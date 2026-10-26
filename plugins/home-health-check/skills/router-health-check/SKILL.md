@@ -91,3 +91,13 @@ Give the user one numbered list of screenshots or values to fetch from the route
 5. **Sources** for firmware versions, advisories and CVEs.
 
 When the user returns with screenshots, update the report rather than starting over.
+
+## 6. Update the inventory
+
+If `~/.home-health-check/inventory.md` exists, add what the router revealed (from its pages, SSH or the user's screenshots). If it doesn't exist, offer to create it with the home-inventory skill first.
+
+- **Client list:** the names devices announce over DHCP, especially for devices the scan could not identify (private MACs).
+- **Mesh nodes / access points:** model, hardware version, firmware version and where they stand, in *Type* and *Notes*.
+- **Address reservations and static IPs:** note them per device.
+
+Rules: match devices by MAC; fill empty fields freely, but **never overwrite a name or note the user set without asking**; add devices the router knows but the scan missed (*First seen* = today, note "from router client list"); keep the table format. Finish by telling the user in a few lines what you added or changed.

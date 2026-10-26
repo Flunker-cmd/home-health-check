@@ -56,6 +56,8 @@ Ask the user only for what you can't read: what the PC is used for, whether ther
 
 Offer to do the fixes with the user, one approved step at a time, and verify each one afterwards.
 
+If `~/.home-health-check/inventory.md` exists, update this PC's row (matched by MAC): computer name, "Windows PC" in *Type*, and model and Windows version in *Notes*. Never overwrite a name or note the user set without asking.
+
 ## Fixing: notes from practice
 
 - **App updates:** `winget upgrade --all --accept-package-agreements --accept-source-agreements` updates most apps. Some apps (banking ID apps, games launchers) must be updated from within the app.

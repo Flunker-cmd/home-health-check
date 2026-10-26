@@ -62,3 +62,5 @@ Network: 192.168.1.0/24, gateway 192.168.1.1. Last scan: 2026-10-26 09:00.
 ## 4. Use by other checks
 
 The pi-health-check, router-health-check and windows-health-check skills read this file when it exists: to find the Pi's address, to judge whether every device uses the intended DNS server, and to spot devices that belong on a guest or IoT network.
+
+They also write back what they learn: the router check adds client names, mesh node models and firmware, and reservations; the Pi and Windows checks fill in their own host's role, OS and model. All of them match on MAC and leave the user's own names and notes alone unless the user agrees. When you rescan, keep everything they added.

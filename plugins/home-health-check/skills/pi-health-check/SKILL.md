@@ -65,6 +65,10 @@ Use this structure:
 
 Offer to carry out the fixes, one approved step at a time.
 
+## 5. Update the inventory
+
+If `~/.home-health-check/inventory.md` exists, update each checked host's row (matched by MAC, from `ip link` on the host): hostname in *Name* if empty, role in *Type* (e.g. "DNS server (Pi-hole + unbound)"), open services, and model, OS release and static IP in *Notes*. Never overwrite a name or note the user set without asking, and tell the user in a line what you changed. Do it again after a reinstall or other big change, so the inventory stays true.
+
 ## Fixing: proven playbooks
 
 ### Unattended update script

@@ -40,7 +40,7 @@ or call a skill directly: `/home-health-check:pi-health-check`.
 
 The reports describe your network and devices. Keep them to yourself.
 
-**Inventory:** run `home-inventory` first and the other checks use its result. It is stored only on your computer, in `~/.home-health-check/inventory.md`.
+**Inventory:** run `home-inventory` first and the other checks use its result, and add what they learn to it (names from the router's client list, firmware of mesh nodes, the role and OS of a Pi). Names you give devices yourself are kept. It is stored only on your computer, in `~/.home-health-check/inventory.md`.
 
 **Router admin pages:** if your router has a web UI, the router check can read it in Claude's browser (the desktop app's built-in browser or Claude in Chrome). You sign in yourself, Claude only reads and never clicks save or apply. App-only mesh systems such as TP-Link Deco or Eero show little on the web, so there Claude asks for screenshots from the app instead.
 
