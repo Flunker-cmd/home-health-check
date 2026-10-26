@@ -23,6 +23,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's directory>/sc
 
 `-SkipWinget` skips the app update list (slow on some machines). Read the whole output, then look closer where something stands out (e.g. `Get-WinEvent` for a specific error, `Get-CimInstance` for a device).
 
+If `~/.home-health-check/inventory.md` exists (from the home-inventory skill), use it for context, e.g. which DNS server the network intends this PC to use.
+
 Ask the user only for what you can't read: what the PC is used for, whether there is any backup they know of, and anything that has felt slow or broken.
 
 ## 2. Assess

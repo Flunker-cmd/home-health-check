@@ -1,6 +1,6 @@
 # home-health-check
 
-Claude Code plugin (and its own marketplace, `flunker`) with three health-check skills: Pi/Linux, router/mesh, Windows. Built from real checks of a home setup in October 2026 (a Raspberry Pi running Pi-hole, a mesh router, a Windows desktop). The repo is public.
+Claude Code plugin (and its own marketplace, `flunker`) with a network inventory skill and three health-check skills: Pi/Linux, router/mesh, Windows. The inventory lives in `~/.home-health-check/` on the user's machine and is read by the other skills. Built from real checks of a home setup in October 2026 (a Raspberry Pi running Pi-hole, a mesh router, a Windows desktop). The repo is public.
 
 ## Conventions
 

@@ -17,7 +17,7 @@ Check one Linux host over SSH, explain what is good and what is not, and hand th
 
 ## 1. Connect
 
-1. Ask for the host (IP or name) and user if you don't have them. Find candidates with `ssh -G <host>`, `~/.ssh/config`, or the ARP table (Raspberry Pi MAC prefixes include `b8:27:eb`, `dc:a6:32`, `e4:5f:01`, `d8:3a:dd`, `2c:cf:67`).
+1. If `~/.home-health-check/inventory.md` exists (from the home-inventory skill), take the host from there. Otherwise ask for the host (IP or name) and user, or find candidates with `ssh -G <host>`, `~/.ssh/config`, or the ARP table (Raspberry Pi MAC prefixes include `b8:27:eb`, `dc:a6:32`, `e4:5f:01`, `d8:3a:dd`, `2c:cf:67`).
 2. Test non-interactively: `ssh -o BatchMode=yes -o ConnectTimeout=5 user@host "hostname"`.
    - If key login is not set up, tell the user how to set it up (`ssh-keygen -t ed25519`, then copy the public key to `~/.ssh/authorized_keys` on the host) and let them do it. Do not work around it with passwords.
 

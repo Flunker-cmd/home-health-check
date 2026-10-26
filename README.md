@@ -1,9 +1,10 @@
 # home-health-check
 
-A Claude Code plugin that lets Claude health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, and your Windows PC. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
+A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, and your Windows PC. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
 
-| Skill | Checks |
+| Skill | Does |
 |---|---|
+| `home-inventory` | Finds the devices on your network (IP, MAC, vendor, name, open services), keeps a private inventory on your computer, and tells you what is new or gone since last time |
 | `pi-health-check` | Raspberry Pi / Debian-based Linux over SSH: OS support status, updates, SD card and power health, SSH and sudo, services and ports, static IP, Pi-hole, unbound/cloudflared, backups |
 | `router-health-check` | Home router or mesh from a PC on the LAN: model and firmware, open ports, UPnP mappings, Wi-Fi security, DHCP and DNS path (incl. Pi-hole bypass), IPv6, double NAT, latency, devices |
 | `windows-health-check` | Windows 10/11: updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and log errors, backup, startup programs, outdated apps |
@@ -23,6 +24,7 @@ claude plugin install home-health-check@flunker
 
 Then start Claude Code and ask, for example:
 
+- "What's on my network?"
 - "Do a health check of my Raspberry Pi at 192.168.1.10"
 - "Check my router and Wi-Fi settings"
 - "Health check this PC"
@@ -37,6 +39,10 @@ or call a skill directly: `/home-health-check:pi-health-check`.
 4. **Fix (optional):** Claude carries out the fixes you approve, one at a time, and verifies each one.
 
 The reports describe your network and devices. Keep them to yourself.
+
+**Inventory:** run `home-inventory` first and the other checks use its result. It is stored only on your computer, in `~/.home-health-check/inventory.md`.
+
+**Router admin pages:** if your router has a web UI, the router check can read it in Claude's browser (the desktop app's built-in browser or Claude in Chrome). You sign in yourself, Claude only reads and never clicks save or apply. App-only mesh systems such as TP-Link Deco or Eero show little on the web, so there Claude asks for screenshots from the app instead.
 
 ## Repository layout
 
