@@ -5,7 +5,9 @@ description: Read-only health check of a Raspberry Pi or other Debian-based Linu
 
 # Raspberry Pi / Linux health check
 
-Check one Linux host over SSH, explain what is good and what is not, and hand the user a prioritized list of fixes. Answer in the user's language.
+Check one or more Linux hosts over SSH, explain what is good and what is not, and hand the user a prioritized list of fixes. Answer in the user's language.
+
+**Several hosts:** if the inventory (or the user) lists more than one Pi or Linux machine, show them with name and address and ask whether to check one or all. For all: connect to and collect from each in turn (each may have its own SSH user), write one report per host, and end with a combined summary that ranks every host's actions in a single priority order, e.g. "update the OS on pi2 and pi3 before anything else". Name the host in every finding so nothing gets mixed up.
 
 ## Ground rules
 

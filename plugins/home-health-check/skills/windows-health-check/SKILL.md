@@ -7,6 +7,8 @@ description: Read-only health check of a Windows 10/11 PC (updates, BIOS, Defend
 
 Check the PC this session runs on, explain what is good and what is not, and hand the user a prioritized list of fixes. Answer in the user's language.
 
+**Several PCs:** the collector only reads the machine it runs on, so each Windows PC is checked in its own Claude Code session on that PC. If the user wants an overview, ask them to save each report and combine them in one session into a single ranked list, with the PC named in every action.
+
 ## Ground rules
 
 - **Read-only until the user says otherwise.** Every change (installing updates, uninstalling apps, BIOS updates, enabling BitLocker, deleting files, editing firewall rules or autostart) needs the user's explicit yes for that specific change.
