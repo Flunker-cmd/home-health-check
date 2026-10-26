@@ -1,0 +1,11 @@
+{
+  "name": "home-health-check",
+  "version": "0.1.0",
+  "description": "Read-only health checks for a Raspberry Pi or Linux server, a home router or mesh network, and a Windows PC, with a prioritized fix list",
+  "author": {
+    "name": "Mattias"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/Flunker-cmd/home-health-check",
+  "keywords": ["health-check", "raspberry-pi", "pi-hole", "router", "windows", "home-network", "security"]
+}

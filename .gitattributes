@@ -1,0 +1,2 @@
+# Shell scripts are piped to Linux hosts over SSH and break with CRLF
+*.sh text eol=lf

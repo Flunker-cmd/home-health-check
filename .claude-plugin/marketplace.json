@@ -1,0 +1,14 @@
+{
+  "name": "flunker",
+  "description": "Mattias plugins for Claude Code",
+  "owner": {
+    "name": "Mattias"
+  },
+  "plugins": [
+    {
+      "name": "home-health-check",
+      "source": "./plugins/home-health-check",
+      "description": "Read-only health checks for a Raspberry Pi or Linux server, a home router or mesh network, and a Windows PC, with a prioritized fix list"
+    }
+  ]
+}

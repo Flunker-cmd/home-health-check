@@ -1,0 +1,10 @@
+# OS
+Thumbs.db
+.DS_Store
+
+# Editor
+.vscode/
+
+# Health check output - describes real devices, never commit
+*.log
+reports/
