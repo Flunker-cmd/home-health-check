@@ -1,0 +1,4 @@
+? (192.168.1.1) at 30:68:93:00:00:00 [ether] on eth0
+? (192.168.1.20) at da:a1:19:00:00:00 [ether] on eth0
+? (192.168.1.50) at <incomplete> on eth0
+? (192.168.1.60) at e0:bb:9e:00:00:00 [ether] on wlan0

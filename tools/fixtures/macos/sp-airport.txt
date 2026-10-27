@@ -1,0 +1,41 @@
+Wi-Fi:
+
+      Software Versions:
+          CoreWLAN: 16.0 (1657)
+          IO80211 Family: 12.0 (1200.13.1)
+      Interfaces:
+        en0:
+          Card Type: Wi-Fi  (0x14E4, 0x7BF)
+          MAC Address: 7a:b2:c3:00:00:00
+          Locale: ETSI
+          Country Code: XX
+          Supported PHY Modes: 802.11 a/b/g/n/ac
+          Supported Channels: 1 (2GHz), 6 (2GHz), 11 (2GHz), 36 (5GHz), 149 (5GHz)
+          Status: Connected
+          Current Network Information:
+            <redacted>:
+              PHY Mode: 802.11ac
+              Channel: 36 (5GHz, 80MHz)
+              Country Code: XX
+              Network Type: Infrastructure
+              Security: WPA2/WPA3 Personal
+              Signal / Noise: -45 dBm / -92 dBm
+              Transmit Rate: 866
+              MCS Index: 9
+          Other Local Wi-Fi Networks:
+            <redacted>:
+              PHY Mode: 802.11a/n/ac/ax
+              Channel: 36 (5GHz, 80MHz)
+              Network Type: Infrastructure
+              Security: WPA2/WPA3 Personal
+              Signal / Noise: -42 dBm / -92 dBm
+            <redacted>:
+              PHY Mode: 802.11b/g/n/ax
+              Channel: 10 (2GHz, 40MHz)
+              Network Type: Infrastructure
+              Security: WPA2 Personal
+              Signal / Noise: -48 dBm / -92 dBm
+        awdl0:
+          MAC Address: 7a:b2:c4:00:00:00
+          Current Network Information:
+              Network Type: Infrastructure

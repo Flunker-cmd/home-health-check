@@ -1,0 +1,6 @@
+Executable=/Applications/Local Tool.app/Contents/MacOS/tool
+Identifier=tool
+Format=app bundle with Mach-O thin (x86_64)
+CodeDirectory v=20400 size=300 flags=0x2(adhoc) hashes=5+2 location=embedded
+Signature=adhoc
+TeamIdentifier=not set

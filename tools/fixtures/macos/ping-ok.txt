@@ -1,0 +1,10 @@
+PING 192.168.1.1 (192.168.1.1): 56 data bytes
+64 bytes from 192.168.1.1: icmp_seq=0 ttl=64 time=1.788 ms
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=9.031 ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=6.981 ms
+64 bytes from 192.168.1.1: icmp_seq=3 ttl=64 time=9.179 ms
+64 bytes from 192.168.1.1: icmp_seq=4 ttl=64 time=9.327 ms
+
+--- 192.168.1.1 ping statistics ---
+5 packets transmitted, 5 packets received, 0.0% packet loss
+round-trip min/avg/max/stddev = 1.788/7.261/9.327/2.867 ms

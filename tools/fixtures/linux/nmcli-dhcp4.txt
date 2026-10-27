@@ -1,0 +1,5 @@
+DHCP4.OPTION[1]:dhcp_lease_time = 86400
+DHCP4.OPTION[2]:dhcp_server_identifier = 192.168.1.1
+DHCP4.OPTION[3]:domain_name_servers = 192.168.1.10 192.168.1.1
+DHCP4.OPTION[4]:routers = 192.168.1.1
+DHCP4.OPTION[5]:subnet_mask = 255.255.255.0

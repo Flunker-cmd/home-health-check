@@ -70,6 +70,10 @@ function Test-IpAllowed($ip) {
     if ($o[0] -eq 100 -and $o[1] -ge 64 -and $o[1] -le 127) { return $true }  # CGNAT 100.64.0.0/10
     if ($o[0] -eq 169 -and $o[1] -eq 254) { return $true }
     if ($o[0] -ge 224 -and $o[0] -le 239) { return $true }                  # multicast (mDNS, SSDP)
+    if ($o[0] -eq 255) { return $true }                                     # netmask
+    if ($o[0] -eq 192 -and $o[1] -eq 0 -and $o[2] -eq 2) { return $true }   # documentation ranges
+    if ($o[0] -eq 198 -and $o[1] -eq 51 -and $o[2] -eq 100) { return $true }
+    if ($o[0] -eq 203 -and $o[1] -eq 0 -and $o[2] -eq 113) { return $true }
     return $false
 }
 
@@ -77,6 +81,8 @@ function Test-Privacy {
     $files = @(Get-ChildItem $pluginDir -Recurse -File)       # every file the plugin and the Agensi ZIPs can ship
     $agensi = Join-Path $root 'agensi'
     if (Test-Path $agensi) { $files += Get-ChildItem $agensi -Recurse -File }
+    $tools = Join-Path $root 'tools'
+    if (Test-Path $tools) { $files += Get-ChildItem $tools -Recurse -File }
     foreach ($name in 'README.md', 'CLAUDE.md') {
         $p = Join-Path $root $name
         if (Test-Path $p) { $files += Get-Item $p }
@@ -95,7 +101,8 @@ function Test-Privacy {
         }
         if ($text -match '[A-Za-z]:\\Users\\') { Fail 'privacy' $f.FullName 'contains a Windows user path' }
         if ($text -match '[A-Za-z]:\\dev\\') { Fail 'privacy' $f.FullName 'contains a local D:\dev style path' }
-        foreach ($m in [regex]::Matches($text, '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b')) {
+        $ipText = [regex]::Replace($text, '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\.in-addr\.arpa', 'reverse-name.in-addr.arpa')
+        foreach ($m in [regex]::Matches($ipText, '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b')) {
             if (-not (Test-IpAllowed $m.Value)) { Fail 'privacy' $f.FullName "public-looking IP address $($m.Value)" }
         }
     }
@@ -172,7 +179,75 @@ function Test-FindingsSection {
     }
 }
 
+function Get-CodeLines($path) {
+    # non-comment lines of a shell script as @{ N = line number; Text = line }
+    $i = 0
+    foreach ($line in [IO.File]::ReadAllLines($path)) {
+        $i++
+        if ($line -match '^\s*#') { continue }
+        @{ N = $i; Text = $line }
+    }
+}
+
+function Test-ShBash32 {
+    # constructs missing from macOS's stock bash 3.2
+    $patterns = @(
+        '\b(declare|local|typeset)\s+-A\b', '\b(mapfile|readarray)\b', '\$\{[A-Za-z_][A-Za-z0-9_]*(,,|\^\^)',
+        '\|&', '&>>', '\bcoproc\b', '\b(declare|local)\s+-n\b', '\[\[\s+-v\b', ';;&', '\bwait\s+-n\b', '%\([^)]*\)T')
+    foreach ($f in Get-RepoFiles '*.sh') {
+        Checked
+        foreach ($l in Get-CodeLines $f.FullName) {
+            foreach ($p in $patterns) {
+                if ($l.Text -match $p) { Fail 'sh-bash32' $f.FullName "line $($l.N) uses a construct bash 3.2 lacks ($p)" }
+            }
+        }
+    }
+}
+
+function Get-MacScripts {
+    # shell scripts that must run on macOS and Linux: everything under plugins/ except the Pi collector
+    Get-ChildItem $pluginDir -Recurse -File -Filter '*.sh' | Where-Object { $_.FullName -notmatch '\\pi-health-check\\' }
+}
+
+function Test-ShPortable {
+    $patterns = @(
+        '^\s*[A-Za-z_][A-Za-z0-9_]*=\(', '\[@\]', '\b(declare|local)\s+-a\b', '(?<![\w-])timeout\s+[0-9$]',
+        'grep\s+-[A-Za-z]*P', 'sed\s+-i', 'date\s+-d', 'stat\s+-c', 'readlink\s+-f', 'BASH_SOURCE')
+    foreach ($f in Get-MacScripts) {
+        Checked
+        foreach ($l in Get-CodeLines $f.FullName) {
+            foreach ($p in $patterns) {
+                if ($l.Text -match $p) { Fail 'sh-portable' $f.FullName "line $($l.N) is not portable to macOS and Linux ($p)" }
+            }
+            # $0 is allowed inside awk and sed programs
+            if ($l.Text -match '\$0\b' -and $l.Text -notmatch '\b(awk|sed)\b') { Fail 'sh-portable' $f.FullName "line $($l.N) uses `$0 (scripts also run from stdin)" }
+        }
+    }
+}
+
+function Test-MacSafe {
+    $patterns = @(
+        '\bsudo\b', '\bosascript\b', '\bmdfind\b', '\btccutil\b', '\bsqlite3\b', 'TCC\.db',
+        '(~|\$HOME|/Users/[^/\s]+)/(Desktop|Documents|Downloads|Pictures|Movies|Music)\b',
+        'Library/(Mobile Documents|Mail|Messages|Safari|Containers)', '/Volumes/')
+    foreach ($f in Get-MacScripts) {
+        Checked
+        $lines = @(Get-CodeLines $f.FullName)
+        foreach ($l in $lines) {
+            foreach ($p in $patterns) {
+                if ($l.Text -match $p) { Fail 'mac-safe' $f.FullName "line $($l.N) may trigger a macOS permission dialog or needs admin ($p)" }
+            }
+        }
+        $usesBrew = @($lines | Where-Object { $_.Text -match '\bbrew\b' }).Count -gt 0
+        $text = [IO.File]::ReadAllText($f.FullName)
+        if ($usesBrew -and -not $text.Contains('HOMEBREW_NO_AUTO_UPDATE=1')) { Fail 'mac-safe' $f.FullName 'runs brew without HOMEBREW_NO_AUTO_UPDATE=1' }
+    }
+}
+
 Test-ContractCopy
+Test-ShBash32
+Test-ShPortable
+Test-MacSafe
 Test-DataDir
 Test-NetworkSection
 Test-FindingsSection

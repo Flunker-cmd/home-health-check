@@ -1,0 +1,5 @@
+DATE: ---Tue 27 Oct 2026---
+10:00:49.684  ...STARTING...
+Timestamp     A/R  Flags         IF  Name                          Type   Class  Rdata
+10:00:49.685  Add  40000002       0  20.1.168.192.in-addr.arpa.    PTR    IN     0.0.0.0    No Such Record
+10:00:49.700  Add  2              6  20.1.168.192.in-addr.arpa.    PTR    IN     macbook.local.

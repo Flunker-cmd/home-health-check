@@ -1,0 +1,7 @@
+   Device Node:               /dev/disk1s1s1
+   Volume Name:               Macintosh HD
+   File System Personality:   APFS
+   SMART Status:              Verified
+   Container Total Space:     500.0 GB (499963174912 Bytes) (exactly 976490576 512-Byte-Units)
+   Container Free Space:      465.7 GB (465737617408 Bytes) (exactly 909643784 512-Byte-Units)
+   Solid State:               Yes

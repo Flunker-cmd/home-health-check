@@ -1,0 +1,10 @@
+Executable=/Applications/Example.app/Contents/MacOS/Example
+Identifier=com.example.appstore
+Format=app bundle with Mach-O universal (x86_64 arm64)
+CodeDirectory v=20500 size=1000 flags=0x10000(runtime) hashes=20+7 location=embedded
+Signature size=4500
+Authority=Apple Mac OS Application Signing
+Authority=Apple Worldwide Developer Relations Certification Authority
+Authority=Apple Root CA
+Timestamp=10 Sep 2026 at 14:09:22
+TeamIdentifier=ABCDE12345

@@ -1,0 +1,21 @@
+Hardware:
+
+    Hardware Overview:
+
+      Model Name: MacBook Pro
+      Model Identifier: MacBookPro16,1
+      Processor Name: 6-Core Intel Core i7
+      Processor Speed: 2.6 GHz
+      Number of Processors: 1
+      Total Number of Cores: 6
+      L2 Cache (per Core): 256 KB
+      L3 Cache: 12 MB
+      Hyper-Threading Technology: Enabled
+      Memory: 32 GB
+      System Firmware Version: 2103.160.2 (iBridge: 24.16.6005)
+      OS Loader Version: 583~5931
+      Serial Number (system): XXXX
+      Hardware UUID: XXXX
+      Provisioning UDID: XXXX
+      Activation Lock Status: Enabled
+
