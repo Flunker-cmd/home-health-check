@@ -1,5 +1,5 @@
-# Wireshark manufacturer database (sample)
-B8:27:EB	RaspberryPiF	Raspberry Pi Foundation
-30:68:93	TP-LinkT	TP-Link Systems Inc.
-E0:BB:9E	SeikoEpso	Seiko Epson Corporation
-94:B9:7E	Espressif	Espressif Inc.
+# Wireshark manufacturer database (sample; first columns are space padded like the real file)
+B8:27:EB         	RaspberryPiF  	Raspberry Pi Foundation
+30:68:93         	TP-LinkT      	TP-Link Systems Inc.
+E0:BB:9E         	SeikoEpso     	Seiko Epson Corporation
+94:B9:7E         	Espressif     	Espressif Inc.
