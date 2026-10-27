@@ -18,6 +18,12 @@ echo "kernel: $(uname -r) ($(uname -m))"
 echo "hostname: $(hostname)"
 echo "uptime: $(uptime -p 2>/dev/null), booted $(uptime -s 2>/dev/null)"
 echo "user: $(id -un), passwordless sudo: $([ -n "$SUDO" ] && echo yes || echo no)"
+iface=$(ip route show default 2>/dev/null | awk '{for (i = 1; i < NF; i++) if ($i == "dev") { print $(i + 1); exit }}')
+if [ -n "$iface" ] && [ -r "/sys/class/net/$iface/address" ]; then
+  echo "mac: $(cat "/sys/class/net/$iface/address") ($iface)"
+else
+  echo "mac: unknown"
+fi
 
 section "Resources"
 df -h -x tmpfs -x devtmpfs -x efivarfs 2>/dev/null

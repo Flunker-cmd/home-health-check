@@ -19,7 +19,7 @@ Find the devices on the local network, identify them as far as possible, and kee
 ## Ground rules
 
 - **Only the user's own LAN.** A ping sweep of the local subnet and a handful of well-known TCP ports per device is fine. No scanning of other networks, no aggressive or broad port scans, no login attempts.
-- **The inventory is private.** It lives only on the user's computer in `~/.home-health-check/inventory.md` (Windows: `%USERPROFILE%\.home-health-check\inventory.md`). Never put it in a git repository, an artifact or anything shared.
+- **The inventory is private.** It lives only on the user's computer in `<data dir>/inventory.md`. `<data dir>` is defined in `references/findings-format.md` (the `HOME_HEALTH_CHECK_DIR` environment variable, or the default folder in the user's home directory named there). Never put it in a git repository, an artifact or anything shared.
 - **Don't guess identities as facts.** Mark what is inferred ("probably a phone: private MAC, no open ports") and ask the user to name what you can't tell.
 
 ## 1. Discover
@@ -75,3 +75,11 @@ Network: 192.168.1.0/24, gateway 192.168.1.1. Last scan: 2026-10-26 09:00.
 The pi-health-check, router-health-check and windows-health-check skills read this file when it exists: to find the Pi's address, to judge whether every device uses the intended DNS server, and to spot devices that belong on a guest or IoT network.
 
 They also write back what they learn: the router check adds client names, mesh node models and firmware, and reservations; the Pi and Windows checks fill in their own host's role, OS and model. All of them match on MAC and leave the user's own names and notes alone unless the user agrees. When you rescan, keep everything they added.
+
+The checks also save their findings as files in `<data dir>/findings/` (format in `references/findings-format.md`). A report skill can read the inventory and those findings together. This skill does not write findings itself.
+
+## Network and permissions
+
+- **Network:** only the user's own LAN. A ping sweep of the local subnet (never more than 1024 addresses), reverse DNS lookups of local addresses, an SSDP discovery multicast, HTTP requests to the device descriptions that local devices announce (and to the well-known Sonos and Chromecast description URLs), and, with `-Ports`, TCP connections to about 18 well-known ports per device. With `-Oui` it downloads Wireshark's public MAC vendor list once from `https://www.wireshark.org/download/automated/data/manuf` and refreshes it after 90 days; no device data is sent. Ask the user first if they are sensitive about network access.
+- **Rights:** no admin rights. `-ExecutionPolicy Bypass` applies to that one PowerShell process only, so the local unsigned script can run; it changes no system setting.
+- **Files:** the script writes only `<data dir>/cache/manuf.txt` (with `-Oui`). The skill writes `<data dir>/inventory.md`.

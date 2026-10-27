@@ -16,6 +16,8 @@ docs_url: https://github.com/Flunker-cmd/home-health-check
 
 Measure what can be measured from a computer on the LAN, ask the user for the rest (many mesh systems are app-only), and hand over a prioritized fix list. Answer in the user's language.
 
+`<data dir>` below is the folder for the inventory and findings; it is defined in `references/findings-format.md`.
+
 ## Ground rules
 
 - **Read-only.** Do not change router settings. Most consumer routers are configured in a phone app, so the user makes every change themselves. Give exact menu paths.
@@ -25,7 +27,7 @@ Measure what can be measured from a computer on the LAN, ask the user for the re
 
 ## 1. Probe from the LAN
 
-If `~/.home-health-check/inventory.md` exists (from the home-inventory skill), read it first: it lists the mesh nodes, the DNS server and the other devices, and lets you point out new or unknown devices.
+If `<data dir>/inventory.md` exists (from the home-inventory skill), read it first: it lists the mesh nodes, the DNS server and the other devices, and lets you point out new or unknown devices.
 
 On Windows run the bundled probe (PowerShell 5.1+, no admin needed):
 
@@ -105,10 +107,47 @@ When the user returns with screenshots, update the report rather than starting o
 
 ## 6. Update the inventory
 
-If `~/.home-health-check/inventory.md` exists, add what the router revealed (from its pages, SSH or the user's screenshots). If it doesn't exist, offer to create it with the home-inventory skill first.
+If `<data dir>/inventory.md` exists, add what the router revealed (from its pages, SSH or the user's screenshots). If it doesn't exist, offer to create it with the home-inventory skill first.
 
 - **Client list:** the names devices announce over DHCP, especially for devices the scan could not identify (private MACs).
 - **Mesh nodes / access points:** model, hardware version, firmware version and where they stand, in *Type* and *Notes*.
 - **Address reservations and static IPs:** note them per device.
 
 Rules: match devices by MAC; fill empty fields freely, but **never overwrite a name or note the user set without asking**; add devices the router knows but the scan missed (*First seen* = today, note "from router client list"); keep the table format. Finish by telling the user in a few lines what you added or changed.
+
+## Save findings
+
+After the report, write the findings so other skills can use them. The format is `hhc-findings/1`, described in `references/findings-format.md`.
+
+1. If `<data dir>` exists, write one findings file with the gateway as the device: take `device.mac` from the `gateway mac:` line of the probe output. Findings about a single mesh node or other device name it in `subject`.
+2. If `<data dir>` does not exist, offer once to create it, and carry on without it if the user declines.
+3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
+4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Put the items you still need from the user (step 3) in `not_checked`.
+5. Tell the user the path of the file in one line.
+
+### Standard finding ids
+
+| id | usual severity | when |
+|---|---|---|
+| `firmware-outdated` | high | router or mesh firmware is old or has known CVEs |
+| `hardware-out-of-support` | high | this hardware version no longer gets fixes |
+| `account-no-2fa` | medium | the router's cloud account has no two-factor authentication or a weak password |
+| `wifi-weak-security` | high | WEP, WPA/TKIP or an open network |
+| `wps-on` | medium | WPS is enabled |
+| `upnp-unexpected-mappings` | high | UPnP mappings nobody recognizes |
+| `port-forwards-unknown` | medium | port forwards or a DMZ nobody remembers |
+| `dns-bypass-secondary` | medium | a public secondary DNS lets clients bypass the DNS filter |
+| `ipv6-dns-bypass` | medium | IPv6 DNS bypasses an IPv4-only DNS filter |
+| `double-nat` | low | the second hop is a private address |
+| `cgnat` | low | the WAN address is in 100.64.0.0/10 |
+| `no-guest-network` | low | no guest or IoT network |
+| `remote-admin-open` | critical | remote administration is open to the internet |
+| `packet-loss` | medium | packet loss, high jitter or a weak mesh backhaul |
+
+Use a standard id when it fits. Otherwise make a new kebab-case id, and keep using it.
+
+## Network and permissions
+
+- **Network:** mostly the local network. The probe pings the gateway, the DNS servers it hands out and the public resolvers 1.1.1.1, 9.9.9.9 and 8.8.8.8 (20 pings each), runs a 3-hop traceroute to 1.1.1.1, and looks up the ad-domain `doubleclick.net` through the gateway and its DNS servers to see whether DNS filtering applies (only the lookup is sent). It sends an SSDP discovery multicast, fetches the router's UPnP description over HTTP, and sends a read-only UPnP request (`GetGenericPortMappingEntry`) to list existing port mappings; it creates no mappings. It tries a handful of TCP ports on the gateway and lists nearby Wi-Fi networks with `netsh wlan`. Firmware versions and advisories are looked up on public web pages by the agent; nothing from the network is sent there.
+- **Rights:** no admin rights. `-ExecutionPolicy Bypass` applies to that one PowerShell process only, so the local unsigned script can run; it changes no system setting. Browser and SSH reading of the router are read-only and the user signs in themselves.
+- **Files:** the probe writes nothing. The skill writes the findings file and updates the inventory in `<data dir>`.

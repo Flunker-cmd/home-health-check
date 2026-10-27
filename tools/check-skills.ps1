@@ -136,7 +136,43 @@ function Test-AgentNeutral {
     }
 }
 
+function Test-DataDir {
+    foreach ($s in Get-Skills) {
+        $md = Join-Path $s.FullName 'SKILL.md'
+        Checked
+        $text = [IO.File]::ReadAllText($md)
+        if ($text.Contains('~/.home-health-check') -or $text.Contains('%USERPROFILE%\.home-health-check')) { Fail 'data-dir' $md 'names the data directory path; say <data dir> instead' }
+        if (-not $text.Contains('<data dir>')) { Fail 'data-dir' $md 'does not mention <data dir>' }
+        if (-not $text.Contains('references/findings-format.md')) { Fail 'data-dir' $md 'does not point to references/findings-format.md' }
+    }
+}
+
+function Test-NetworkSection {
+    foreach ($s in Get-Skills) {
+        $md = Join-Path $s.FullName 'SKILL.md'
+        Checked
+        if (-not [regex]::IsMatch([IO.File]::ReadAllText($md), '(?m)^## Network and permissions\s*$')) { Fail 'network-section' $md "missing '## Network and permissions' heading" }
+    }
+}
+
+function Test-FindingsSection {
+    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check') {
+        $md = Join-Path $skillsDir "$name\SKILL.md"
+        Checked
+        $text = [IO.File]::ReadAllText($md)
+        if (-not [regex]::IsMatch($text, '(?m)^## Save findings\s*$')) { Fail 'findings-section' $md "missing '## Save findings' heading" }
+        if (-not $text.Contains('hhc-findings/1')) { Fail 'findings-section' $md "does not mention hhc-findings/1" }
+        $m = [regex]::Match($text, '(?ms)^### Standard finding ids\s*$(.*?)(?=^#{1,3} |\z)')
+        if (-not $m.Success) { Fail 'findings-section' $md "missing '### Standard finding ids' heading"; continue }
+        $rows = @($m.Groups[1].Value -split "`n" | Where-Object { $_ -match '^\|\s*`[a-z0-9-]+`\s*\|' })
+        if ($rows.Count -lt 8) { Fail 'findings-section' $md "standard id table has $($rows.Count) rows, needs at least 8" }
+    }
+}
+
 Test-ContractCopy
+Test-DataDir
+Test-NetworkSection
+Test-FindingsSection
 Test-Frontmatter
 Test-AgentNeutral
 Test-ScriptSize

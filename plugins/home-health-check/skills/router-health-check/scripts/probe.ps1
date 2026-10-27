@@ -42,6 +42,10 @@ $ip4 = (Get-NetIPAddress -InterfaceIndex $ifIndex -AddressFamily IPv4 | Select-O
 "adapter:        $($adapter.Name) ($($adapter.InterfaceDescription)), link $($adapter.LinkSpeed)"
 "this PC:        $($ip4.IPAddress)/$($ip4.PrefixLength)"
 "gateway:        $gw"
+$null = Test-Connection $gw -Count 1 -Quiet      # makes sure the gateway is in the ARP table
+$gwMac = (Get-NetNeighbor -IPAddress $gw -InterfaceIndex $ifIndex | Where-Object LinkLayerAddress | Select-Object -First 1).LinkLayerAddress
+if ($gwMac) { $gwMac = $gwMac.Replace('-', ':').ToLower() } else { $gwMac = 'unknown' }
+"gateway mac:    $gwMac"
 "DHCP enabled:   $($cfg.DHCPEnabled)"
 "DHCP server:    $($cfg.DHCPServer)"
 "DNS servers:    $($cfg.DNSServerSearchOrder -join ', ')"

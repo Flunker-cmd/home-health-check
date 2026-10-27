@@ -2,7 +2,8 @@
 # Only talks to the local subnet (plus one optional download of a public MAC vendor list).
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File discover.ps1 [-Ports] [-Oui] [-Json]
 #   -Ports  also check a few well-known TCP ports per device to guess what it is
-#   -Oui    look up MAC vendors in Wireshark's public vendor list (downloaded once to ~/.home-health-check/manuf.txt)
+#   -Oui    look up MAC vendors in Wireshark's public vendor list (downloaded once to <data dir>/cache/manuf.txt;
+#           <data dir> is $env:HOME_HEALTH_CHECK_DIR, or ~/.home-health-check when that is not set)
 #   -Json   print JSON instead of a table
 param([switch]$Ports, [switch]$Oui, [switch]$Json)
 
@@ -44,10 +45,13 @@ $devices[$ip4.IPAddress] = [ordered]@{ ip = $ip4.IPAddress; mac = $selfMac.Repla
 # --- MAC vendor -------------------------------------------------------------
 $ouiMap = @{}
 if ($Oui) {
-    $dir = Join-Path $env:USERPROFILE '.home-health-check'
+    $dataDir = if ($env:HOME_HEALTH_CHECK_DIR) { $env:HOME_HEALTH_CHECK_DIR } else { Join-Path $env:USERPROFILE '.home-health-check' }
+    $dir = Join-Path $dataDir 'cache'
     $file = Join-Path $dir 'manuf.txt'
+    New-Item -ItemType Directory -Force $dir | Out-Null
+    $oldFile = Join-Path $dataDir 'manuf.txt'      # location used before 0.3.0
+    if ((Test-Path $oldFile) -and -not (Test-Path $file)) { Move-Item $oldFile $file }
     if (-not (Test-Path $file) -or (Get-Item $file).LastWriteTime -lt (Get-Date).AddDays(-90)) {
-        New-Item -ItemType Directory -Force $dir | Out-Null
         try { Invoke-WebRequest 'https://www.wireshark.org/download/automated/data/manuf' -OutFile $file -UseBasicParsing -TimeoutSec 60 } catch { }
     }
     # lines look like "B8:27:EB<tab>RaspberryPiF<tab>Raspberry Pi Foundation"; only whole 24-bit prefixes are used
