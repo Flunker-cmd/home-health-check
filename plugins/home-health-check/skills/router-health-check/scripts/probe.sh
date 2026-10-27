@@ -67,12 +67,12 @@ parse_upnp_desc() {
       print out }' | sed -e 's/&lt;/</g' -e 's/&gt;/>/g' -e 's/&quot;/"/g' -e "s/&apos;/'/g" -e 's/&amp;/\&/g'
 }
 
-location_host_ok() { local h; h=${2#*://}; h=${h%%/*}; h=${h%%:*}; [ "$h" = "$1" ]; }
+location_host_ok() { local h; case $2 in http://*|https://*) ;; *) return 1 ;; esac; case $2 in *@*) return 1 ;; esac; h=${2#*://}; h=${h%%/*}; h=${h%%:*}; [ "$h" = "$1" ]; }
 
 lan_hint() {
   [ "$1" -eq 0 ] || return 0
   case $2 in
-    Darwin) echo "(no other devices answered - on macOS 15 and later, if this runs inside an app instead of Terminal, allow that app under System Settings > Privacy & Security > Local Network and run again)" ;;
+    Darwin) echo "(no other devices answered - on macOS 15 and later, if this runs inside an app instead of Terminal, allow that app under System Settings > Privacy & Security > Local Network, then run it again)" ;;
     *) echo "(no devices answered - check that this computer is on the home network)" ;;
   esac
 }
@@ -82,6 +82,15 @@ TAG_AWK='function tag(s, t,   a, i, j) { a = "<" t ">"; i = index(s, a); if (!i)
 usage() {
   echo "Usage: bash probe.sh [--sweep]"
   echo "  --sweep  ping every address in the local /24 first"
+}
+
+# $1 = did the gateway answer a ping (yes|no), $2 = uname -s: warns that the results below cannot be trusted
+gw_hint() {
+  [ "$1" = yes ] && return 0
+  case $2 in
+    Darwin) echo "WARNING: the gateway did not answer. On macOS 15 and later this usually means the app running this was refused Local Network access (System Settings > Privacy & Security > Local Network): the port, UPnP and DNS results below are unreliable. Allow it and run again." ;;
+    *) echo "WARNING: the gateway did not answer a ping, so the results below may be incomplete (a few routers do not answer pings)." ;;
+  esac
 }
 
 # ping output on stdin (macOS or Linux) -> one summary line in the probe.ps1 format
@@ -130,12 +139,15 @@ parse_scutil_dns() {
 # UPnP device description on stdin, $1 = its url -> "control url<TAB>service type" for WAN IP/PPP connection services
 parse_upnp_services() {
   tr '\r\n' '  ' | awk -v loc="$1" "$TAG_AWK"'
-    BEGIN { p = index(loc, "://"); rest = substr(loc, p + 3); j = index(rest, "/"); auth = (j > 0) ? substr(rest, 1, j - 1) : rest; base = substr(loc, 1, p + 2) auth }
+    BEGIN { p = index(loc, "://"); rest = substr(loc, p + 3); j = index(rest, "/"); auth = (j > 0) ? substr(rest, 1, j - 1) : rest; base = substr(loc, 1, p + 2) auth; lhost = auth; sub(/:.*$/, "", lhost) }
     { s = $0
       while ((i = index(s, "</service>")) > 0) {
         rec = substr(s, 1, i - 1); s = substr(s, i + 10)
         t = tag(rec, "serviceType"); c = tag(rec, "controlURL")
-        if (t ~ /WAN(IP|PPP)Connection/ && c != "") { if (c !~ /^https?:\/\//) { if (c !~ /^\//) c = "/" c; c = base c } print c "\t" t }
+        if (t ~ /WAN(IP|PPP)Connection/ && c != "") {
+          if (c ~ /^https?:\/\//) { h = c; sub(/^https?:\/\//, "", h); sub(/\/.*$/, "", h); if (h ~ /@/) continue; sub(/:.*$/, "", h); if (h != lhost) continue }
+          else { if (c !~ /^\//) c = "/" c; c = base c }
+          print c "\t" t }
       } }'
 }
 
@@ -256,13 +268,15 @@ main() {
   net_info
   if [ -z "$ip" ] || [ -z "$gw" ]; then echo "No default network found. Connect to the home network and try again." >&2; return 1; fi
 
+  local gw_up=no
+  if [ "$os" = Darwin ]; then ping -c 1 -t 1 "$gw" >/dev/null 2>&1 && gw_up=yes; else ping -c 1 -W 1 "$gw" >/dev/null 2>&1 && gw_up=yes; fi
+  gw_hint "$gw_up" "$os"
   section "Gateway and DHCP"
   local port_name="" gwmac dhcp dhcp_server dhcp_lease dhcp_dns dnslist
   if [ "$os" = Darwin ]; then port_name=$(networksetup -listallhardwareports 2>/dev/null | awk -v d="$iface" '/^Hardware Port:/ { p = substr($0, 16) } $1 == "Device:" && $2 == d { print p; exit }'); fi
   echo "adapter:        ${port_name:-$iface}${port_name:+ ($iface)}"
   echo "this computer:  $ip/$prefix"
   echo "gateway:        $gw"
-  if [ "$os" = Darwin ]; then ping -c 1 -t 1 "$gw" >/dev/null 2>&1; else ping -c 1 -W 1 "$gw" >/dev/null 2>&1; fi
   gwmac=$(neighbors | awk -F '\t' -v g="$gw" '$1 == g { print $2; exit }')
   echo "gateway mac:    ${gwmac:-unknown}"
   dhcp=""
@@ -368,7 +382,7 @@ main() {
   fi
   neighbors | sort -t . -k1,1n -k2,2n -k3,3n -k4,4n > "$work/arp.tsv"
   awk -F '\t' '{ printf "%-15s %s\n", $1, $2 }' "$work/arp.tsv"
-  lan_hint "$(awk -F '\t' -v g="$gw" '$1 != g' "$work/arp.tsv" | wc -l | tr -d ' ')" "$os"
+  lan_hint "$([ "$gw_up" = yes ] && echo 1 || echo 0)" "$os"
   echo "(look up the first three MAC bytes for the vendor; random-looking MACs with the 2nd hex digit 2/6/a/e are private phone/tablet addresses)"
 }
 

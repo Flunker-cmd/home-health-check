@@ -42,7 +42,8 @@ parse_softwareupdate() {
       rec = field($0, "Recommended: ", ","); sub(/ +$/, "", rec)
       restart = ($0 ~ /Action: restart/) ? "yes" : "no"
       line[n] = sprintf("  %s, version %s, recommended %s, restart %s", title, ver, rec, restart) }
-    END { print "pending updates: " n + 0; for (i = 1; i <= n; i++) print line[i] }'
+    /No new software available/ { none = 1 }
+    END { if (n == 0 && !none) exit 1; print "pending updates: " n + 0; for (i = 1; i <= n; i++) print line[i] }'
 }
 
 # netstat -anp tcp on stdin -> the sharing ports that listen on a non-loopback address
@@ -123,7 +124,8 @@ main() {
   done
   if [ "$(uname -s)" != Darwin ]; then echo "This collector reads macOS only." >&2; return 1; fi
 
-  local work out rc v k
+  local out rc v k
+  # work stays global: the EXIT trap runs after main has returned
   work=$(mktemp -d "${TMPDIR:-/tmp}/hhc-macos.XXXXXX") || return 1
   trap 'rm -rf "$work"' EXIT
 
@@ -145,7 +147,7 @@ main() {
     not_checked "pending updates" "skipped"
   else
     out=$(with_timeout 180 softwareupdate -l 2>&1); rc=$?
-    if [ "$rc" -ne 0 ]; then not_checked "pending updates" "timed out"; else printf '%s\n' "$out" | parse_softwareupdate; fi
+    if [ "$rc" -eq 143 ]; then not_checked "pending updates" "timed out"; elif ! printf '%s\n' "$out" | parse_softwareupdate; then not_checked "pending updates" "not available"; fi
   fi
   echo "recent installs:"
   softwareupdate --history 2>/dev/null | sed -n '3,$p' | tail -5 | sed 's/^/  /'
@@ -177,7 +179,7 @@ main() {
     echo "backup: no Time Machine destination"
   else
     printf '%s\n' "$out" | grep -E '^(Name|Kind) ' | sed 's/^/  /'
-    v=$(tmutil latestbackup 2>&1 | parse_tm_latest)
+    v=$(with_timeout 20 tmutil latestbackup 2>&1 | parse_tm_latest)
     if [ -n "$v" ]; then echo "last backup: $v"; else not_checked "last backup" "needs Full Disk Access"; fi
   fi
 
@@ -208,12 +210,12 @@ main() {
   for k in /opt/homebrew/bin/brew /usr/local/bin/brew; do [ -x "$k" ] && { brew=$k; break; }; done
   if [ -n "$brew" ]; then
     out=$(with_timeout 60 env HOMEBREW_NO_AUTO_UPDATE=1 HOMEBREW_NO_ANALYTICS=1 "$brew" outdated --verbose 2>/dev/null); rc=$?
-    if [ "$rc" -ne 0 ]; then not_checked "homebrew outdated" "timed out"; else echo "homebrew outdated: $(printf '%s' "$out" | grep -c .)"; printf '%s\n' "$out" | grep . | head -20 | sed 's/^/  /'; fi
+    if [ "$rc" -eq 143 ]; then not_checked "homebrew outdated" "timed out"; elif [ "$rc" -ne 0 ]; then not_checked "homebrew outdated" "not available"; else echo "homebrew outdated: $(printf '%s' "$out" | grep -c .)"; printf '%s\n' "$out" | grep . | head -20 | sed 's/^/  /'; fi
   else
     echo "homebrew: not installed"
   fi
   with_timeout 90 scan_apps > "$work/apps.tsv" 2>/dev/null; rc=$?
-  [ "$rc" -ne 0 ] && not_checked "app signatures" "timed out (partial list)"
+  [ "$rc" -ne 0 ] && not_checked "app signatures" "timed out"
   awk -F '\t' '{ n[$1]++ } END { for (k in n) printf "apps %s: %d\n", k, n[k] }' "$work/apps.tsv" | sort
   awk -F '\t' '$1 == "unsigned" || $1 == "adhoc" { print "  " $1 ": " $2 }' "$work/apps.tsv"
 

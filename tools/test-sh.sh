@@ -34,6 +34,9 @@ assert_match() {
 
 fixture() { echo "$HHC_ROOT/tools/fixtures/$1"; }
 
+# make_stub <dir> <name> <shell body>: writes an executable stub command, to run a whole script against fake tools
+make_stub() { mkdir -p "$1"; printf '#!/bin/sh\n%s\n' "$3" > "$1/$2"; chmod +x "$1/$2"; }
+
 # Sources a script without its final `main "$@"` line, so its functions can be tested.
 load_script() {
   case $1 in /*|[A-Za-z]:*) src=$1 ;; *) src=$HHC_ROOT/$1 ;; esac

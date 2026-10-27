@@ -56,3 +56,14 @@ out=$(bash -s -- --help < "$HHC_ROOT/$COLLECT" 2>&1); rc=$?
 assert_eq "--help from stdin exits 0 and prints Usage" "0 usage" "$rc $(printf '%s' "$out" | grep -q Usage && echo usage)"
 bash -s -- --bogus < "$HHC_ROOT/$COLLECT" >/dev/null 2>&1
 assert_eq "an unknown option exits 2" "2" "$?"
+
+# --- an error from softwareupdate must not read as "up to date" ---
+printf 'softwareupdate: Could not contact the update server\n' | parse_softwareupdate >/dev/null
+assert_eq "parse_softwareupdate returns 1 on output it does not recognize" "1" "$?"
+
+# --- the temporary folder is removed when the script ends ---
+STUBS=$HHC_TMP/stubs
+make_stub "$STUBS" uname 'if [ "$1" = -s ]; then echo Darwin; else exec '"$(command -v uname)"' "$@"; fi'
+mkdir -p "$HHC_TMP/tmpd"
+TMPDIR="$HHC_TMP/tmpd" PATH="$STUBS:$PATH" bash "$HHC_ROOT/$COLLECT" --skip-updates >/dev/null 2>&1
+assert_eq "collect.sh leaves no temporary folder behind" "0" "$(ls "$HHC_TMP/tmpd" | wc -l | tr -d ' ')"

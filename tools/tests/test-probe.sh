@@ -51,3 +51,29 @@ out=$(bash -s -- --help < "$HHC_ROOT/$PROBE" 2>&1); rc=$?
 assert_eq "--help from stdin exits 0 and prints Usage" "0 usage" "$rc $(printf '%s' "$out" | grep -q Usage && echo usage)"
 bash -s -- --bogus < "$HHC_ROOT/$PROBE" >/dev/null 2>&1
 assert_eq "an unknown option exits 2" "2" "$?"
+
+# --- the gateway must answer: otherwise the port, UPnP and DNS results are not to be trusted ---
+assert_match "gw_hint on macOS names Local Network and the unreliable results" 'Local Network.*unreliable|unreliable.*Local Network' "$(gw_hint no Darwin)"
+assert_match "gw_hint on Linux warns that results may be incomplete" 'incomplete' "$(gw_hint no Linux)"
+assert_eq "gw_hint is quiet when the gateway answered" "" "$(gw_hint yes Darwin)"
+
+# --- control urls on other hosts are dropped (a gateway must not choose where requests go) ---
+foreign='<root><device><serviceList><service><serviceType>urn:schemas-upnp-org:service:WANIPConnection:1</serviceType><controlURL>http://evil.example/ctl</controlURL></service><service><serviceType>urn:schemas-upnp-org:service:WANPPPConnection:1</serviceType><controlURL>http://192.168.1.1:80@evil.example/x</controlURL></service></serviceList></device></root>'
+assert_eq "parse_upnp_services drops control urls on other hosts" "" "$(printf '%s' "$foreign" | parse_upnp_services http://192.168.1.1:1900/igd.xml)"
+
+# --- whole script against fake tools ---
+STUBS=$HHC_TMP/pstubs
+make_stub "$STUBS" uname 'if [ "$1" = -s ]; then echo Darwin; else exec '"$(command -v uname)"' "$@"; fi'
+make_stub "$STUBS" route 'cat '"$(fixture macos/route-get-default.txt)"
+make_stub "$STUBS" ifconfig 'cat '"$(fixture macos/ifconfig.txt)"
+make_stub "$STUBS" arp 'cat '"$(fixture macos/arp-an.txt)"
+make_stub "$STUBS" ipconfig 'cat '"$(fixture macos/ipconfig-getpacket.txt)"
+make_stub "$STUBS" scutil 'cat '"$(fixture macos/scutil-dns.txt)"
+make_stub "$STUBS" system_profiler 'cat '"$(fixture macos/sp-airport.txt)"
+for fake in networksetup nc curl dig host netstat traceroute perl; do make_stub "$STUBS" "$fake" 'exit 1'; done
+make_stub "$STUBS" ping 'exit 1'
+out=$(PATH="$STUBS:$PATH" bash "$HHC_ROOT/$PROBE" 2>&1)
+assert_match "probe.sh warns at the top when the gateway does not answer" 'WARNING.*Local Network' "$out"
+make_stub "$STUBS" ping 'echo "5 packets transmitted, 5 packets received, 0.0% packet loss"; exit 0'
+out=$(PATH="$STUBS:$PATH" bash "$HHC_ROOT/$PROBE" 2>&1)
+assert_eq "probe.sh prints no warning when the gateway answers" "" "$(printf '%s\n' "$out" | grep 'WARNING')"

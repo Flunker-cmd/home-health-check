@@ -85,3 +85,27 @@ out=$(bash -s -- --help < "$HHC_ROOT/$DISCOVER" 2>&1); rc=$?
 assert_eq "--help from stdin exits 0 and prints Usage" "0 usage" "$rc $(printf '%s' "$out" | grep -q Usage && echo usage)"
 bash -s -- --bogus < "$HHC_ROOT/$DISCOVER" >/dev/null 2>&1
 assert_eq "an unknown option exits 2" "2" "$?"
+
+# --- location_host_ok must not be fooled by a user part in the url ---
+location_host_ok 192.168.1.5 'http://192.168.1.5:80@example.com/x'; assert_eq "location_host_ok rejects a url whose real host follows an @" "1" "$?"
+location_host_ok 192.168.1.5 'http://user@192.168.1.5/x'; assert_eq "location_host_ok rejects any url with a user part" "1" "$?"
+location_host_ok 192.168.1.5 'ftp://192.168.1.5/x'; assert_eq "location_host_ok rejects a scheme other than http and https" "1" "$?"
+location_host_ok 192.168.1.5 'https://192.168.1.5/x'; assert_eq "location_host_ok accepts https on the device's own address" "0" "$?"
+
+# --- run the whole script against fake tools: access denied on macOS must be reported even when the neighbor cache holds devices ---
+STUBS=$HHC_TMP/stubs
+make_stub "$STUBS" uname 'if [ "$1" = -s ]; then echo Darwin; else exec '"$(command -v uname)"' "$@"; fi'
+make_stub "$STUBS" route 'cat '"$(fixture macos/route-get-default.txt)"
+make_stub "$STUBS" ifconfig 'sed s/0xffffff00/0xfffffffc/ '"$(fixture macos/ifconfig.txt)"
+make_stub "$STUBS" arp 'cat '"$(fixture macos/arp-an.txt)"
+make_stub "$STUBS" perl 'exit 0'
+make_stub "$STUBS" host 'exit 1'
+make_stub "$STUBS" dns-sd 'exit 1'
+make_stub "$STUBS" ping 'exit 1'
+out=$(PATH="$STUBS:$PATH" bash "$HHC_ROOT/$DISCOVER" 2>&1)
+assert_match "no sweep replies on macOS prints the Local Network hint although arp lists devices" 'Local Network' "$out"
+out=$(PATH="$STUBS:$PATH" bash "$HHC_ROOT/$DISCOVER" --json 2>"$HHC_TMP/hint.err")
+assert_eq "--json keeps stdout clean and puts the hint on stderr" "{ yes" "$(printf '%s' "$out" | head -c1) $(grep -q 'Local Network' "$HHC_TMP/hint.err" && echo yes)"
+make_stub "$STUBS" ping 'exit 0'
+out=$(PATH="$STUBS:$PATH" bash "$HHC_ROOT/$DISCOVER" 2>&1)
+assert_eq "no hint when the sweep got replies" "" "$(printf '%s\n' "$out" | grep 'Local Network')"

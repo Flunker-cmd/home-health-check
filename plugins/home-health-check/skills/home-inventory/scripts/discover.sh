@@ -92,7 +92,7 @@ parse_upnp_desc() {
 }
 
 # only fetch a LOCATION url when its host is the device that announced it
-location_host_ok() { local h; h=${2#*://}; h=${h%%/*}; h=${h%%:*}; [ "$h" = "$1" ]; }
+location_host_ok() { local h; case $2 in http://*|https://*) ;; *) return 1 ;; esac; case $2 in *@*) return 1 ;; esac; h=${2#*://}; h=${h%%/*}; h=${h%%:*}; [ "$h" = "$1" ]; }
 
 # normalized MACs on stdin -> "mac<TAB>vendor", using a Wireshark manuf file
 oui_lookup() {
@@ -146,7 +146,7 @@ print_table() {
 lan_hint() {
   [ "$1" -eq 0 ] || return 0
   case $2 in
-    Darwin) echo "(no other devices answered - on macOS 15 and later, if this runs inside an app instead of Terminal, allow that app under System Settings > Privacy & Security > Local Network and run again)" ;;
+    Darwin) echo "(no other devices answered - on macOS 15 and later, if this runs inside an app instead of Terminal, allow that app under System Settings > Privacy & Security > Local Network, then run it again)" ;;
     *) echo "(no devices answered - check that this computer is on the home network)" ;;
   esac
 }
@@ -217,7 +217,7 @@ main() {
   work=$(mktemp -d "${TMPDIR:-/tmp}/hhc-discover.XXXXXX") || return 1
   trap 'rm -rf "$work"' EXIT
 
-  local iface gw ifc ip prefix addr maskhex selfmac net mask count i n h hosts_ip
+  local iface gw ifc ip prefix addr maskhex selfmac net mask count i n h hosts_ip replies
   if [ "$os" = Darwin ]; then
     iface=$(route -n get default 2>/dev/null | awk '/interface:/ { print $2; exit }')
     gw=$(route -n get default 2>/dev/null | awk '/gateway:/ { print $2; exit }')
@@ -241,15 +241,20 @@ main() {
   count=$(( (1 << (32 - prefix)) - 2 ))
 
   # ping sweep so the neighbor table fills up
+  # every reply from another address is recorded: no reply at all means no access to the LAN (see lan_hint)
+  : > "$work/replies"
   i=1
   while [ "$i" -le "$count" ]; do
     n=$((net + i))
     h="$(( (n >> 24) & 255 )).$(( (n >> 16) & 255 )).$(( (n >> 8) & 255 )).$(( n & 255 ))"
-    if [ "$os" = Darwin ]; then ping -c 1 -t 1 "$h" >/dev/null 2>&1 & else ping -c 1 -W 1 "$h" >/dev/null 2>&1 & fi
-    throttle 64
+    if [ "$h" != "$ip" ]; then
+      if [ "$os" = Darwin ]; then ( ping -c 1 -t 1 "$h" >/dev/null 2>&1 && echo 1 >> "$work/replies" ) & else ( ping -c 1 -W 1 "$h" >/dev/null 2>&1 && echo 1 >> "$work/replies" ) & fi
+      throttle 64
+    fi
     i=$((i + 1))
   done
   wait; jobs_n=0
+  replies=$(wc -l < "$work/replies" | tr -d ' ')
   sleep 1
 
   # neighbors (this computer first, so its own name wins)
@@ -317,15 +322,15 @@ main() {
     "$work/vend.tsv" "$work/names.tsv" "$work/upnp.tsv" "$work/ports.tsv" "$work/neigh.tsv" |
     sort -t . -k1,1n -k2,2n -k3,3n -k4,4n > "$work/records.tsv"
 
-  local subnet total others
+  local subnet total
   subnet="$(num_to_ip "$net")/$prefix"
   total=$(wc -l < "$work/records.tsv" | tr -d ' ')
-  others=$(awk -F '\t' -v me="$ip" -v gw="$gw" '$1 != me && $1 != gw' "$work/records.tsv" | wc -l | tr -d ' ')
   if [ "$want_json" = yes ]; then
+    lan_hint "$replies" "$os" >&2
     print_json "$(date '+%Y-%m-%dT%H:%M:%S')" "$subnet" "$gw" "$work/records.tsv"
   else
     echo "scanned: $(date '+%Y-%m-%d %H:%M')  subnet: $subnet  gateway: $gw  devices: $total"
-    lan_hint "$others" "$os"
+    lan_hint "$replies" "$os"
     [ -s "$work/ssdp.tsv" ] || echo "(no SSDP replies - UPnP may be off, or perl is not available)"
     if [ "$want_oui" = yes ] && [ ! -s "$work/vend.tsv" ]; then echo "(vendor list could not be downloaded)"; fi
     print_table "$work/records.tsv"
