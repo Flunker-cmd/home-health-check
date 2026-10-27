@@ -1,6 +1,15 @@
 ---
 name: pi-health-check
 description: Read-only health check of a Raspberry Pi or other Debian-based Linux box reachable over SSH (OS support status, updates, SD card and disk health, security, services, Pi-hole/unbound/cloudflared DNS setup), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Pi, Pi-hole, home server or a Linux machine on their network.
+summary: Read-only SSH health check of a Raspberry Pi or Linux box with a prioritized fix list, Pi-hole aware.
+version: 0.3.0
+tags: [raspberry-pi, linux, pi-hole, ssh, security, health-check]
+keywords: [raspberry pi, debian, pi-hole, unbound, cloudflared, sd card, home server]
+use_cases:
+  - Check whether my Pi still gets security updates
+  - Review my Pi-hole and DNS setup
+  - Find out why my home server feels unhealthy
+docs_url: https://github.com/Flunker-cmd/home-health-check
 ---
 
 # Raspberry Pi / Linux health check
@@ -25,10 +34,10 @@ Check one or more Linux hosts over SSH, explain what is good and what is not, an
 
 ## 2. Collect
 
-Run the bundled collector. It only reads, uses `sudo -n` (never prompts), and skips what it can't access:
+Run the bundled script `scripts/collect.sh` from this skill's folder. If your agent gave you this skill without a folder on disk, write the script's text unchanged to a temporary file, run that file the same way, and delete it afterwards. It only reads, uses `sudo -n` (never prompts), and skips what it can't access:
 
 ```bash
-ssh -o BatchMode=yes user@host 'bash -s' < "<this skill's directory>/scripts/collect.sh"
+ssh -o BatchMode=yes user@host 'bash -s' < "<path-to-this-skill>/scripts/collect.sh"
 ```
 
 Read the whole output. Follow up with your own read-only commands where something needs a closer look.

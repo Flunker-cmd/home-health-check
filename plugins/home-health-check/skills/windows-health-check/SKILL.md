@@ -1,13 +1,22 @@
 ---
 name: windows-health-check
 description: Read-only health check of a Windows 10/11 PC (updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and event log errors, backup, startup programs, outdated apps), ending in a prioritized fix list. Use when the user asks to check, review, clean up or "health check" their Windows computer.
+summary: Read-only health check of a Windows 10/11 PC with a prioritized fix list, no admin rights needed.
+version: 0.3.0
+tags: [windows, health-check, security, bitlocker, defender, maintenance]
+keywords: [windows 11, windows 10, bios, secure boot, event log, backup, winget, startup programs]
+use_cases:
+  - Check whether my PC is secure and up to date
+  - Find out why Windows crashes or feels slow
+  - Clean up startup programs and outdated apps
+docs_url: https://github.com/Flunker-cmd/home-health-check
 ---
 
 # Windows PC health check
 
 Check the PC this session runs on, explain what is good and what is not, and hand the user a prioritized list of fixes. Answer in the user's language.
 
-**Several PCs:** the collector only reads the machine it runs on, so each Windows PC is checked in its own Claude Code session on that PC. If the user wants an overview, ask them to save each report and combine them in one session into a single ranked list, with the PC named in every action.
+**Several PCs:** the collector only reads the machine it runs on, so each Windows PC is checked by running this skill on that PC. For an overview of several PCs, see *Several computers* in `references/findings-format.md`: the findings of every PC can end up in one data directory, where a report skill can combine them into a single ranked list with the PC named in every action.
 
 ## Ground rules
 
@@ -19,8 +28,10 @@ Check the PC this session runs on, explain what is good and what is not, and han
 
 ## 1. Collect
 
+Run the bundled script `scripts/collect.ps1` from this skill's folder. If your agent gave you this skill without a folder on disk, write the script's text unchanged to a temporary file, run that file the same way, and delete it afterwards.
+
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's directory>/scripts/collect.ps1"
+powershell -NoProfile -ExecutionPolicy Bypass -File "<path-to-this-skill>/scripts/collect.ps1"
 ```
 
 `-SkipWinget` skips the app update list (slow on some machines). Read the whole output, then look closer where something stands out (e.g. `Get-WinEvent` for a specific error, `Get-CimInstance` for a device).

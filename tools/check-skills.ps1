@@ -98,7 +98,47 @@ function Test-Privacy {
     }
 }
 
+function Get-Frontmatter($skillMd) {
+    $lines = Get-Content $skillMd
+    $fm = @{}
+    if ($lines.Count -lt 2 -or $lines[0].Trim() -ne '---') { return $fm }
+    for ($i = 1; $i -lt $lines.Count; $i++) {
+        if ($lines[$i].Trim() -eq '---') { break }
+        if ($lines[$i] -match '^([A-Za-z_]+):\s*(.*)$') { $fm[$Matches[1]] = $Matches[2].Trim() }
+    }
+    return $fm
+}
+
+function Test-Frontmatter {
+    $required = 'name', 'description', 'summary', 'version', 'tags', 'keywords', 'use_cases', 'docs_url'
+    $pluginVersion = (Get-Content -Raw (Join-Path $pluginDir '.claude-plugin\plugin.json') | ConvertFrom-Json).version
+    foreach ($s in Get-Skills) {
+        $md = Join-Path $s.FullName 'SKILL.md'
+        $fm = Get-Frontmatter $md
+        Checked
+        foreach ($k in $required) {
+            if (-not $fm.ContainsKey($k)) { Fail 'frontmatter' $md "missing key '$k'" }
+        }
+        if ($fm.ContainsKey('name') -and $fm['name'] -ne $s.Name) { Fail 'name-folder' $md "name '$($fm['name'])' does not match folder '$($s.Name)'" }
+        if ($fm.ContainsKey('version') -and $fm['version'] -ne $pluginVersion) { Fail 'version-match' $md "version '$($fm['version'])' differs from plugin.json '$pluginVersion'" }
+    }
+}
+
+function Test-AgentNeutral {
+    $patterns = '\bClaude\b', "<this skill's directory>", 'Claude Code session', 'Claude in Chrome', 'get_page_text', 'read_page'
+    foreach ($s in Get-Skills) {
+        $md = Join-Path $s.FullName 'SKILL.md'
+        Checked
+        $text = [IO.File]::ReadAllText($md)
+        foreach ($p in $patterns) {
+            if ($text -match $p) { Fail 'agent-neutral' $md "matches '$p'" }
+        }
+    }
+}
+
 Test-ContractCopy
+Test-Frontmatter
+Test-AgentNeutral
 Test-ScriptSize
 Test-Ps1Ascii
 Test-ShLf

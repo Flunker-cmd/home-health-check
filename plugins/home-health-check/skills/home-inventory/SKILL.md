@@ -1,6 +1,15 @@
 ---
 name: home-inventory
 description: Discover and keep a local inventory of the devices on the user's home network (IP, MAC, vendor, name, type, open services), and report new, missing or changed devices since the last scan. Use when the user asks what is on their network, wants an inventory or device list, asks about an unknown device, or before another health check needs to know which devices exist.
+summary: Finds every device on your home network, keeps a private inventory, and tells you what is new or gone.
+version: 0.3.0
+tags: [home-network, inventory, network-scan, security, home-lab]
+keywords: [network devices, ip scanner, mac vendor, arp, unknown device, home lab]
+use_cases:
+  - See what is connected to my home network
+  - Spot a device I do not recognize
+  - Keep a device list the other health checks can use
+docs_url: https://github.com/Flunker-cmd/home-health-check
 ---
 
 # Home network inventory
@@ -17,8 +26,10 @@ Find the devices on the local network, identify them as far as possible, and kee
 
 On Windows (no admin needed):
 
+Run the bundled script `scripts/discover.ps1` from this skill's folder. If your agent gave you this skill without a folder on disk, write the script's text unchanged to a temporary file, run that file the same way, and delete it afterwards.
+
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "<this skill's directory>/scripts/discover.ps1" -Ports -Oui
+powershell -NoProfile -ExecutionPolicy Bypass -File "<path-to-this-skill>/scripts/discover.ps1" -Ports -Oui
 ```
 
 - `-Ports` checks ~18 well-known ports per device (ssh, http, smb, printer, Sonos, Chromecast, Home Assistant, Plex ...) and reads the device description from Sonos and Chromecast devices.
