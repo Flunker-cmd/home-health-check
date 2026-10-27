@@ -2,7 +2,7 @@
 name: home-network-report
 description: Combine the home inventory and the findings of every health check into one prioritized report for the whole home - the most important actions, a red/yellow/green overview per device, and what changed since last time. Use when the user asks for a report, an overview or a summary of all checks of their home network, or what to fix first.
 summary: One prioritized report for the whole home from the inventory and every health check's findings.
-version: 0.4.0
+version: 0.5.0
 tags: [home-network, report, health-check, security, home-lab]
 keywords: [home report, summary, overview, what to fix first, findings, inventory, prioritized]
 use_cases:
@@ -41,7 +41,7 @@ List the names in `findings/` first; do not open them yet. A findings file is na
 
 1. Group the names by module and MAC. A name that does not follow the pattern goes to the *could not read* list with "name does not follow the pattern".
 2. Within a group, sorting by name sorts by time. The **latest** file is the last name, the **previous** file is the one before it.
-3. **Read only the latest and the previous file of each group.** Never open older files, however many there are: they are history the report does not need.
+3. **Read the latest file of each group. Read the previous file only when it is needed:** when an earlier report exists (section 4, *Changes since last time*, compares the two), or when the latest file cannot be read. Never open older files, however many there are: they are history the report does not need.
 4. For `unknown` MACs, a module can have several unknown devices. Split such a group by the `device.name` inside the files.
 
 ## 3. Read the findings
