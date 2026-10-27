@@ -1,0 +1,109 @@
+# Checks the skills in this repo against the rules in the design (docs/superpowers/specs).
+# Prints one line per violation: FAIL <rule-id> <repo-relative-path>: <message>
+# Exit code 0 when everything passes, 1 otherwise. Windows PowerShell 5.1, no parameters.
+$ErrorActionPreference = 'Stop'
+
+$root = (Resolve-Path (Join-Path $PSScriptRoot '..')).Path
+$pluginDir = Join-Path $root 'plugins\home-health-check'
+$skillsDir = Join-Path $pluginDir 'skills'
+$contractSrc = Join-Path $pluginDir 'shared\findings-format.md'
+$script:fails = 0
+$script:checks = 0
+
+function Rel($path) { $path.Substring($root.Length).TrimStart('\', '/').Replace('\', '/') }
+function Fail($rule, $path, $msg) { $script:fails++; "FAIL $rule $(Rel $path): $msg" }
+function Checked { $script:checks++ }
+
+function Get-Skills {
+    Get-ChildItem $skillsDir -Directory | Where-Object { Test-Path (Join-Path $_.FullName 'SKILL.md') }
+}
+
+function Get-RepoFiles($filter) {
+    Get-ChildItem $root -Recurse -File -Filter $filter |
+        Where-Object { $_.FullName -notmatch '\\(\.git|\.superpowers)\\' }
+}
+
+function Test-ContractCopy {
+    if (-not (Test-Path $contractSrc)) { Fail 'contract-copy' $contractSrc 'contract source is missing'; return }
+    $srcHash = (Get-FileHash $contractSrc).Hash
+    foreach ($s in Get-Skills) {
+        Checked
+        $copy = Join-Path $s.FullName 'references\findings-format.md'
+        if (-not (Test-Path $copy)) { Fail 'contract-copy' $copy 'missing, run tools/sync-contract.ps1'; continue }
+        if ((Get-FileHash $copy).Hash -ne $srcHash) { Fail 'contract-copy' $copy 'differs from shared/findings-format.md, run tools/sync-contract.ps1' }
+    }
+}
+
+function Test-ScriptSize {
+    foreach ($s in Get-Skills) {
+        $dir = Join-Path $s.FullName 'scripts'
+        if (-not (Test-Path $dir)) { continue }
+        foreach ($f in Get-ChildItem $dir -Recurse -File) {
+            Checked
+            if ($f.Length -ge 20480) { Fail 'script-size' $f.FullName "$($f.Length) bytes, must be under 20480" }
+        }
+    }
+}
+
+function Test-Ps1Ascii {
+    foreach ($f in Get-RepoFiles '*.ps1') {
+        Checked
+        $bad = [IO.File]::ReadAllBytes($f.FullName) | Where-Object { $_ -gt 127 } | Select-Object -First 1
+        if ($null -ne $bad) { Fail 'ps1-ascii' $f.FullName 'contains non-ASCII bytes' }
+    }
+}
+
+function Test-ShLf {
+    foreach ($f in Get-RepoFiles '*.sh') {
+        Checked
+        if ([IO.File]::ReadAllBytes($f.FullName) -contains 13) { Fail 'sh-lf' $f.FullName 'contains CR (CRLF line endings)' }
+    }
+}
+
+function Test-IpAllowed($ip) {
+    $o = $ip.Split('.') | ForEach-Object { [int]$_ }
+    if ($o | Where-Object { $_ -gt 255 }) { return $true }                  # not an address (version string)
+    if ($ip -in @('1.1.1.1', '9.9.9.9', '8.8.8.8', '0.0.0.0', '255.255.255.255')) { return $true }
+    if ($o[0] -eq 10 -or $o[0] -eq 127) { return $true }
+    if ($o[0] -eq 192 -and $o[1] -eq 168) { return $true }
+    if ($o[0] -eq 172 -and $o[1] -ge 16 -and $o[1] -le 31) { return $true }
+    if ($o[0] -eq 100 -and $o[1] -ge 64 -and $o[1] -le 127) { return $true }  # CGNAT 100.64.0.0/10
+    if ($o[0] -eq 169 -and $o[1] -eq 254) { return $true }
+    if ($o[0] -ge 224 -and $o[0] -le 239) { return $true }                  # multicast (mDNS, SSDP)
+    return $false
+}
+
+function Test-Privacy {
+    $files = @()
+    foreach ($ext in '*.md', '*.ps1', '*.sh') {
+        $files += Get-ChildItem $pluginDir -Recurse -File -Filter $ext
+    }
+    $agensi = Join-Path $root 'agensi'
+    if (Test-Path $agensi) { $files += Get-ChildItem $agensi -Recurse -File }
+    foreach ($name in 'README.md', 'CLAUDE.md') {
+        $p = Join-Path $root $name
+        if (Test-Path $p) { $files += Get-Item $p }
+    }
+    foreach ($f in $files) {
+        Checked
+        $text = [IO.File]::ReadAllText($f.FullName)
+        foreach ($m in [regex]::Matches($text, '(?i)\b([0-9a-f]{2}:){5}[0-9a-f]{2}\b')) {
+            if ($m.Value -notmatch '00:00:00$') { Fail 'privacy' $f.FullName "MAC address $($m.Value) (use a placeholder ending in 00:00:00)" }
+        }
+        if ($text -match '[A-Za-z]:\\Users\\') { Fail 'privacy' $f.FullName 'contains a Windows user path' }
+        if ($text -match '[A-Za-z]:\\dev\\') { Fail 'privacy' $f.FullName 'contains a local D:\dev style path' }
+        foreach ($m in [regex]::Matches($text, '\b\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}\b')) {
+            if (-not (Test-IpAllowed $m.Value)) { Fail 'privacy' $f.FullName "public-looking IP address $($m.Value)" }
+        }
+    }
+}
+
+Test-ContractCopy
+Test-ScriptSize
+Test-Ps1Ascii
+Test-ShLf
+Test-Privacy
+
+if ($script:fails -eq 0) { "OK $($script:checks) checks"; exit 0 }
+"$($script:fails) failures"
+exit 1
