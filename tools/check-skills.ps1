@@ -166,9 +166,10 @@ function Test-NetworkSection {
 }
 
 function Test-FindingsSection {
-    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check') {
+    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check', 'macos-health-check') {
         $md = Join-Path $skillsDir "$name\SKILL.md"
         Checked
+        if (-not (Test-Path $md)) { Fail 'findings-section' $md 'missing SKILL.md'; continue }
         $text = [IO.File]::ReadAllText($md)
         if (-not [regex]::IsMatch($text, '(?m)^## Save findings\s*$')) { Fail 'findings-section' $md "missing '## Save findings' heading" }
         if (-not $text.Contains('hhc-findings/1')) { Fail 'findings-section' $md "does not mention hhc-findings/1" }

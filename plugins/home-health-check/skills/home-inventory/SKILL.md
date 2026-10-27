@@ -2,9 +2,9 @@
 name: home-inventory
 description: Discover and keep a local inventory of the devices on the user's home network (IP, MAC, vendor, name, type, open services), and report new, missing or changed devices since the last scan. Use when the user asks what is on their network, wants an inventory or device list, asks about an unknown device, or before another health check needs to know which devices exist.
 summary: Finds every device on your home network, keeps a private inventory, and tells you what is new or gone.
-version: 0.3.0
+version: 0.4.0
 tags: [home-network, inventory, network-scan, security, home-lab]
-keywords: [network devices, ip scanner, mac vendor, arp, unknown device, home lab]
+keywords: [network devices, ip scanner, mac vendor, arp, unknown device, home lab, macos, linux]
 use_cases:
   - See what is connected to my home network
   - Spot a device I do not recognize
@@ -32,11 +32,19 @@ Run the bundled script `scripts/discover.ps1` from this skill's folder. If your 
 powershell -NoProfile -ExecutionPolicy Bypass -File "<path-to-this-skill>/scripts/discover.ps1" -Ports -Oui
 ```
 
-- `-Ports` checks ~18 well-known ports per device (ssh, http, smb, printer, Sonos, Chromecast, Home Assistant, Plex ...) and reads the device description from Sonos and Chromecast devices.
-- `-Oui` maps MAC addresses to vendors with Wireshark's public vendor list (downloaded once, refreshed every 90 days). Ask before the first download if the user is sensitive about network access; only the list is fetched, no device data is sent.
-- `-Json` gives machine-readable output.
+On macOS or Linux (no sudo needed):
 
-On macOS/Linux use what is available: `arp -a` after a ping sweep (`nmap -sn <subnet>` if nmap is installed), `avahi-browse -art` or `dns-sd -B _services._dns-sd._udp` for mDNS names, and `nc -zv -w1` for single ports.
+Run the bundled script `scripts/discover.sh` from this skill's folder. If your agent gave you this skill without a folder on disk, write the script's text unchanged to a temporary file, run that file the same way, and delete it afterwards.
+
+```bash
+bash "<path-to-this-skill>/scripts/discover.sh" --ports --oui
+```
+
+It prints the same table, or the same JSON, as the Windows script, so steps 2 and 3 do not care which one ran. It needs only tools that ship with macOS and Debian-based Linux (`ping`, `arp` or `ip neigh`, `curl`, `nc` and `perl` for the UPnP discovery); anything missing is skipped. On macOS 15 and later, if your agent runs inside an app (an editor or a desktop app) instead of Terminal, macOS asks once whether that app may find devices on the local network. Tell the user before the first scan, and ask them to allow it; running in Terminal or over SSH needs no permission. If the scan finds no other devices on macOS, that dialog was probably refused: the script prints a hint.
+
+- `-Ports` / `--ports` checks ~18 well-known ports per device (ssh, http, smb, printer, Sonos, Chromecast, Home Assistant, Plex ...) and reads the device description from Sonos and Chromecast devices.
+- `-Oui` / `--oui` maps MAC addresses to vendors with Wireshark's public vendor list (downloaded once, refreshed every 90 days). Ask before the first download if the user is sensitive about network access; only the list is fetched, no device data is sent.
+- `-Json` / `--json` gives machine-readable output.
 
 If a Raspberry Pi or Linux server with SSH is on the network, it can add more: `avahi-browse -artp` there (if `avahi-utils` is installed) lists mDNS names that Windows can't see, and **Pi-hole** knows which clients make DNS queries:
 `sudo pihole-FTL sqlite3 /etc/pihole/pihole-FTL.db "select client, count(*) from queries where timestamp > strftime('%s','now')-86400 group by client"`.
@@ -81,5 +89,6 @@ The checks also save their findings as files in `<data dir>/findings/` (format i
 ## Network and permissions
 
 - **Network:** only the user's own LAN. A ping sweep of the local subnet (never more than 1024 addresses), reverse DNS lookups of local addresses, an SSDP discovery multicast, HTTP requests to the device descriptions that local devices announce (and to the well-known Sonos and Chromecast description URLs), and, with `-Ports`, TCP connections to about 18 well-known ports per device. With `-Oui` it downloads Wireshark's public MAC vendor list once from `https://www.wireshark.org/download/automated/data/manuf` and refreshes it after 90 days; no device data is sent. Ask the user first if they are sensitive about network access.
-- **Rights:** no admin rights. `-ExecutionPolicy Bypass` applies to that one PowerShell process only, so the local unsigned script can run; it changes no system setting.
-- **Files:** the script writes only `<data dir>/cache/manuf.txt` (with `-Oui`). The skill writes `<data dir>/inventory.md`.
+- **Network, macOS and Linux:** `discover.sh` makes the same kinds of requests as the Windows script: a ping sweep of the local subnet (never more than 1024 addresses), reverse DNS lookups (`host` or `getent`), mDNS name lookups (`dns-sd` on macOS, `avahi-resolve` on Linux if installed), an SSDP discovery multicast sent by `perl` if installed, HTTP requests to the device descriptions that local devices announce, TCP connections with `nc` or bash `/dev/tcp` with `--ports`, and with `--oui` the same single download of the Wireshark vendor list with `curl`. Local devices cannot make it fetch other hosts: it only requests a description from the address that announced it.
+- **Rights:** no admin rights, and no sudo on macOS or Linux. `-ExecutionPolicy Bypass` applies to that one PowerShell process only, so the local unsigned script can run; it changes no system setting. On macOS 15 and later the first scan from inside an app asks for Local Network access for that app (an operating system dialog, once); Terminal and SSH are exempt.
+- **Files:** the scripts write only `<data dir>/cache/manuf.txt` (with `-Oui` / `--oui`), plus a temporary folder that `discover.sh` deletes when it ends. The skill writes `<data dir>/inventory.md`.

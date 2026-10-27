@@ -2,7 +2,7 @@
 name: pi-health-check
 description: Read-only health check of a Raspberry Pi or other Debian-based Linux box reachable over SSH (OS support status, updates, SD card and disk health, security, services, Pi-hole/unbound/cloudflared DNS setup), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Pi, Pi-hole, home server or a Linux machine on their network.
 summary: Read-only SSH health check of a Raspberry Pi or Linux box with a prioritized fix list, Pi-hole aware.
-version: 0.3.0
+version: 0.4.0
 tags: [raspberry-pi, linux, pi-hole, ssh, security, health-check]
 keywords: [raspberry pi, debian, pi-hole, unbound, cloudflared, sd card, home server]
 use_cases:

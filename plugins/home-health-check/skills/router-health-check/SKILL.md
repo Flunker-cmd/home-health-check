@@ -2,9 +2,9 @@
 name: router-health-check
 description: Read-only health check of a home router or mesh Wi-Fi system (TP-Link Deco, Eero, Google/Nest Wifi, Asus, Netgear, Ubiquiti and others) from a computer on the LAN - model and firmware, open ports, UPnP, Wi-Fi security, DHCP/DNS path, IPv6, double NAT, latency - ending in a prioritized fix list. Use when the user asks to check or review their router, mesh, Wi-Fi or home network settings.
 summary: Read-only check of your router or mesh from the LAN: firmware, ports, UPnP, Wi-Fi, DNS path, double NAT.
-version: 0.3.0
+version: 0.4.0
 tags: [router, mesh, wifi, upnp, home-network, security]
-keywords: [tp-link deco, eero, asus, netgear, firmware, double nat, dns, ipv6]
+keywords: [tp-link deco, eero, asus, netgear, firmware, double nat, dns, ipv6, macos, linux]
 use_cases:
   - Review my router and Wi-Fi security settings
   - Find out whether UPnP or port forwards expose my network
@@ -39,7 +39,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -File "<path-to-this-skill>/script
 
 It reports: gateway and DHCP info (DNS handed out, lease time), latency and packet loss, open TCP ports on the gateway, the model and manufacturer from the router's UPnP description, UPnP port mappings, nearby Wi-Fi networks with their security, the first hops (double NAT / CGNAT), whether the gateway's own DNS filters ads, and the devices in the ARP table.
 
-On macOS or Linux, gather the same with: `ip route` / `netstat -rn`, `ping -c 50`, `nc -zv -w2 <gw> 22 23 53 80 443 8080 8443`, `traceroute -n -m 3 1.1.1.1`, `arp -a`, `dig @<gw> doubleclick.net`, and the Wi-Fi tool of the OS (`nmcli dev wifi list`, or *Option-click* the Wi-Fi icon on macOS).
+On macOS or Linux (no sudo needed):
+
+Run the bundled script `scripts/probe.sh` from this skill's folder. If your agent gave you this skill without a folder on disk, write the script's text unchanged to a temporary file, run that file the same way, and delete it afterwards.
+
+```bash
+bash "<path-to-this-skill>/scripts/probe.sh"
+```
+
+It reports the same sections as the Windows probe, in the same order, and takes about 30 seconds. `--sweep` pings the whole local /24 first so the neighbor list is complete. Things it cannot read are left out rather than guessed: DHCP details need `nmcli` on Linux (a static address shows "not readable"), and on macOS the names of nearby Wi-Fi networks are hidden by the operating system (`<redacted>`); the user can *Option-click* the Wi-Fi icon to see the network they are on. On macOS 15 and later, if your agent runs inside an app (an editor or a desktop app) instead of Terminal, macOS asks once whether that app may find devices on the local network. Tell the user before the first run and ask them to allow it; Terminal and SSH need no permission. If the device list is empty on macOS, that dialog was probably refused: the script prints a hint.
 
 If a DNS filter such as **Pi-hole** is in use, also check which clients it sees (see the pi-health-check skill). If it only ever sees the router's IP, the router is forwarding DNS and per-device stats and rules are lost.
 
@@ -149,5 +157,6 @@ Use a standard id when it fits. Otherwise make a new kebab-case id, and keep usi
 ## Network and permissions
 
 - **Network:** mostly the local network. The probe pings the gateway, the DNS servers it hands out and the public resolvers 1.1.1.1, 9.9.9.9 and 8.8.8.8 (20 pings each), runs a 3-hop traceroute to 1.1.1.1, and looks up the ad-domain `doubleclick.net` through the gateway and its DNS servers to see whether DNS filtering applies (only the lookup is sent). It sends an SSDP discovery multicast, fetches the router's UPnP description over HTTP, and sends a read-only UPnP request (`GetGenericPortMappingEntry`) to list existing port mappings; it creates no mappings. It tries a handful of TCP ports on the gateway and lists nearby Wi-Fi networks with `netsh wlan`. Firmware versions and advisories are looked up on public web pages by the agent; nothing from the network is sent there.
-- **Rights:** no admin rights. `-ExecutionPolicy Bypass` applies to that one PowerShell process only, so the local unsigned script can run; it changes no system setting. Browser and SSH reading of the router are read-only and the user signs in themselves.
-- **Files:** the probe writes nothing. The skill writes the findings file and updates the inventory in `<data dir>`.
+- **Network, macOS and Linux:** `probe.sh` makes the same calls as the Windows probe (pings, a 3-hop route to 1.1.1.1 with `traceroute`, `tracepath` or TTL-limited pings, the `doubleclick.net` lookup with `dig` or `host`, the SSDP multicast sent by `perl` if installed, the router's UPnP description fetched with `curl`, the read-only `GetGenericPortMappingEntry` request, a handful of TCP ports on the gateway) and lists nearby Wi-Fi networks with `system_profiler` on macOS or `nmcli` on Linux. It only fetches a description from the address that announced it. `--sweep` (also `-Sweep`) pings every address in the local /24 before reading the neighbor table; `probe.ps1 -Sweep` does the same on Windows.
+- **Rights:** no admin rights, and no sudo on macOS or Linux. `-ExecutionPolicy Bypass` applies to that one PowerShell process only, so the local unsigned script can run; it changes no system setting. On macOS 15 and later the first run from inside an app asks for Local Network access for that app (an operating system dialog, once); Terminal and SSH are exempt. Browser and SSH reading of the router are read-only and the user signs in themselves.
+- **Files:** the probes write nothing except a temporary folder that `probe.sh` deletes when it ends. The skill writes the findings file and updates the inventory in `<data dir>`.
