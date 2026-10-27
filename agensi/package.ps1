@@ -19,9 +19,13 @@ if ($out -eq $root -or $out.StartsWith($root + '\', [StringComparison]::OrdinalI
 if ($LASTEXITCODE -ne 0) { throw 'tools/check-skills.ps1 failed, fix that first' }
 New-Item -ItemType Directory -Force $out | Out-Null
 
+$shipped = '\.(md|ps1|sh|txt)$'      # Agensi delivers text files only; anything else is left out
+
 function Get-SkillEntries($skill, $prefix) {
     $dir = $skill.FullName
-    Get-ChildItem $dir -Recurse -File | ForEach-Object {
+    Get-ChildItem $dir -Recurse -File | Where-Object {
+        if ($_.Name -match $shipped) { $true } else { Write-Host "skipped (not shipped): $($_.FullName.Substring($root.Length + 1))"; $false }
+    } | ForEach-Object {
         @{ Source = $_.FullName; Entry = $prefix + $skill.Name + '/' + $_.FullName.Substring($dir.Length + 1).Replace('\', '/') }
     }
 }

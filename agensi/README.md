@@ -9,6 +9,6 @@ Let your AI agent map and health-check your home: the devices on your network, a
 | `router-health-check` | Router or mesh from a PC on the LAN: firmware, open ports, UPnP, Wi-Fi security, DNS path, double NAT, latency |
 | `windows-health-check` | Windows 10/11: updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes, backup, startup programs |
 
-The skills work on their own and share one private data folder on your computer (inventory and findings), so a report can combine them. Everything stays on your machine. Details are in each skill's `references/findings-format.md`.
+The skills work on their own and share one private data folder on your computer (inventory and findings). Everything stays on your machine. Details are in each skill's `references/findings-format.md`.
 
 Open source (MIT): https://github.com/Flunker-cmd/home-health-check

@@ -74,10 +74,7 @@ function Test-IpAllowed($ip) {
 }
 
 function Test-Privacy {
-    $files = @()
-    foreach ($ext in '*.md', '*.ps1', '*.sh') {
-        $files += Get-ChildItem $pluginDir -Recurse -File -Filter $ext
-    }
+    $files = @(Get-ChildItem $pluginDir -Recurse -File)       # every file the plugin and the Agensi ZIPs can ship
     $agensi = Join-Path $root 'agensi'
     if (Test-Path $agensi) { $files += Get-ChildItem $agensi -Recurse -File }
     foreach ($name in 'README.md', 'CLAUDE.md') {
@@ -87,8 +84,14 @@ function Test-Privacy {
     foreach ($f in $files) {
         Checked
         $text = [IO.File]::ReadAllText($f.FullName)
-        foreach ($m in [regex]::Matches($text, '(?i)\b([0-9a-f]{2}:){5}[0-9a-f]{2}\b')) {
-            if ($m.Value -notmatch '00:00:00$') { Fail 'privacy' $f.FullName "MAC address $($m.Value) (use a placeholder ending in 00:00:00)" }
+        foreach ($m in [regex]::Matches($text, '(?i)\b[0-9a-f]{2}([:-])(?:[0-9a-f]{2}\1){4}[0-9a-f]{2}\b')) {
+            if ($m.Value -notmatch '00[:-]00[:-]00$' -and $m.Value -notmatch '^(?i)ff([:-]ff){5}$') { Fail 'privacy' $f.FullName "MAC address $($m.Value) (use a placeholder ending in 00:00:00)" }
+        }
+        foreach ($m in [regex]::Matches($text, '(?i)\b[0-9a-f]{4}\.[0-9a-f]{4}\.[0-9a-f]{4}\b')) {
+            if ($m.Value -notmatch '00\.0000$') { Fail 'privacy' $f.FullName "MAC address $($m.Value) (use a placeholder ending in 00.0000)" }
+        }
+        foreach ($m in [regex]::Matches($text, '(?i)\b2[0-9a-f]{3}:[0-9a-f:]{2,}')) {
+            if ($m.Value -notmatch '^2001:db8:') { Fail 'privacy' $f.FullName "global IPv6 address $($m.Value) (use 2001:db8:: for examples)" }
         }
         if ($text -match '[A-Za-z]:\\Users\\') { Fail 'privacy' $f.FullName 'contains a Windows user path' }
         if ($text -match '[A-Za-z]:\\dev\\') { Fail 'privacy' $f.FullName 'contains a local D:\dev style path' }

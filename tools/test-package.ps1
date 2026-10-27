@@ -27,6 +27,9 @@ foreach ($z in $zips) {
         if ($names | Where-Object { $_.Contains('\') }) { Fail "$z has entry names with a backslash" }
         if ($entries.Count -gt 200) { Fail "$z has $($entries.Count) files, limit is 200" }
         foreach ($e in $entries) { if ($e.Length -ge 20480) { Fail "$z entry $($e.FullName) is $($e.Length) bytes, limit is 20480" } }
+        foreach ($e in $entries) {
+            if ($e.Name -notmatch '\.(md|ps1|sh|txt)$') { Fail "$z entry $($e.FullName) has an extension Agensi packaging does not ship" }
+        }
         foreach ($bad in 'plugin.json', '.git', 'listings.md', 'package.ps1') {
             if ($names | Where-Object { $_ -match [regex]::Escape($bad) }) { Fail "$z contains $bad" }
         }
