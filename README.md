@@ -1,6 +1,6 @@
 # home-health-check
 
-A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, and your Windows PC. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
+A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC and your Mac. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
 
 | Skill | Does |
 |---|---|
@@ -8,12 +8,13 @@ A Claude Code plugin that lets Claude map and health-check the devices in your h
 | `pi-health-check` | Raspberry Pi / Debian-based Linux over SSH: OS support status, updates, SD card and power health, SSH and sudo, services and ports, static IP, Pi-hole, unbound/cloudflared, backups |
 | `router-health-check` | Home router or mesh from a PC on the LAN: model and firmware, open ports, UPnP mappings, Wi-Fi security, DHCP and DNS path (incl. Pi-hole bypass), IPv6, double NAT, latency, devices |
 | `windows-health-check` | Windows 10/11: updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and log errors, backup, startup programs, outdated apps |
+| `macos-health-check` | macOS: version and support, updates, FileVault, SIP, Gatekeeper, firewall, XProtect, sharing, Time Machine, disk, battery, startup items, Homebrew and unsigned apps, crashes and panics. No sudo, no permission dialogs |
 
 ## Requirements
 
 - [Claude Code](https://code.claude.com) in a terminal or the Code tab of the Claude desktop app. It has to run on a computer on your home network. Claude in a browser can't reach your devices.
 - For the Pi check: SSH key login to the Pi.
-- The router and Windows probes are PowerShell scripts. On macOS/Linux, Claude runs equivalent commands instead.
+- The inventory and router scripts exist as PowerShell (Windows) and bash (macOS and Linux, stock bash 3.2); the Mac check is a bash script that needs no sudo. On macOS 15 and later, if your agent runs inside an app rather than in Terminal, macOS asks once whether that app may find devices on your local network (Terminal and SSH need no permission).
 
 ## Install
 
@@ -28,6 +29,7 @@ Then start Claude Code and ask, for example:
 - "Do a health check of my Raspberry Pi at 192.168.1.10"
 - "Check my router and Wi-Fi settings"
 - "Health check this PC"
+- "Health check this Mac"
 
 or call a skill directly: `/home-health-check:pi-health-check`.
 
@@ -76,7 +78,7 @@ plugins/home-health-check/
   skills/<skill>/SKILL.md              instructions for the agent
   skills/<skill>/references/           copy of the findings contract
   skills/<skill>/scripts/              read-only collectors
-tools/                                 check-skills.ps1, sync-contract.ps1, test-package.ps1
+tools/                                 check-skills.ps1, sync-contract.ps1, test-package.ps1, test-sh.sh, tests/, fixtures/
 agensi/                                Agensi listing texts and packaging script
 docs/superpowers/                      design and implementation plans
 ```
@@ -86,6 +88,7 @@ Validate after changes:
 ```bash
 claude plugin validate .
 powershell -NoProfile -ExecutionPolicy Bypass -File tools/check-skills.ps1
+bash tools/test-sh.sh
 ```
 
 ## License
