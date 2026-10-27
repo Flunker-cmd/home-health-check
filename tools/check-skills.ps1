@@ -189,6 +189,28 @@ function Get-CodeLines($path) {
     }
 }
 
+function Remove-SingleQuoted($lines) {
+    # drops text inside '...' (tracked across lines, ignoring apostrophes inside "..." and trailing comments)
+    $inS = $false; $inD = $false
+    foreach ($l in $lines) {
+        $t = $l.Text; $sb = New-Object Text.StringBuilder
+        for ($i = 0; $i -lt $t.Length; $i++) {
+            $c = $t[$i]
+            if ($inS) { if ($c -eq "'") { $inS = $false }; continue }
+            if ($inD) {
+                [void]$sb.Append($c)
+                if ($c -eq '\' -and $i + 1 -lt $t.Length) { $i++; [void]$sb.Append($t[$i]) } elseif ($c -eq '"') { $inD = $false }
+                continue
+            }
+            if ($c -eq "'") { $inS = $true; continue }
+            if ($c -eq '"') { $inD = $true }
+            if ($c -eq '#' -and ($i -eq 0 -or $t[$i - 1] -match '\s')) { break }
+            [void]$sb.Append($c)
+        }
+        @{ N = $l.N; Text = $sb.ToString() }
+    }
+}
+
 function Test-ShBash32 {
     # constructs missing from macOS's stock bash 3.2
     $patterns = @(
@@ -219,8 +241,10 @@ function Test-ShPortable {
             foreach ($p in $patterns) {
                 if ($l.Text -match $p) { Fail 'sh-portable' $f.FullName "line $($l.N) is not portable to macOS and Linux ($p)" }
             }
-            # $0 is allowed inside awk and sed programs
-            if ($l.Text -match '\$0\b' -and $l.Text -notmatch '\b(awk|sed)\b') { Fail 'sh-portable' $f.FullName "line $($l.N) uses `$0 (scripts also run from stdin)" }
+        }
+        # $0 is fine inside single quotes (awk and sed programs, also over several lines), not as the script name
+        foreach ($l in Remove-SingleQuoted (Get-CodeLines $f.FullName)) {
+            if ($l.Text -match '\$0\b') { Fail 'sh-portable' $f.FullName "line $($l.N) uses `$0 (scripts also run from stdin)" }
         }
     }
 }
