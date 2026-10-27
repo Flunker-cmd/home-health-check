@@ -1,2 +1,5 @@
 # Shell scripts are piped to Linux hosts over SSH and break with CRLF
 *.sh text eol=lf
+
+# Test fixtures are parsed byte for byte by the shell tests
+tools/fixtures/** text eol=lf
