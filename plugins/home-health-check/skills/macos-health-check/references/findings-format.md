@@ -1,6 +1,6 @@
 # Shared data and findings format (hhc-findings/1)
 
-This is the contract between the check skills (modules) and the report skill. Every skill folder carries an identical copy as `references/findings-format.md`. The source is `shared/findings-format.md` in the plugin; edit that one and run `tools/sync-contract.ps1`.
+This is the contract between the check skills (modules) and the report skill. Every skill folder carries an identical copy as `references/findings-format.md`.
 
 A skill always works on its own and gives its full report in chat. Writing findings to the data directory is an extra that makes the skill part of one picture of the home.
 
@@ -12,7 +12,8 @@ A skill always works on its own and gives its full report in chat. Writing findi
 <data dir>/
   inventory.md     device list, owned by the home-inventory skill
   findings/        one file per module run, written by the check skills
-  reports/         written by the report skill
+  reports/         <YYYY-MM-DD>-home-report.md, one per day, written by the home-network-report skill
+                   (a later run on the same day overwrites that day's file)
   cache/           downloaded helper data, for example the MAC vendor list (manuf.txt)
 ```
 
@@ -32,7 +33,7 @@ Windows and macOS checks only read the computer they run on, so their findings a
 A device is identified by its **MAC address**: lowercase, colon separated (`b8:27:eb:00:00:00`). Collectors print the MAC of the network interface they used.
 
 - Things that are not network devices, such as a smart-home hub's sensors, belong to the network device that manages them. Name the sub-device in `subject`.
-- If the MAC cannot be determined, use `device: unknown` with a best-effort name.
+- If the MAC cannot be determined, write `device:` as usual with `mac: unknown` and a best-effort `name`, and use `unknown` in the file name. Readers also accept the older form `device: unknown`.
 
 ## Findings file
 
