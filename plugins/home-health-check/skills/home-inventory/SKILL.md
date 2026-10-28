@@ -2,7 +2,7 @@
 name: home-inventory
 description: Discover and keep a local inventory of the devices on the user's home network (IP, MAC, vendor, name, type, open services), and report new, missing or changed devices since the last scan. Use when the user asks what is on their network, wants an inventory or device list, asks about an unknown device, or before another health check needs to know which devices exist.
 summary: Finds every device on your home network, keeps a private inventory, and tells you what is new or gone.
-version: 0.5.2
+version: 0.6.0
 tags: [home-network, inventory, network-scan, security, home-lab]
 keywords: [network devices, ip scanner, mac vendor, arp, unknown device, home lab, macos, linux]
 use_cases:
@@ -80,9 +80,9 @@ Network: 192.168.1.0/24, gateway 192.168.1.1. Last scan: 2026-10-26 09:00.
 
 ## 4. Use by other checks
 
-The pi-health-check, router-health-check, windows-health-check and macos-health-check skills read this file when it exists: to find the Pi's address, to judge whether every device uses the intended DNS server, and to spot devices that belong on a guest or IoT network.
+The pi-health-check, router-health-check, windows-health-check, macos-health-check and homey-health-check skills read this file when it exists: to find the Pi's address, to judge whether every device uses the intended DNS server, and to spot devices that belong on a guest or IoT network.
 
-They also write back what they learn: the router check adds client names, mesh node models and firmware, and reservations; the Pi, Windows and Mac checks fill in their own host's role, OS and model. All of them match on MAC and leave the user's own names and notes alone unless the user agrees. When you rescan, keep everything they added.
+They also write back what they learn: the router check adds client names, mesh node models and firmware, and reservations; the Pi, Windows, Mac and Homey checks fill in their own host's role, OS and model. All of them match on MAC and leave the user's own names and notes alone unless the user agrees. When you rescan, keep everything they added.
 
 The checks also save their findings as files in `<data dir>/findings/` (format in `references/findings-format.md`). The home-network-report skill reads the inventory and those findings together and writes one prioritized report for the whole home to `<data dir>/reports/`. This skill does not write findings itself.
 

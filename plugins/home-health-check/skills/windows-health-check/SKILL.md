@@ -2,7 +2,7 @@
 name: windows-health-check
 description: Read-only health check of a Windows 10/11 PC (updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and event log errors, backup, startup programs, outdated apps), ending in a prioritized fix list. Use when the user asks to check, review, clean up or "health check" their Windows computer.
 summary: Read-only health check of a Windows 10/11 PC with a prioritized fix list, no admin rights needed.
-version: 0.5.2
+version: 0.6.0
 tags: [windows, health-check, security, bitlocker, defender, maintenance]
 keywords: [windows 11, windows 10, bios, secure boot, event log, backup, winget, startup programs]
 use_cases:

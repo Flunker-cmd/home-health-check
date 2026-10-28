@@ -167,7 +167,7 @@ function Test-NetworkSection {
 }
 
 function Test-FindingsSection {
-    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check', 'macos-health-check') {
+    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check', 'macos-health-check', 'homey-health-check') {
         $md = Join-Path $skillsDir "$name\SKILL.md"
         Checked
         if (-not (Test-Path $md)) { Fail 'findings-section' $md 'missing SKILL.md'; continue }
