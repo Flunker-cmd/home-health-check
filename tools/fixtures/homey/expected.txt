@@ -21,8 +21,6 @@ outages_7d: 1
 outages_31d: none
 memory_trend_31d: 320 MB -> 400 MB (+25%)
 undervoltage_31d_max: 0.25
-  app_memory: Weather Station 60 -> 90 MB
-  app_memory: Light Bridge 40 -> 45 MB
 ## Backup
 backup_state: Idle
 backup_error: none

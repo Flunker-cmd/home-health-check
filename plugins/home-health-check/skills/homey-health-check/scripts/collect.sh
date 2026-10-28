@@ -15,8 +15,7 @@ usage() {
   echo "  --now <ISO 8601 UTC>    offline: the clock to use, for testing (e.g. 2026-10-28T12:00Z)"
   echo "  files read by --from-dir: system.json devices.json flows.json advancedflows.json apps.json"
   echo "    zones.json zigbee.json zwave.json updates.json notifications.json backup-state.json"
-  echo "    insights-logs.json memory-24h.json memory-7d.json memory-31d.json undervoltage-31d.json"
-  echo "    app-mem/<app id>.json"
+  echo "    memory-24h.json memory-7d.json memory-31d.json undervoltage-31d.json"
 }
 
 check_perl() {
@@ -117,7 +116,6 @@ $mem{'24h'} = get('memory_24h', 'memory-24h.json', series('homey:manager:system:
 $mem{'7d'} = get('memory_7d', 'memory-7d.json', series('homey:manager:system:memory', 'last7Days'));
 $mem{'31d'} = get('memory_31d', 'memory-31d.json', series('homey:manager:system:memory', 'last31Days'));
 my $uv = get('undervoltage_31d_max', 'undervoltage-31d.json', series('homey:manager:system:undervoltageratio', 'last31Days'));
-my $logs = get('insights', 'insights-logs.json', '/api/manager/insights/log');
 my $bk = get('backup', 'backup-state.json', '/api/manager/backup/state');
 my $nt = get('notifications', 'notifications.json', '/api/manager/notifications/notification/');
 my $apps = get('apps', 'apps.json', '/api/manager/apps/app/');
@@ -168,31 +166,13 @@ for (['24h', 60, 'min'], ['7d', 3600, 'h'], ['31d', 3600, 'h']) {
   print '  ', dt($_->[0]), ' ', rnd($_->[1] * ($s->{step} || 0) / 1000 / $div, 0), " $unit\n" for @out;
 }
 my ($f, $l) = $mem{'31d'} ? weeks($mem{'31d'}) : ();
-my $pct;
 if (defined $f && $f > 0) {
-  $pct = ($l - $f) / $f * 100;
+  my $pct = ($l - $f) / $f * 100;
   my $r = rnd($pct, 0);
   print 'memory_trend_31d: ', rnd($f, 0), ' MB -> ', rnd($l, 0), ' MB (', ($r =~ /^-/ ? '' : '+'), "$r%)\n";
 } else { nc('memory_trend_31d', 'memory_31d') }
 my @u = grep { defined } map { $_->[1] } ($uv ? pts($uv) : ());
 if (@u) { my $mx = $u[0]; for (@u) { $mx = $_ if $_ > $mx } print 'undervoltage_31d_max: ', rnd($mx, 2), "\n" } else { nc('undervoltage_31d_max') }
-if (defined $pct && $pct >= 20) {
-  if (!$logs) { nc('app_memory', 'insights') } else {
-    my (@am, $miss);
-    my @ids = sort map { $_->{id} =~ /^homey:manager:apps:(.+)-mem$/ ? $1 : () } grep { ref $_ eq 'HASH' && defined $_->{id} } objs($logs);
-    for my $id (@ids) {
-      my $s = get('app_memory', "app-mem/$id.json", series("homey:manager:apps:$id-mem", 'last31Days'));
-      if (!$s) { $miss = 1; next }
-      my ($m1, $m2) = weeks($s);
-      next unless defined $m1;
-      my $n = ref $apps eq 'HASH' && ref $apps->{$id} eq 'HASH' && defined $apps->{$id}{name} ? $apps->{$id}{name} : $id;
-      push @am, [$n, $m1, $m2];
-    }
-    nc('app_memory') if $miss;
-    @am = sort { ($b->[2] - $b->[1]) <=> ($a->[2] - $a->[1]) or ord_ci($a->[0], $b->[0]) } @am;
-    print "  app_memory: $_->[0] ", rnd($_->[1], 0), ' -> ', rnd($_->[2], 0), " MB\n" for grep { defined } @am[0 .. 2];
-  }
-}
 
 # notifications as [epoch, ownerUri, ownerName, text with whitespace collapsed]
 my @N = grep { defined $_->[0] } map { [ep($_->{dateCreated}), (defined $_->{ownerUri} ? $_->{ownerUri} : ''), (defined $_->{ownerName} ? $_->{ownerName} : $_->{ownerUri}), one($_->{excerpt})] } grep { ref $_ eq 'HASH' } objs($nt);

@@ -89,3 +89,14 @@ $r = Invoke-Homey -Homey 127.0.0.1:9 -KeyFile $k
 Assert-Eq 'an unreachable Homey exits 3' '3' "$($r.Code)"
 Assert-Eq 'an unreachable Homey says so' 'error: cannot reach the Homey at 127.0.0.1:9' ($r.Out + $r.Err).Trim()
 Assert-Eq 'no key in error output' 'no' $(if (($r.Out + $r.Err) -match 'CANARY') { 'yes' } else { 'no' })
+
+# --- collect.ps1 needs render.ps1 next to it ---
+$alone = Join-Path $HhcTmp 'alone'
+New-Item -ItemType Directory -Path $alone | Out-Null
+Copy-Item -LiteralPath $HomeyPs -Destination $alone
+$saved = $HomeyPs
+$HomeyPs = Join-Path $alone 'collect.ps1'
+$r = Invoke-Homey -Homey 192.168.1.50 -FromDir (Get-Fixture 'homey') -Now $HomeyNow
+$HomeyPs = $saved
+Assert-Eq 'collect.ps1 without render.ps1 exits 2' '2' "$($r.Code)"
+Assert-Eq 'collect.ps1 without render.ps1 says so' 'error: render.ps1 must be in the same folder as collect.ps1' ($r.Out + $r.Err).Trim()

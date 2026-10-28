@@ -15,7 +15,7 @@ Saved Homey Pro (Early 2023) API responses, in the layout `--from-dir`/`-FromDir
 
 Synthetic wording (real wording unknown): the successful backup notice, and the app states `crashed` and `stopped`. The failed backup notice is the real wording.
 
-Canaries that must never appear in output: `CANARY-KEY` (a presence notice that also says `offline`), `CANARY-LASTVALUE` (`lastValue` of a logic log in `insights-logs.json`), `CANARY-SSID` (`wifiSsid`), `CANARY-ZWAVE` (`zw_state.expandedNetworkKeys` in `zwave.json`).
+Canaries that must never appear in output: `CANARY-KEY` (a presence notice that also says `offline`), `CANARY-SSID` (`wifiSsid`), `CANARY-ZWAVE` (`zw_state.expandedNetworkKeys` in `zwave.json`).
 
 Radio fields the collectors read (exact names from the real Homey):
 

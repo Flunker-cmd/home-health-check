@@ -40,7 +40,7 @@ function Test-ScriptSize {
         if (-not (Test-Path $dir)) { continue }
         foreach ($f in Get-ChildItem $dir -Recurse -File) {
             Checked
-            if ($f.Length -ge 20480) { Fail 'script-size' $f.FullName "$($f.Length) bytes, must be under 20480" }
+            if ($f.Length -ge 20000) { Fail 'script-size' $f.FullName "$($f.Length) bytes, must be under 20000" }
         }
     }
 }
