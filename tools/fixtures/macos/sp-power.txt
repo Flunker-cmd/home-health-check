@@ -1,0 +1,26 @@
+Power:
+
+    Battery Information:
+
+      Model Information:
+          Serial Number: XXXX
+          Manufacturer: DSY
+          Device Name: bq40z651
+          Firmware Version: 0b00
+          Hardware Revision: 300
+      Charge Information:
+          The battery charge is below the warning level: No
+          Fully Charged: No
+          Charging: No
+          Full Charge Capacity (mAh): 7714
+          State of Charge (%): 55
+      Health Information:
+          Cycle Count: 117
+          Condition: Normal
+
+    System Power Settings:
+
+      AC Power:
+          System Sleep Timer (Minutes): 1
+          Wake on LAN: Yes
+          Low Power Mode: No

@@ -108,7 +108,7 @@ Get-WinEvent -FilterHashtable @{ LogName = 'Application'; Level = 1, 2; StartTim
 
 # ---------------------------------------------------------------------------
 Section "Network"
-Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { "adapter: $($_.Name), $($_.LinkSpeed), $($_.InterfaceDescription)" }
+Get-NetAdapter | Where-Object Status -eq 'Up' | ForEach-Object { "adapter: $($_.Name), $($_.LinkSpeed), $($_.InterfaceDescription), mac: $($_.MacAddress.Replace('-', ':').ToLower())" }
 Get-DnsClientServerAddress -AddressFamily IPv4 | Where-Object ServerAddresses | ForEach-Object { "DNS ($($_.InterfaceAlias)): $($_.ServerAddresses -join ', ')" }
 $doh = Get-ItemProperty 'HKLM:\SOFTWARE\Policies\Google\Chrome' -Name DnsOverHttpsMode
 if ($doh) { "Chrome DoH policy: $($doh.DnsOverHttpsMode)" }

@@ -1,0 +1,9 @@
+Power:
+
+    System Power Settings:
+
+      AC Power:
+          System Sleep Timer (Minutes): 1
+          Disk Sleep Timer (Minutes): 10
+          Wake on LAN: Yes
+          Low Power Mode: No

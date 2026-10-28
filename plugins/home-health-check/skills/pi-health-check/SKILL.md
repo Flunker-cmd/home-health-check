@@ -1,11 +1,22 @@
 ---
 name: pi-health-check
 description: Read-only health check of a Raspberry Pi or other Debian-based Linux box reachable over SSH (OS support status, updates, SD card and disk health, security, services, Pi-hole/unbound/cloudflared DNS setup), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Pi, Pi-hole, home server or a Linux machine on their network.
+summary: Read-only SSH health check of a Raspberry Pi or Linux box with a prioritized fix list, Pi-hole aware.
+version: 0.4.0
+tags: [raspberry-pi, linux, pi-hole, ssh, security, health-check]
+keywords: [raspberry pi, debian, pi-hole, unbound, cloudflared, sd card, home server]
+use_cases:
+  - Check whether my Pi still gets security updates
+  - Review my Pi-hole and DNS setup
+  - Find out why my home server feels unhealthy
+docs_url: https://github.com/Flunker-cmd/home-health-check
 ---
 
 # Raspberry Pi / Linux health check
 
 Check one or more Linux hosts over SSH, explain what is good and what is not, and hand the user a prioritized list of fixes. Answer in the user's language.
+
+`<data dir>` below is the folder for the inventory and findings; it is defined in `references/findings-format.md`.
 
 **Several hosts:** if the inventory (or the user) lists more than one Pi or Linux machine, show them with name and address and ask whether to check one or all. For all: connect to and collect from each in turn (each may have its own SSH user), write one report per host, and end with a combined summary that ranks every host's actions in a single priority order, e.g. "update the OS on pi2 and pi3 before anything else". Name the host in every finding so nothing gets mixed up.
 
@@ -19,16 +30,16 @@ Check one or more Linux hosts over SSH, explain what is good and what is not, an
 
 ## 1. Connect
 
-1. If `~/.home-health-check/inventory.md` exists (from the home-inventory skill), take the host from there. Otherwise ask for the host (IP or name) and user, or find candidates with `ssh -G <host>`, `~/.ssh/config`, or the ARP table (Raspberry Pi MAC prefixes include `b8:27:eb`, `dc:a6:32`, `e4:5f:01`, `d8:3a:dd`, `2c:cf:67`).
+1. If `<data dir>/inventory.md` exists (from the home-inventory skill), take the host from there. Otherwise ask for the host (IP or name) and user, or find candidates with `ssh -G <host>`, `~/.ssh/config`, or the ARP table (Raspberry Pi MAC prefixes include `b8:27:eb`, `dc:a6:32`, `e4:5f:01`, `d8:3a:dd`, `2c:cf:67`).
 2. Test non-interactively: `ssh -o BatchMode=yes -o ConnectTimeout=5 user@host "hostname"`.
    - If key login is not set up, tell the user how to set it up (`ssh-keygen -t ed25519`, then copy the public key to `~/.ssh/authorized_keys` on the host) and let them do it. Do not work around it with passwords.
 
 ## 2. Collect
 
-Run the bundled collector. It only reads, uses `sudo -n` (never prompts), and skips what it can't access:
+Run the bundled script `scripts/collect.sh` from this skill's folder. If your agent gave you this skill without a folder on disk, write the script's text unchanged to a temporary file, run that file the same way, and delete it afterwards. It only reads, uses `sudo -n` (never prompts), and skips what it can't access:
 
 ```bash
-ssh -o BatchMode=yes user@host 'bash -s' < "<this skill's directory>/scripts/collect.sh"
+ssh -o BatchMode=yes user@host 'bash -s' < "<path-to-this-skill>/scripts/collect.sh"
 ```
 
 Read the whole output. Follow up with your own read-only commands where something needs a closer look.
@@ -67,7 +78,45 @@ Offer to carry out the fixes, one approved step at a time.
 
 ## 5. Update the inventory
 
-If `~/.home-health-check/inventory.md` exists, update each checked host's row (matched by MAC, from `ip link` on the host): hostname in *Name* if empty, role in *Type* (e.g. "DNS server (Pi-hole + unbound)"), open services, and model, OS release and static IP in *Notes*. Never overwrite a name or note the user set without asking, and tell the user in a line what you changed. Do it again after a reinstall or other big change, so the inventory stays true.
+If `<data dir>/inventory.md` exists, update each checked host's row (matched by MAC, from the `mac:` line of the collector output): hostname in *Name* if empty, role in *Type* (e.g. "DNS server (Pi-hole + unbound)"), open services, and model, OS release and static IP in *Notes*. Never overwrite a name or note the user set without asking, and tell the user in a line what you changed. Do it again after a reinstall or other big change, so the inventory stays true.
+
+## Save findings
+
+After the report, write the findings so other skills can use them. The format is `hhc-findings/1`, described in `references/findings-format.md`.
+
+1. If `<data dir>` exists, write one findings file per checked host, named as the format describes. Take `device.mac` from the `mac:` line of that host's collector output.
+2. If `<data dir>` does not exist, offer once to create it, and carry on without it if the user declines.
+3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
+4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Put what could not be read in `not_checked`.
+5. Tell the user the path of each file in one line.
+
+### Standard finding ids
+
+| id | usual severity | when |
+|---|---|---|
+| `os-out-of-support` | high | OS release no longer gets security updates |
+| `updates-pending` | medium | pending upgrades, security ones first |
+| `reboot-required` | low | a reboot is needed to finish updates |
+| `storage-errors` | high | kernel I/O, mmc or ext4 errors, or root mounted read-only (SD card dying) |
+| `undervoltage` | medium | `get_throttled` is not `0x0` |
+| `low-disk-space` | medium | root filesystem nearly full |
+| `ssh-password-login` | medium | SSH accepts password login |
+| `ssh-root-login` | medium | SSH accepts root login |
+| `failed-units` | medium | failed systemd units |
+| `unused-services` | low | services that look unused (VNC, Samba, CUPS, old RetroPie) |
+| `no-static-ip` | low | a server whose address is not fixed |
+| `pihole-no-password` | high | Pi-hole web UI has no password |
+| `pihole-outdated` | low | Pi-hole core, FTL or web has an update |
+| `cloudflared-deprecated` | medium | still on cloudflared `proxy-dns`, removed upstream in 2026.2.0 |
+| `no-backup` | high | no backup of the Pi-hole or other configuration |
+
+Use a standard id when it fits. Otherwise make a new kebab-case id, and keep using it.
+
+## Network and permissions
+
+- **Network:** SSH to the host the user names, with key login only (`BatchMode`, no passwords). The collector makes no outbound calls of its own; it reads the host's local state. `apt-get -s` is a simulation and installs nothing. Support dates, versions and advisories are looked up on public web pages by the agent; nothing from the host is sent there.
+- **Rights:** runs as the normal SSH user. It uses `sudo -n` (passwordless sudo only, it never prompts) to read things such as the effective sshd configuration, firewall status, the kernel log, process names behind listening ports, and Pi-hole's settings and query database (a read-only count). Without passwordless sudo these are skipped and listed as needing sudo. It checks whether Pi-hole's web password is set and prints only yes or no, never the hash.
+- **Files:** nothing is written on the host. On this computer the skill writes the findings files and updates the inventory row, both in `<data dir>`. Every fix is a separate step that needs the user's yes.
 
 ## Fixing: proven playbooks
 

@@ -1,0 +1,7 @@
+tcp4       0      0  *.22                   *.*                    LISTEN     
+tcp6       0      0  *.22                   *.*                    LISTEN     
+tcp4       0      0  127.0.0.1.5900         *.*                    LISTEN     
+tcp6       0      0  *.7000                 *.*                    LISTEN     
+tcp4       0      0  *.7000                 *.*                    LISTEN     
+tcp4       0      0  *.49185                *.*                    LISTEN     
+tcp6       0      0  fe80::1%en0.49167      *.*                    LISTEN     

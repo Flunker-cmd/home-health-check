@@ -1,11 +1,11 @@
 {
   "name": "home-health-check",
-  "version": "0.2.2",
-  "description": "Home network inventory plus read-only health checks for a Raspberry Pi or Linux server, a home router or mesh network, and a Windows PC, with a prioritized fix list",
+  "version": "0.4.0",
+  "description": "Home network inventory plus read-only health checks for a Raspberry Pi or Linux server, a home router or mesh network, a Windows PC and a Mac, with a prioritized fix list",
   "author": {
     "name": "Mattias"
   },
   "license": "MIT",
   "repository": "https://github.com/Flunker-cmd/home-health-check",
-  "keywords": ["health-check", "raspberry-pi", "pi-hole", "router", "windows", "home-network", "security"]
+  "keywords": ["health-check", "raspberry-pi", "pi-hole", "router", "windows", "macos", "home-network", "security"]
 }

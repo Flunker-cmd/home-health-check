@@ -1,0 +1,10 @@
+Executable=/Applications/Example Browser.app/Contents/MacOS/Example Browser
+Identifier=com.example.browser
+Format=app bundle with Mach-O thin (x86_64)
+CodeDirectory v=20500 size=577 flags=0x12a00(kill,restrict,library-validation,runtime) hashes=7+7 location=embedded
+Signature size=9012
+Authority=Developer ID Application: Example Corp (ABCDE12345)
+Authority=Developer ID Certification Authority
+Authority=Apple Root CA
+Timestamp=10 Sep 2026 at 14:09:22
+TeamIdentifier=ABCDE12345
