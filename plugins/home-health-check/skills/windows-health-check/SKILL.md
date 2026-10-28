@@ -2,7 +2,7 @@
 name: windows-health-check
 description: Read-only health check of a Windows 10/11 PC (updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and event log errors, backup, startup programs, outdated apps), ending in a prioritized fix list. Use when the user asks to check, review, clean up or "health check" their Windows computer.
 summary: Read-only health check of a Windows 10/11 PC with a prioritized fix list, no admin rights needed.
-version: 0.5.0
+version: 0.5.1
 tags: [windows, health-check, security, bitlocker, defender, maintenance]
 keywords: [windows 11, windows 10, bios, secure boot, event log, backup, winget, startup programs]
 use_cases:
@@ -18,7 +18,7 @@ Check the PC this session runs on, explain what is good and what is not, and han
 
 `<data dir>` below is the folder for the inventory and findings; it is defined in `references/findings-format.md`.
 
-**Several PCs:** the collector only reads the machine it runs on, so each Windows PC is checked by running this skill on that PC. For an overview of several PCs, see *Several computers* in `references/findings-format.md`: the findings of every PC can end up in one data directory, where a report skill can combine them into a single ranked list with the PC named in every action.
+**Several PCs:** the collector only reads the machine it runs on, so each Windows PC is checked by running this skill on that PC. For an overview of several PCs, see *Several computers* in `references/findings-format.md`: the findings of every PC can end up in one data directory, where the home-network-report skill can combine them into a single ranked list with the PC named in every action.
 
 ## Ground rules
 
