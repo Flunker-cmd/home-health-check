@@ -1,6 +1,6 @@
 # Agensi listings
 
-Texts for the Agensi upload form. This file is not shipped in the ZIPs. Every listing links to the GitHub repo. Only describe what is built: macOS, the home report and Homey go under "Coming" and nowhere else.
+Texts for the Agensi upload form. This file is not shipped in the ZIPs. Every listing links to the GitHub repo. Only describe what is built: modules that are not built yet, such as Homey, go under "Coming" and nowhere else.
 
 Repo: https://github.com/Flunker-cmd/home-health-check
 
@@ -16,7 +16,7 @@ Repo: https://github.com/Flunker-cmd/home-health-check
 
 - **Title:** Home Health Check Pack
 - **Summary:** Read-only health checks for your Raspberry Pi or Linux box, router or mesh Wi-Fi, Windows PC and Mac, each with a prioritized fix list.
-- **Description:** Six skills that work alone and share one private data folder. `home-inventory` maps your network. `pi-health-check` checks a Raspberry Pi or Debian-based server over SSH, Pi-hole aware. `router-health-check` checks your router or mesh from the LAN: firmware, open ports, UPnP, Wi-Fi security, DNS path, double NAT. `windows-health-check` checks a Windows 10/11 PC without admin rights. `macos-health-check` checks a Mac without sudo and without permission dialogs. The inventory and router checks run on Windows, macOS and Linux. `home-network-report` combines the inventory and every check into one prioritized report for the whole home, with what changed since last time. Every check ends with a prioritized fix list with exact steps, and every script is read-only. Each skill lists the network calls and permissions it uses. Open source (MIT): the repo link above.
+- **Description:** Six skills that share one private data folder. The five checks work alone; the report combines what they found. `home-inventory` maps your network. `pi-health-check` checks a Raspberry Pi or Debian-based server over SSH, Pi-hole aware. `router-health-check` checks your router or mesh from the LAN: firmware, open ports, UPnP, Wi-Fi security, DNS path, double NAT. `windows-health-check` checks a Windows 10/11 PC without admin rights. `macos-health-check` checks a Mac without sudo and without permission dialogs. The inventory and router checks run on Windows, macOS and Linux. `home-network-report` combines the inventory and every check into one prioritized report for the whole home, with what changed since last time. Every check ends with a prioritized fix list with exact steps, and every script is read-only. Each skill lists the network calls and permissions it uses. Open source (MIT): the repo link above.
 - **Tags:** home-lab, raspberry-pi, router, windows, macos, security, health-check, report
 - **Price note:** one-time, 3-5 USD. The author sets the final price on Agensi.
 
