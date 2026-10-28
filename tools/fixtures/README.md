@@ -21,3 +21,4 @@ Radio fields the collectors read (exact names from the real Homey):
 
 - `zigbee.json`: `zigbee_ready` (bool), `zigbee_error` (null or text), `nodes` (object keyed by IEEE address; each node has `type`: `router`, `enddevice` or `coordinator`). Node count = entries whose `type` is not `coordinator`.
 - `zwave.json`: `zw_ready`, `zw_error`, and under `zw_state`: `nodes` (array of node ids, includes the controller), `nodeId` (the controller's own id), `noAckNodes` (array of node ids). Node count = `zw_state.nodes` without `zw_state.nodeId`; no_ack = length of `zw_state.noAckNodes`.
+- `system.json`: `wifiStrength` is a 0-100 quality value (the real Homey reported 90), printed as `wifi_signal: <wifiStrength>%, <wifiFrequency> MHz`, not dBm.

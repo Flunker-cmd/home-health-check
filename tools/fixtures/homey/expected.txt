@@ -10,7 +10,7 @@ memory: 1304 MB used of 1896 MB
 loadavg: 0.15 0.21 0.18
 power: undervoltage_now=no undervoltage_seen=yes throttled_seen=no
 network: wifi
-wifi_signal: 78 dBm, 5180 MHz
+wifi_signal: 78%, 5180 MHz
 mac: aa:bb:cc:00:00:00
 address: 192.168.1.50
 ## Stability
