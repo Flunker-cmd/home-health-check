@@ -110,7 +110,8 @@ function Section([string]$name) { Say "## $name" }
 function NotChecked([string]$label, [string]$area) {
   if ($area -eq '') { $area = $label }
   $reason = 'not available'
-  if (-not $Tested) { $reason = 'untested model' } elseif ($Why.ContainsKey($area)) { $reason = $Why[$area] }
+  if ($Why.ContainsKey($area)) { $reason = $Why[$area] }
+  if (-not $Tested) { $reason += ' (untested model)' }
   Say "not checked: ${label}: $reason"
 }
 function Fact([string]$key, $value) {
@@ -235,7 +236,7 @@ function Write-Report($Responses, $Why, $NowEpoch) {
     Say ("backup_notices: $($list.Count)" + $(if ($null -ne $oldest) { ' since ' + (FormatDate $oldest) }))
     foreach ($x in $list) {
       $kind = 'other'
-      if ($x.text -match 'problem|fail|error') { $kind = 'failed' } elseif ($x.text -match 'success|complete|created') { $kind = 'succeeded' }
+      if ($x.text -match 'problem|fail|error|unable|\bnot\b') { $kind = 'failed' } elseif ($x.text -match 'success|complete|created') { $kind = 'succeeded' }
       Say ('  ' + (FormatDate $x.t) + " ${kind}: " + (Excerpt $x.text))
     }
   }
@@ -325,9 +326,9 @@ function Write-Report($Responses, $Why, $NowEpoch) {
     $counts = $Dict::new()
     foreach ($x in $recent) { if ($counts.ContainsKey($x.owner)) { $counts[$x.owner] += 1 } else { $counts[$x.owner] = 1 } }
     foreach ($owner in @(SortStable @($counts.Keys) { param($p, $q) CompareNames $p $q })) { Say "  ${owner}: $($counts[$owner])" }
-    # presence and security notices can name people: never matched or quoted
+    # presence and security notices can name people, and notices written by flows can hold variable values: never matched or quoted
     $keywords = 'backup|offline|disconnect|connection lost|lost connection|unreachable|failed|error|crash|sync.*disabled|battery'
-    $matched = @($recent | Where-Object { $_.uri -cnotmatch '^homey:manager:(presence|security|backup)$' -and $_.text -match $keywords })
+    $matched = @($recent | Where-Object { $_.uri -cnotmatch '^homey:manager:(presence|security|backup|flow|notifications)$' -and $_.text -match $keywords })
     foreach ($x in @(SortStable $matched $byTime)) { Say ('  match ' + (FormatDate $x.t) + " $($x.owner): " + (Excerpt $x.text)) }
   }
   Section 'Tidiness'

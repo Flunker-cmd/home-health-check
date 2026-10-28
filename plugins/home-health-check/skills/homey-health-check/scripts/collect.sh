@@ -46,11 +46,14 @@ if ($dir eq '') {
   $k =~ s/^\xEF\xBB\xBF//;
   $k =~ s/^\s+|\s+$//g;
   fail('error: the key file is empty', 2) if $k eq '';
-  $http = HTTP::Tiny->new(timeout => 15, default_headers => { Authorization => "Bearer $k" });
+  # no proxy from the environment and no redirects: the key goes to the named host only (a 3xx reads as not available)
+  $http = HTTP::Tiny->new(timeout => 15, proxy => undef, http_proxy => undef, max_redirect => 0, default_headers => { Authorization => "Bearer $k" });
 }
 
 # get(<area>, <file under --from-dir>, <API path>): decoded JSON, or undef with the reason in $why{<area>}.
+# A body that is not a JSON object (or, for the list areas, an array) is unreadable too.
 # Responses are never printed whole; a failed request prints nothing from the response.
+my %list = map { $_ => 1 } qw(firmware_update notifications apps devices zones flows advanced_flows);
 sub get {
   my ($area, $file, $path) = @_;
   my ($body, $st);
@@ -64,7 +67,7 @@ sub get {
     elsif ($st == 599 && $calls == 1) { fail("error: cannot reach the Homey at $host", 3) }
     elsif ($st == 599 && $r->{content} =~ /timed? out/i) { $st = 'timeout' }
   }
-  if (defined $body) { my $d = eval { decode_json($body) }; return $d if defined $d; $st = 'bad' }
+  if (defined $body) { my $d = eval { decode_json($body) }; return $d if ref $d eq 'HASH' || ($list{$area} && ref $d eq 'ARRAY'); $st = 'bad' }
   $why{$area} = $st =~ /^40[13]$/ ? 'key lacks permission' : $st eq 'timeout' ? 'timed out' : 'not available';
   return undef;
 }
@@ -102,7 +105,7 @@ sub weeks {
   return (mean(@f), mean(@l));
 }
 sub sec { print "## $_[0]\n" }
-sub nc { my ($label, $area) = @_; print "not checked: $label: ", ($tested ? $why{defined $area ? $area : $label} || 'not available' : 'untested model'), "\n" }
+sub nc { my ($label, $area) = @_; print "not checked: $label: ", $why{defined $area ? $area : $label} || 'not available', ($tested ? '' : ' (untested model)'), "\n" }
 sub kv { my ($k, $v) = @_; if (defined $v && $v ne '') { print "$k: $v\n" } else { nc($k) } }
 
 my $now = $nowarg ne '' ? ep($nowarg) : time;
@@ -187,7 +190,7 @@ if (!$nt) { nc('notifications') } else {
   my ($old) = sort { $a <=> $b } map { $_->[0] } @N;
   print 'backup_notices: ', scalar @b, (defined $old ? ' since ' . dt($old) : ''), "\n";
   for (@b) {
-    my $k = $_->[3] =~ /problem|fail|error/i ? 'failed' : $_->[3] =~ /success|complete|created/i ? 'succeeded' : 'other';
+    my $k = $_->[3] =~ /problem|fail|error|unable|\bnot\b/i ? 'failed' : $_->[3] =~ /success|complete|created/i ? 'succeeded' : 'other';
     print '  ', dt($_->[0]), " $k: ", substr($_->[3], 0, 120), "\n";
   }
 }
@@ -284,8 +287,9 @@ if (!$nt) { nc('notifications') } else {
   my %c;
   $c{$_->[2]}++ for @w;
   print "  $_: $c{$_}\n" for sort { ord_ci($a, $b) } keys %c;
-  # presence and security notices can name people: counted above, never matched or quoted
-  for (sort { $a->[0] <=> $b->[0] } grep { $_->[1] !~ /^homey:manager:(presence|security|backup)$/ && $_->[3] =~ /backup|offline|disconnect|connection lost|lost connection|unreachable|failed|error|crash|sync.*disabled|battery/i } @w) {
+  # presence and security notices can name people, and notices written by flows can hold variable values:
+  # counted above, never matched or quoted (backup notices are listed under Backup)
+  for (sort { $a->[0] <=> $b->[0] } grep { $_->[1] !~ /^homey:manager:(presence|security|backup|flow|notifications)$/ && $_->[3] =~ /backup|offline|disconnect|connection lost|lost connection|unreachable|failed|error|crash|sync.*disabled|battery/i } @w) {
     print '  match ', dt($_->[0]), " $_->[2]: ", substr($_->[3], 0, 120), "\n";
   }
 }

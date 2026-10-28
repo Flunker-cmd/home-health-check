@@ -89,5 +89,29 @@
     "dateCreated": "2026-09-20T06:00:00.000Z",
     "excerpt": "Person B disarmed the alarm",
     "meta": {}
+  },
+  "3b1f6a52-8c0e-5d47-9a21-6e4f0b7c2d18": {
+    "id": "3b1f6a52-8c0e-5d47-9a21-6e4f0b7c2d18",
+    "ownerUri": "homey:manager:backup",
+    "ownerName": "Backups",
+    "dateCreated": "2026-10-05T02:00:00.000Z",
+    "excerpt": "Backup could not be created.",
+    "meta": {}
+  },
+  "c4d2e8a1-7b3f-5e90-8d16-2a9c5f1e7b04": {
+    "id": "c4d2e8a1-7b3f-5e90-8d16-2a9c5f1e7b04",
+    "ownerUri": "homey:manager:flow",
+    "ownerName": "Flow",
+    "dateCreated": "2026-10-26T19:00:00.000Z",
+    "excerpt": "Washing machine error, CANARY-FLOW power 3 W",
+    "meta": {}
+  },
+  "9e7a1c35-4f2b-5a68-b0d9-1c8e3f6a2b57": {
+    "id": "9e7a1c35-4f2b-5a68-b0d9-1c8e3f6a2b57",
+    "ownerUri": "homey:manager:notifications",
+    "ownerName": "Notifications",
+    "dateCreated": "2026-10-23T07:30:00.000Z",
+    "excerpt": "Garage door offline, CANARY-NOTE",
+    "meta": {}
   }
 }

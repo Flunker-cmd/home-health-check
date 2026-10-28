@@ -3,7 +3,7 @@
 # The key (first line of -KeyFile) goes only into the Authorization header: never an argument, never printed.
 # Output and exit codes equal collect.sh, the reference for every rule.
 # Usage: powershell -NoProfile -ExecutionPolicy Bypass -File collect.ps1 -Homey <ip or name> -KeyFile <path>
-# Exit codes: 0 report printed, 2 bad options (or render.ps1 missing), 3 Homey not reachable.
+# Exit codes: 0 report printed, 1 the report could not be rendered, 2 bad options (or render.ps1 missing), 3 Homey not reachable.
 # There is no param block: the options are parsed by hand so an unknown option or a missing value prints the usage
 # and exits 2 like collect.sh (PowerShell's own parameter binder would exit 1 with its own message).
 $ErrorActionPreference = 'Stop'
@@ -61,6 +61,8 @@ $Calls = 0
 
 # Fetch <area> <API path> [<file under -FromDir>]: stores the decoded JSON in $Responses[<area>],
 # or $null with the reason in $Why[<area>]. Nothing from a response or an exception is ever printed.
+# A body that is not a JSON object (or, for the list areas, an array) is unreadable too.
+$ListAreas = 'firmware_update', 'notifications', 'apps', 'devices', 'zones', 'flows', 'advanced_flows'
 function Fetch([string]$area, [string]$path, [string]$file = "$area.json") {
   $body = $null
   $status = 'bad'
@@ -73,13 +75,16 @@ function Fetch([string]$area, [string]$path, [string]$file = "$area.json") {
     $gotHeaders = $false
     try {
       $request = [Net.WebRequest]::Create("http://$Homey/api/manager/$path")
+      # no proxy and no redirects: the key goes to the named host only (a 3xx reads as not available)
       $request.Proxy = $null
+      $request.AllowAutoRedirect = $false
       $request.Timeout = 15000
       $request.ReadWriteTimeout = 15000
       $request.Headers.Add('Authorization', $Auth)
       $response = $request.GetResponse()
       $gotHeaders = $true
-      $body = (New-Object IO.StreamReader($response.GetResponseStream(), $Utf8)).ReadToEnd()
+      $status = [int]$response.StatusCode
+      if ($status -lt 300) { $body = (New-Object IO.StreamReader($response.GetResponseStream(), $Utf8)).ReadToEnd() }
       $response.Close()
     } catch {
       $body = $null
@@ -93,6 +98,7 @@ function Fetch([string]$area, [string]$path, [string]$file = "$area.json") {
   $data = $null
   if ($null -ne $body) {
     try { $data = $Json.DeserializeObject($body) } catch { $data = $null }
+    if ($data -isnot [Collections.Generic.Dictionary[string, object]] -and -not ($data -is [object[]] -and $ListAreas -contains $area)) { $data = $null }
   }
   if ($null -eq $data) {
     $Why[$area] = 'not available'

@@ -40,6 +40,7 @@ $all = $r.Out + $r.Err
 Assert-Eq 'no canary in output' 'no' $(if ($all -match 'CANARY') { 'yes' } else { 'no' })
 Assert-Eq 'presence notice not quoted' 'no' $(if ($all -match '(?m)^  match .*Presence') { 'yes' } else { 'no' })
 Assert-Eq 'no person named by presence or security notices' 'no' $(if ($all -match 'Person') { 'yes' } else { 'no' })
+Assert-Eq 'notices written by flows not quoted' 'no' $(if ($all -match '(?m)^  match .*(Flow|Notifications):') { 'yes' } else { 'no' })
 
 # --- a key without permission for one area (here: no zwave.json) ---
 $d = Copy-Homey 'nozwave'
@@ -55,6 +56,17 @@ $f = Join-Path $d 'system.json'
 [IO.File]::WriteAllText($f, [IO.File]::ReadAllText($f, $Utf8).Replace('Homey Pro (Early 2023)', 'Homey Pro (2019)'), $Utf8)
 $r = Invoke-Homey -Homey 192.168.1.50 -FromDir $d -Now $HomeyNow
 Assert-Match 'untested model' '(?m)^model_tested: no$' $r.Out
+Remove-Item -LiteralPath (Join-Path $d 'zwave.json')
+$r = Invoke-Homey -Homey 192.168.1.50 -FromDir $d -Now $HomeyNow
+Assert-Match 'untested model keeps the real reason' '(?m)^not checked: zwave: not available \(untested model\)$' $r.Out
+
+# --- wrongly shaped responses (homey-wrong-shape/ overlays the fixtures; collect.sh must print the same) ---
+$d = Copy-Homey 'wrongshape'
+Copy-Item -Path (Join-Path (Get-Fixture 'homey-wrong-shape') '*.json') -Destination $d
+$r = Invoke-Homey -Homey 192.168.1.50 -FromDir $d -Now $HomeyNow
+$expected = [IO.File]::ReadAllText((Get-Fixture 'homey-wrong-shape/expected.txt'), $Utf8).Replace("`r", '')
+Assert-Eq 'wrongly shaped responses match homey-wrong-shape/expected.txt' $expected ($r.Out + $r.Err)
+Assert-Eq 'wrongly shaped responses exit 0' '0' "$($r.Code)"
 
 # --- a devices.json over 3 MB (ConvertFrom-Json in 5.1 gives up near 2 MB) ---
 $d = Copy-Homey 'large'
@@ -100,3 +112,43 @@ $r = Invoke-Homey -Homey 192.168.1.50 -FromDir (Get-Fixture 'homey') -Now $Homey
 $HomeyPs = $saved
 Assert-Eq 'collect.ps1 without render.ps1 exits 2' '2' "$($r.Code)"
 Assert-Eq 'collect.ps1 without render.ps1 says so' 'error: render.ps1 must be in the same folder as collect.ps1' ($r.Out + $r.Err).Trim()
+
+# --- the key never leaves for another host: a redirect is not followed ---
+# A fake Homey answers every call with a redirect to a second listener, which logs any request it gets.
+$listeners = @(1, 2 | ForEach-Object { $l = [Net.Sockets.TcpListener]::new([Net.IPAddress]::Loopback, 0); $l.Start(); $l })
+$otherLog = Join-Path $HhcTmp 'homey-other.log'
+$server = [powershell]::Create()
+[void]$server.AddScript({
+    param($listeners, $log)
+    $other = $listeners[1].LocalEndpoint.Port
+    $deadline = [DateTime]::UtcNow.AddSeconds(120)
+    while ([DateTime]::UtcNow -lt $deadline) {
+        foreach ($l in $listeners) {
+            if (-not $l.Pending()) { continue }
+            $c = $l.AcceptTcpClient()
+            $s = $c.GetStream()
+            $reader = New-Object IO.StreamReader($s)
+            $head = ''
+            while ($true) { $line = $reader.ReadLine(); if ($null -eq $line -or $line -eq '') { break }; $head += "$line`n" }
+            if ($l -eq $listeners[1]) {
+                [IO.File]::AppendAllText($log, 'other host got a request' + $(if ($head -match '(?im)^Authorization:') { ' with the key' }) + "`n")
+                $answer = "HTTP/1.1 404 Not Found`r`nContent-Length: 0`r`nConnection: close`r`n`r`n"
+            } else {
+                $answer = "HTTP/1.1 302 Found`r`nLocation: http://127.0.0.1:$other/api/manager/system/`r`nContent-Length: 0`r`nConnection: close`r`n`r`n"
+            }
+            $bytes = [Text.Encoding]::ASCII.GetBytes($answer)
+            $s.Write($bytes, 0, $bytes.Length)
+            $s.Flush()
+            $c.Close()
+        }
+        Start-Sleep -Milliseconds 20
+    }
+}).AddArgument($listeners).AddArgument($otherLog)
+$running = $server.BeginInvoke()
+$r = Invoke-Homey -Homey "127.0.0.1:$($listeners[0].LocalEndpoint.Port)" -KeyFile $k
+$server.Stop()
+foreach ($l in $listeners) { $l.Stop() }
+$got = ''
+if (Test-Path -LiteralPath $otherLog) { $got = [IO.File]::ReadAllText($otherLog).Trim() }
+Assert-Eq 'a redirect is not followed' '' $got
+Assert-Eq 'a redirect reads as not available, exit 0' '0 yes' "$($r.Code) $(if ($r.Out -match '(?m)^not checked: system: not available$') { 'yes' })"

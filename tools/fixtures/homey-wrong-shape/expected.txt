@@ -1,0 +1,52 @@
+## Homey
+model: Homey Pro (Early 2023)
+model_tested: yes
+firmware: 13.5.3
+not checked: firmware_update: not available
+booted: 2026-10-22T04:04Z
+uptime_days: 6.3
+reboot_reason: reboot-ota
+memory: 1304 MB used of 1896 MB
+loadavg: 0.15 0.21 0.18
+power: undervoltage_now=no undervoltage_seen=yes throttled_seen=no
+network: wifi
+wifi_signal: 78%, 5180 MHz
+mac: aa:bb:cc:00:00:00
+address: 192.168.1.50
+## Stability
+outages_24h: 1
+  2026-10-27T20:20Z 15 min
+not checked: outages_7d: not available
+outages_31d: none
+memory_trend_31d: 320 MB -> 400 MB (+25%)
+not checked: undervoltage_31d_max: not available
+## Backup
+not checked: backup: not available
+not checked: notifications: not available
+## Apps
+not checked: apps: not available
+## Devices
+devices: 11
+  unavailable: Motion sensor [sensor] Hallway: No response since 10/20/2026, 2:26:36 PM
+  warning: Speaker [speaker]: Connection unstable, check Wi-Fi
+  firmware: Ceiling light: 0.1b0 / 0.0b71 -> 0.1b0 / 0.0b87
+  firmware: Remote: 0.0b1 / 1.0b6 -> 0.1b1 / 0.0b4, needs wake
+  stale: Motion sensor [sensor] last 2026-10-20T14:26Z (7 days)
+  stale: Temperature sensor [sensor] last 2026-10-20T06:00Z (8 days)
+  stale: Thermostat [thermostat] last never
+## Batteries
+  low: Leak sensor 2 15%, alarm
+  alarm: Door sensor alarm_battery on
+  no_battery_report: Leak sensor 1 [alarm_water]
+## Flows
+not checked: flows: not available
+  broken: Evening scene
+## Radio
+not checked: zigbee: not available
+not checked: zwave: not available
+## Notifications (14 days)
+not checked: notifications: not available
+## Tidiness
+  no_zone: Smart plug
+  empty_zone: Attic
+  name_spaces: "Desk lamp "

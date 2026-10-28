@@ -33,6 +33,16 @@ dir=$(homey_copy untested)
 sed 's/Homey Pro (Early 2023)/Homey Pro (2019)/' "$dir/system.json" > "$dir/system.tmp" && mv "$dir/system.tmp" "$dir/system.json"
 out=$(homey_run "$dir")
 assert_match "untested model" '^model_tested: no$' "$out"
+rm "$dir/zwave.json"
+out=$(homey_run "$dir")
+assert_match "untested model keeps the real reason" '^not checked: zwave: not available \(untested model\)$' "$out"
+
+# --- wrongly shaped responses (homey-wrong-shape/ overlays the fixtures; collect.ps1 must print the same) ---
+dir=$(homey_copy wrongshape); cp "$(fixture homey-wrong-shape)"/*.json "$dir/"
+homey_run "$dir" > "$HHC_TMP/homey-wrong.txt"; rc=$?
+if cmp -s "$(fixture homey-wrong-shape/expected.txt)" "$HHC_TMP/homey-wrong.txt"; then same=yes; else same=no; fi
+assert_eq "wrongly shaped responses match homey-wrong-shape/expected.txt" "yes" "$same" || diff "$(fixture homey-wrong-shape/expected.txt)" "$HHC_TMP/homey-wrong.txt"
+assert_eq "wrongly shaped responses exit 0" "0" "$rc"
 
 # --- options, also from stdin (an agent without a skill folder) ---
 bash "$HHC_ROOT/$COLLECT" --help >/dev/null 2>&1
@@ -61,3 +71,41 @@ assert_eq "no key in error output" "" "$(printf '%s\n' "$out" | grep CANARY)"
 make_stub "$HHC_TMP/noperl" perl 'exit 1'
 out=$(PATH="$HHC_TMP/noperl:$PATH" bash "$HHC_ROOT/$COLLECT" --host 192.168.1.50 --from-dir "$(fixture homey)" 2>&1); rc=$?
 assert_eq "check_perl exits 4 when perl lacks the modules" "4 error: needs perl with HTTP::Tiny and JSON::PP" "$rc $out"
+
+# --- the key never leaves for another host: no redirect, no proxy from the environment ---
+# A fake Homey answers every call with a redirect to a second listener, which logs any request it gets.
+cat > "$HHC_TMP/homey-srv.pl" <<'SRV'
+use strict; use IO::Socket::INET; use IO::Select;
+my ($portfile, $log) = @ARGV;
+my @l = map { IO::Socket::INET->new(LocalAddr => '127.0.0.1', LocalPort => 0, Listen => 10, ReuseAddr => 1) or die } 1, 2;
+my $other = $l[1]->sockport;
+open(my $pf, '>', "$portfile.tmp") or die; print $pf $l[0]->sockport, " $other\n"; close $pf; rename "$portfile.tmp", $portfile;
+$SIG{ALRM} = sub { exit 0 }; alarm 120;
+my $sel = IO::Select->new(@l);
+while (my @r = $sel->can_read) {
+  for my $s (@r) {
+    my $c = $s->accept or next;
+    my $head = '';
+    while (defined(my $line = <$c>)) { $head .= $line; last if $line =~ /^\r?\n$/ }
+    if ($s == $l[1]) {
+      open(my $lf, '>>', $log) or die; print $lf 'other host got a request', ($head =~ /^Authorization:/mi ? ' with the key' : ''), "\n"; close $lf;
+      print $c "HTTP/1.1 404 Not Found\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+    } else {
+      print $c "HTTP/1.1 302 Found\r\nLocation: http://127.0.0.1:$other/api/manager/system/\r\nContent-Length: 0\r\nConnection: close\r\n\r\n";
+    }
+    close $c;
+  }
+}
+SRV
+perl "$HHC_TMP/homey-srv.pl" "$HHC_TMP/homey-ports" "$HHC_TMP/homey-other.log" &
+srv=$!
+i=0; while [ ! -f "$HHC_TMP/homey-ports" ] && [ $i -lt 100 ]; do perl -e 'select(undef, undef, undef, 0.1)'; i=$((i + 1)); done
+read -r homey_port other_port < "$HHC_TMP/homey-ports"
+out=$(no_proxy= NO_PROXY= bash "$HHC_ROOT/$COLLECT" --host "127.0.0.1:$homey_port" --key-file "$HHC_TMP/homey-key.txt" 2>&1); rc=$?
+assert_eq "a redirect is not followed" "" "$(cat "$HHC_TMP/homey-other.log" 2>/dev/null)"
+assert_eq "a redirect reads as not available, exit 0" "0 yes" "$rc $(printf '%s\n' "$out" | grep -q '^not checked: system: not available$' && echo yes)"
+rm -f "$HHC_TMP/homey-other.log"
+proxy=http://127.0.0.1:$other_port
+out=$(http_proxy=$proxy HTTP_PROXY=$proxy all_proxy=$proxy no_proxy= NO_PROXY= bash "$HHC_ROOT/$COLLECT" --host "127.0.0.1:$homey_port" --key-file "$HHC_TMP/homey-key.txt" 2>&1)
+assert_eq "a proxy from the environment is not used" "" "$(cat "$HHC_TMP/homey-other.log" 2>/dev/null)"
+kill "$srv" 2>/dev/null; wait "$srv" 2>/dev/null

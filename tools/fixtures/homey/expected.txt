@@ -24,8 +24,9 @@ undervoltage_31d_max: 0.25
 ## Backup
 backup_state: Idle
 backup_error: none
-backup_notices: 2 since 2026-09-20T06:00Z
+backup_notices: 3 since 2026-09-20T06:00Z
   2026-09-25T03:00Z succeeded: Backup created successfully.
+  2026-10-05T02:00Z failed: Backup could not be created.
   2026-10-15T15:07Z failed: Homey encountered a problem while creating a backup. Go to Backups in the Homey app for more information.
 ## Apps
 apps: 5 (3 running)
@@ -56,8 +57,10 @@ zwave: nodes=2 no_ack=1
 ## Notifications (14 days)
   Apps: 2
   Backups: 1
+  Flow: 1
   Google Assistant: 1
   Light Bridge: 1
+  Notifications: 1
   Presence: 1
   Security: 1
   Updates: 1
