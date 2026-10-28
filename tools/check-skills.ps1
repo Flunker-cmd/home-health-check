@@ -78,7 +78,8 @@ function Test-IpAllowed($ip) {
 }
 
 function Test-Privacy {
-    $files = @(Get-ChildItem $pluginDir -Recurse -File)       # every file the plugin and the Agensi ZIPs can ship
+    # every file the plugin and the Agensi ZIPs can ship; eval run results are local transcripts, never committed
+    $files = @(Get-ChildItem $pluginDir -Recurse -File | Where-Object { $_.FullName -notmatch '\\evals\\results\\' })
     $agensi = Join-Path $root 'agensi'
     if (Test-Path $agensi) { $files += Get-ChildItem $agensi -Recurse -File }
     $tools = Join-Path $root 'tools'
@@ -229,7 +230,8 @@ function Test-ShBash32 {
 
 function Get-MacScripts {
     # shell scripts that must run on macOS and Linux: everything under plugins/ except the Pi collector
-    Get-ChildItem $pluginDir -Recurse -File -Filter '*.sh' | Where-Object { $_.FullName -notmatch '\\pi-health-check\\' }
+    # and the eval scaffolds, which run on the author's machine and are not shipped
+    Get-ChildItem $pluginDir -Recurse -File -Filter '*.sh' | Where-Object { $_.FullName -notmatch '\\(pi-health-check|evals)\\' }
 }
 
 function Test-ShPortable {

@@ -2,7 +2,7 @@
 name: macos-health-check
 description: Read-only health check of the Mac it runs on (macOS version and support, updates, FileVault, SIP, Gatekeeper, firewall, XProtect, sharing services, Time Machine, disk, battery, startup items, Homebrew and unsigned apps, crashes and panics), ending in a prioritized fix list. Use when the user asks to check, review, clean up or "health check" their Mac, MacBook or iMac.
 summary: Read-only health check of your Mac with a prioritized fix list, no sudo and no permission dialogs.
-version: 0.4.0
+version: 0.5.0
 tags: [macos, mac, health-check, security, filevault, time-machine]
 keywords: [macbook, imac, mac mini, sip, gatekeeper, xprotect, homebrew, launch agents]
 use_cases:
