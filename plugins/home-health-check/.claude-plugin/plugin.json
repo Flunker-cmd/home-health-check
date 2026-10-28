@@ -1,6 +1,6 @@
 {
   "name": "home-health-check",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "Home network inventory plus read-only health checks for a Raspberry Pi or Linux server, a home router or mesh network, a Windows PC and a Mac, each with a prioritized fix list, plus one report for the whole home",
   "author": {
     "name": "Mattias"
