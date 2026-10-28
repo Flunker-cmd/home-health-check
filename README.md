@@ -9,6 +9,7 @@ A Claude Code plugin that lets Claude map and health-check the devices in your h
 | `router-health-check` | Home router or mesh from a PC on the LAN: model and firmware, open ports, UPnP mappings, Wi-Fi security, DHCP and DNS path (incl. Pi-hole bypass), IPv6, double NAT, latency, devices |
 | `windows-health-check` | Windows 10/11: updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and log errors, backup, startup programs, outdated apps |
 | `macos-health-check` | macOS: version and support, updates, FileVault, SIP, Gatekeeper, firewall, XProtect, sharing, Time Machine, disk, battery, startup items, Homebrew and unsigned apps, crashes and panics. No sudo, no permission dialogs |
+| `home-network-report` | Combines the inventory and every check's findings into one report: the most important actions across the home, a red/yellow/green overview per device, and what changed since last time |
 
 ## Requirements
 
@@ -30,6 +31,7 @@ Then start Claude Code and ask, for example:
 - "Check my router and Wi-Fi settings"
 - "Health check this PC"
 - "Health check this Mac"
+- "Make a report of my home network"
 
 or call a skill directly: `/home-health-check:pi-health-check`.
 
@@ -53,11 +55,11 @@ All skills share one private data folder on your computer: `~/.home-health-check
 ```
 inventory.md   the device list from home-inventory
 findings/      one file per check run, in a documented format (hhc-findings/1)
-reports/       reserved for a report skill
+reports/       one report per day from home-network-report
 cache/         downloaded helper data, e.g. the MAC vendor list
 ```
 
-Every check works alone and gives its full report in chat. When the data folder exists it also saves its findings there, so a report can combine several checks into one list. The format is described in [findings-format.md](plugins/home-health-check/shared/findings-format.md).
+Every check works alone and gives its full report in chat. When the data folder exists it also saves its findings there, so `home-network-report` can combine all checks into one prioritized report for the whole home. The format is described in [findings-format.md](plugins/home-health-check/shared/findings-format.md).
 
 - **Several computers:** point `HOME_HEALTH_CHECK_DIR` at a folder you sync between your own computers and all checks land in one place. Mind that the inventory and findings then sit in that cloud. Or leave the folder local and copy a findings file by hand to the computer that keeps the inventory.
 - **Privacy:** everything in the data folder describes your home. Never put it in a repository or share it.
@@ -78,6 +80,7 @@ plugins/home-health-check/
   skills/<skill>/SKILL.md              instructions for the agent
   skills/<skill>/references/           copy of the findings contract
   skills/<skill>/scripts/              read-only collectors
+  evals/                               behavior tests of the report skill (claude plugin eval)
 tools/                                 check-skills.ps1, sync-contract.ps1, test-package.ps1, test-sh.sh, tests/, fixtures/
 agensi/                                Agensi listing texts and packaging script
 docs/superpowers/                      design and implementation plans

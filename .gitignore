@@ -8,3 +8,4 @@ Thumbs.db
 # Health check output - describes real devices, never commit
 *.log
 reports/
+plugins/home-health-check/evals/results/
