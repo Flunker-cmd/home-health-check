@@ -2,7 +2,7 @@
 name: pi-health-check
 description: Read-only health check of a Raspberry Pi or other Debian-based Linux box reachable over SSH (OS support status, updates, SD card and disk health, security, services, Pi-hole/unbound/cloudflared DNS setup), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Pi, Pi-hole, home server or a Linux machine on their network.
 summary: Read-only SSH health check of a Raspberry Pi or Linux box with a prioritized fix list, Pi-hole aware.
-version: 0.5.1
+version: 0.5.2
 tags: [raspberry-pi, linux, pi-hole, ssh, security, health-check]
 keywords: [raspberry pi, debian, pi-hole, unbound, cloudflared, sd card, home server]
 use_cases:
@@ -33,6 +33,7 @@ Check one or more Linux hosts over SSH, explain what is good and what is not, an
 1. If `<data dir>/inventory.md` exists (from the home-inventory skill), take the host from there. Otherwise ask for the host (IP or name) and user, or find candidates with `ssh -G <host>`, `~/.ssh/config`, or the ARP table (Raspberry Pi MAC prefixes include `b8:27:eb`, `dc:a6:32`, `e4:5f:01`, `d8:3a:dd`, `2c:cf:67`).
 2. Test non-interactively: `ssh -o BatchMode=yes -o ConnectTimeout=5 user@host "hostname"`.
    - If key login is not set up, tell the user how to set it up (`ssh-keygen -t ed25519`, then copy the public key to `~/.ssh/authorized_keys` on the host) and let them do it. Do not work around it with passwords.
+   - If the user does not want key login, offer that they run the collector themselves (step 2, *Run by the user*). They type the password into ssh in their own terminal, and you never see it.
 
 ## 2. Collect
 
@@ -43,6 +44,20 @@ ssh -o BatchMode=yes user@host 'bash -s' < "<path-to-this-skill>/scripts/collect
 ```
 
 Read the whole output. Follow up with your own read-only commands where something needs a closer look.
+
+**Run by the user** (no key login): give the user one command that saves the output to a file in a temporary folder, with the script's full path filled in. In a macOS or Linux terminal, or in Windows cmd:
+
+```bash
+ssh user@host 'bash -s' < "<path-to-this-skill>/scripts/collect.sh" > "<temp folder>/pi-collect.txt"
+```
+
+Windows PowerShell has no `<` redirect, so there pass the line to cmd, with single quotes outside and double quotes inside:
+
+```powershell
+cmd /c 'ssh user@host "bash -s" < "<path-to-this-skill>\scripts\collect.sh" > "<temp folder>\pi-collect.txt"'
+```
+
+The user types the password when ssh asks. Then read the file, delete it once the findings are saved, and continue with step 3. You cannot run follow-up commands on the host in this mode: where you would have, say what you could not check, or give the user the read-only command to run and paste the output.
 
 ## 3. Assess
 
@@ -114,7 +129,7 @@ Use a standard id when it fits. Otherwise make a new kebab-case id, and keep usi
 
 ## Network and permissions
 
-- **Network:** SSH to the host the user names, with key login only (`BatchMode`, no passwords). The collector makes no outbound calls of its own; it reads the host's local state. `apt-get -s` is a simulation and installs nothing. Support dates, versions and advisories are looked up on public web pages by the agent; nothing from the host is sent there.
+- **Network:** SSH to the host the user names, with key login only (`BatchMode`, no passwords). Without key login the user runs the collector over ssh in their own terminal and types the password there; the agent only reads the saved output file and deletes it afterwards. The collector makes no outbound calls of its own; it reads the host's local state. `apt-get -s` is a simulation and installs nothing. Support dates, versions and advisories are looked up on public web pages by the agent; nothing from the host is sent there.
 - **Rights:** runs as the normal SSH user. It uses `sudo -n` (passwordless sudo only, it never prompts) to read things such as the effective sshd configuration, firewall status, the kernel log, process names behind listening ports, and Pi-hole's settings and query database (a read-only count). Without passwordless sudo these are skipped and listed as needing sudo. It checks whether Pi-hole's web password is set and prints only yes or no, never the hash.
 - **Files:** nothing is written on the host. On this computer the skill writes the findings files and updates the inventory row, both in `<data dir>`. Every fix is a separate step that needs the user's yes.
 
