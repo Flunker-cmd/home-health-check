@@ -1,7 +1,7 @@
 ---
 type: tool_used
 tool: Write
-input_match: home-report[^"]*\(
+input_match: file_path.:.[^"]*home-report[^"]*\(
 min: 0
 max: 0
 arm: both

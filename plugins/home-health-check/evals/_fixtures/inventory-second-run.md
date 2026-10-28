@@ -11,3 +11,5 @@ Network: 192.168.1.0/24, gateway 192.168.1.1. Last scan: @TODAY@ 09:00.
 | 192.168.1.40 | e0:bb:9e:00:00:00 | Seiko Epson Corporation | printer | Printer | ipp, printer | 2026-01-01 | @TODAY@ | |
 | 192.168.1.50 | da:a1:19:00:00:00 | (private MAC) | phone | Phone | | 2026-01-01 | @TODAY@ | private MAC |
 | 192.168.1.60 | 94:b9:7e:00:00:00 | Espressif Inc. | plug | Smart plug | http | @TODAY@ | @TODAY@ | |
+| 192.168.1.70 | 78:42:1c:00:00:00 | Espressif Inc. | sensor | Sensor | | 2025-01-01 | 2026-01-05 | |
+| 192.168.1.80 | 90:13:da:00:00:00 | Athom B.V. | hub | Smart home hub | | 2025-01-01 | 2025-06-01 | |
