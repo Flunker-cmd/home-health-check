@@ -1,0 +1,167 @@
+{
+  "com.example.alarmhub": {
+    "id": "com.example.alarmhub",
+    "name": "Alarm Hub",
+    "iconObj": {
+      "id": "deb37b68-69de-5a8c-86f9-e9c94d1a2376",
+      "url": "/app/com.example.alarmhub/assets/icon.svg"
+    },
+    "version": "2.1.0",
+    "channel": "live",
+    "origin": "appstore",
+    "author": {
+      "name": "Example Author"
+    },
+    "compatibility": ">=5.0.0",
+    "permissions": [],
+    "color": "#336699",
+    "images": {
+      "large": "/app/com.example.alarmhub/assets/images/large.png",
+      "small": "/app/com.example.alarmhub/assets/images/small.png"
+    },
+    "state": "crashed",
+    "crashedMessage": "TypeError: Cannot read properties of undefined (reading 'zone')",
+    "enabled": true,
+    "autoupdate": true,
+    "settings": null,
+    "updateAvailable": null,
+    "usage": {
+      "cpu": 0,
+      "mem": 52428800
+    },
+    "crashed": true,
+    "crashedCount": 3
+  },
+  "com.example.devtool": {
+    "id": "com.example.devtool",
+    "name": "Dev Tool",
+    "iconObj": {
+      "id": "e5e2de95-dbaf-595a-a591-37a8a2bb5317",
+      "url": "/app/com.example.devtool/assets/icon.svg"
+    },
+    "version": "0.0.1",
+    "channel": null,
+    "origin": "devkit_install",
+    "author": {
+      "name": "Example Author"
+    },
+    "compatibility": ">=5.0.0",
+    "permissions": [],
+    "color": "#336699",
+    "images": {
+      "large": "/app/com.example.devtool/assets/images/large.png",
+      "small": "/app/com.example.devtool/assets/images/small.png"
+    },
+    "state": "running",
+    "crashedMessage": null,
+    "enabled": true,
+    "autoupdate": false,
+    "settings": null,
+    "updateAvailable": null,
+    "usage": {
+      "cpu": 0,
+      "mem": 52428800
+    },
+    "crashed": false,
+    "crashedCount": 0
+  },
+  "com.example.lightbridge": {
+    "id": "com.example.lightbridge",
+    "name": "Light Bridge",
+    "iconObj": {
+      "id": "8340447e-01f8-59f9-9de4-e6075d7fd0cc",
+      "url": "/app/com.example.lightbridge/assets/icon.svg"
+    },
+    "version": "5.3.2",
+    "channel": "live",
+    "origin": "appstore",
+    "author": {
+      "name": "Example Author"
+    },
+    "compatibility": ">=5.0.0",
+    "permissions": [],
+    "color": "#336699",
+    "images": {
+      "large": "/app/com.example.lightbridge/assets/images/large.png",
+      "small": "/app/com.example.lightbridge/assets/images/small.png"
+    },
+    "state": "running",
+    "crashedMessage": null,
+    "enabled": true,
+    "autoupdate": true,
+    "settings": null,
+    "updateAvailable": null,
+    "usage": {
+      "cpu": 0,
+      "mem": 52428800
+    },
+    "crashed": false,
+    "crashedCount": 0
+  },
+  "com.example.mediaplayer": {
+    "id": "com.example.mediaplayer",
+    "name": "Media Player",
+    "iconObj": {
+      "id": "fd86f80f-9632-5db0-8048-2b4c4ad43b0a",
+      "url": "/app/com.example.mediaplayer/assets/icon.svg"
+    },
+    "version": "1.4.2",
+    "channel": "live",
+    "origin": "appstore",
+    "author": {
+      "name": "Example Author"
+    },
+    "compatibility": ">=5.0.0",
+    "permissions": [],
+    "color": "#336699",
+    "images": {
+      "large": "/app/com.example.mediaplayer/assets/images/large.png",
+      "small": "/app/com.example.mediaplayer/assets/images/small.png"
+    },
+    "state": "stopped",
+    "crashedMessage": null,
+    "enabled": false,
+    "autoupdate": true,
+    "settings": null,
+    "updateAvailable": null,
+    "usage": {
+      "cpu": 0,
+      "mem": 52428800
+    },
+    "crashed": false,
+    "crashedCount": 0
+  },
+  "com.example.weather": {
+    "id": "com.example.weather",
+    "name": "Weather Station",
+    "iconObj": {
+      "id": "1e3df726-05f4-5a21-a411-14bfa20b73eb",
+      "url": "/app/com.example.weather/assets/icon.svg"
+    },
+    "version": "3.2.1",
+    "channel": "live",
+    "origin": "appstore",
+    "author": {
+      "name": "Example Author"
+    },
+    "compatibility": ">=5.0.0",
+    "permissions": [],
+    "color": "#336699",
+    "images": {
+      "large": "/app/com.example.weather/assets/images/large.png",
+      "small": "/app/com.example.weather/assets/images/small.png"
+    },
+    "state": "running",
+    "crashedMessage": null,
+    "enabled": true,
+    "autoupdate": true,
+    "settings": null,
+    "updateAvailable": null,
+    "usage": {
+      "cpu": 0,
+      "mem": 52428800
+    },
+    "crashed": false,
+    "crashedCount": 0
+  }
+}

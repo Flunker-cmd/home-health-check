@@ -1,0 +1,44 @@
+{
+  "9d101b21-bf0f-59e4-9011-e314bc8186e1": {
+    "id": "9d101b21-bf0f-59e4-9011-e314bc8186e1",
+    "name": "Evening scene",
+    "folder": null,
+    "triggerable": true,
+    "enabled": true,
+    "broken": true,
+    "cards": {
+      "dd5839cc-b0a2-5a15-be0e-d43c0cb0a543": {
+        "ownerUri": "homey:manager:cron",
+        "id": "time",
+        "args": {
+          "time": "19:00"
+        },
+        "type": "trigger",
+        "x": 100,
+        "y": 100,
+        "outputSuccess": []
+      }
+    }
+  },
+  "a13397c7-2ccc-5275-beb9-654b56b7ced2": {
+    "id": "a13397c7-2ccc-5275-beb9-654b56b7ced2",
+    "name": "Leak alert",
+    "folder": null,
+    "triggerable": true,
+    "enabled": true,
+    "broken": false,
+    "cards": {
+      "e39206a6-59c0-5018-bc23-7815e04a4a24": {
+        "ownerUri": "homey:manager:cron",
+        "id": "time",
+        "args": {
+          "time": "19:00"
+        },
+        "type": "trigger",
+        "x": 100,
+        "y": 100,
+        "outputSuccess": []
+      }
+    }
+  }
+}

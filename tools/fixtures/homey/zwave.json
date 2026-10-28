@@ -1,0 +1,169 @@
+{
+  "zw_state": {
+    "libraryType": 7,
+    "versionMajor": 7,
+    "versionMinor": 21,
+    "serialApiVersionMajor": 1,
+    "serialApiVersionMinor": 0,
+    "packageVersionMajor": 1,
+    "packageVersionMinor": 0,
+    "logEnabled": false,
+    "stats": {},
+    "nodeId": 1,
+    "homeId": 1,
+    "nodes": [
+      1,
+      5,
+      7
+    ],
+    "nodeSettings": {
+      "1": {
+        "commandClassSupported": [],
+        "deviceClassBasic": {},
+        "deviceClassGeneric": {},
+        "deviceClassSpecific": {},
+        "manufacturerId": {},
+        "productTypeId": {},
+        "productId": {},
+        "associationGroups": {}
+      }
+    },
+    "currentCommand": null,
+    "currentProcess": null,
+    "availableRegions": {},
+    "hardwareRegion": "EU",
+    "networkKeys": {
+      "S0": {
+        "type": "Buffer",
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Unauthenticated": {
+        "type": "Buffer",
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Authenticated": {
+        "type": "Buffer",
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      },
+      "Access": {
+        "type": "Buffer",
+        "data": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    "expandedNetworkKeys": {
+      "S2_Unauthenticated": "CANARY-ZWAVE"
+    },
+    "maxPayloadLength": 46,
+    "methodsAsync": [],
+    "provisioningDSKs": [],
+    "version": "Z-Wave 7.21",
+    "protocolVersion": {
+      "protocolType": 0,
+      "majorVersion": 7,
+      "minorVersion": 21,
+      "revisionVersion": 0,
+      "appFrameworkBuildNr": 0
+    },
+    "capabilities": {
+      "api": "serial",
+      "timerSupported": true,
+      "controllerType": "primary",
+      "sis": true
+    },
+    "chip_type": 8,
+    "chip_version": 0,
+    "SERIAL_APPL_VERSION": 7,
+    "SERIAL_APPL_REVISION": 21,
+    "SERIALAPI_MANUFACTURER_ID": 0,
+    "SERIALAPI_MANUFACTURER_PRODUCT_TYPE": 0,
+    "SERIALAPI_MANUFACTURER_PRODUCT_ID": 0,
+    "FUNCID_SUPPORTED_BITMASK": [
+      254,
+      255
+    ],
+    "CONTROLLER_IS_SECONDARY": false,
+    "CONTROLLER_ON_OTHER_NETWORK": false,
+    "CONTROLLER_NODEID_SERVER_PRESENT": true,
+    "CONTROLLER_IS_REAL_PRIMARY": true,
+    "CONTROLLER_IS_SUC": true,
+    "NO_NODES_INCUDED": false,
+    "sucId": 1,
+    "noAckNodes": [
+      7
+    ],
+    "softwareRegion": "EU"
+  },
+  "availability": {
+    "zwave": "available"
+  },
+  "zw_ready": true,
+  "zw_error": null
+}

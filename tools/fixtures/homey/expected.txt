@@ -1,0 +1,72 @@
+## Homey
+model: Homey Pro (Early 2023)
+model_tested: yes
+firmware: 13.5.3
+firmware_update: none
+booted: 2026-10-22T04:04Z
+uptime_days: 6.3
+reboot_reason: reboot-ota
+memory: 1304 MB used of 1896 MB
+loadavg: 0.15 0.21 0.18
+power: undervoltage_now=no undervoltage_seen=yes throttled_seen=no
+network: wifi
+wifi_signal: 78 dBm, 5180 MHz
+mac: aa:bb:cc:00:00:00
+address: 192.168.1.50
+## Stability
+outages_24h: 1
+  2026-10-27T20:20Z 15 min
+outages_7d: 1
+  2026-10-23T14:00Z 2 h
+outages_31d: none
+memory_trend_31d: 320 MB -> 400 MB (+25%)
+undervoltage_31d_max: 0.25
+  app_memory: Weather Station 60 -> 90 MB
+  app_memory: Light Bridge 40 -> 45 MB
+## Backup
+backup_state: Idle
+backup_error: none
+backup_notices: 2 since 2026-09-20T06:00Z
+  2026-09-25T03:00Z succeeded: Backup created successfully.
+  2026-10-15T15:07Z failed: Homey encountered a problem while creating a backup. Go to Backups in the Homey app for more information.
+## Apps
+apps: 5 (3 running)
+  Alarm Hub 2.1.0: crashed 3 times
+  Alarm Hub 2.1.0: not running (crashed)
+  Dev Tool 0.0.1: origin devkit_install
+  Media Player 1.4.2: disabled
+## Devices
+devices: 11
+  unavailable: Motion sensor [sensor] Hallway: No response since 10/20/2026, 2:26:36 PM
+  warning: Speaker [speaker]: Connection unstable, check Wi-Fi
+  firmware: Ceiling light: 0.1b0 / 0.0b71 -> 0.1b0 / 0.0b87
+  firmware: Remote: 0.0b1 / 1.0b6 -> 0.1b1 / 0.0b4, needs wake
+  stale: Motion sensor [sensor] last 2026-10-20T14:26Z (7 days)
+  stale: Temperature sensor [sensor] last 2026-10-20T06:00Z (8 days)
+  stale: Thermostat [thermostat] last never
+## Batteries
+  low: Leak sensor 2 15%, alarm
+  alarm: Door sensor alarm_battery on
+  no_battery_report: Leak sensor 1 [alarm_water]
+## Flows
+flows: 2 (1 enabled), advanced: 2 (2 enabled)
+  broken: Evening scene
+  disabled: Vacation lights
+## Radio
+zigbee: ready=yes error=none nodes=4
+zwave: nodes=2 no_ack=1
+## Notifications (14 days)
+  Apps: 2
+  Backups: 1
+  Google Assistant: 1
+  Light Bridge: 1
+  Presence: 1
+  Security: 1
+  Updates: 1
+  match 2026-10-19T08:00Z Google Assistant: Device sync was disabled by the user
+  match 2026-10-24T18:30Z Light Bridge: Gateway connection lost, retrying
+  match 2026-10-25T09:41Z Apps: **Alarm Hub** has crashed. Error: Cannot read properties of undefined (reading 'zone') at Driver.onInit (/app/drivers/hu
+## Tidiness
+  no_zone: Smart plug
+  empty_zone: Attic
+  name_spaces: "Desk lamp "

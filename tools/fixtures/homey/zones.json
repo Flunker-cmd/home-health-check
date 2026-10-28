@@ -1,0 +1,62 @@
+{
+  "0641053b-a2b9-568f-b104-3e3d15dc324e": {
+    "id": "0641053b-a2b9-568f-b104-3e3d15dc324e",
+    "name": "Home",
+    "parent": null,
+    "sortIndex": null,
+    "active": false,
+    "activeOrigins": [],
+    "activeLastUpdated": null,
+    "icon": "home"
+  },
+  "fcba9f63-d4d2-5426-88ad-29c3a14be648": {
+    "id": "fcba9f63-d4d2-5426-88ad-29c3a14be648",
+    "name": "Ground floor",
+    "parent": "0641053b-a2b9-568f-b104-3e3d15dc324e",
+    "sortIndex": null,
+    "active": false,
+    "activeOrigins": [],
+    "activeLastUpdated": null,
+    "icon": "groundFloor"
+  },
+  "8f151621-54ee-5e21-b060-490a246793d6": {
+    "id": "8f151621-54ee-5e21-b060-490a246793d6",
+    "name": "Hallway",
+    "parent": "fcba9f63-d4d2-5426-88ad-29c3a14be648",
+    "sortIndex": null,
+    "active": false,
+    "activeOrigins": [],
+    "activeLastUpdated": null,
+    "icon": "hallway"
+  },
+  "93b2d458-f2f4-51fb-8dde-062b6b47edbc": {
+    "id": "93b2d458-f2f4-51fb-8dde-062b6b47edbc",
+    "name": "Kitchen",
+    "parent": "fcba9f63-d4d2-5426-88ad-29c3a14be648",
+    "sortIndex": null,
+    "active": false,
+    "activeOrigins": [],
+    "activeLastUpdated": null,
+    "icon": "kitchen"
+  },
+  "f5686f1b-a976-58ea-8a07-08d1469b1cf2": {
+    "id": "f5686f1b-a976-58ea-8a07-08d1469b1cf2",
+    "name": "Living room",
+    "parent": "fcba9f63-d4d2-5426-88ad-29c3a14be648",
+    "sortIndex": null,
+    "active": false,
+    "activeOrigins": [],
+    "activeLastUpdated": null,
+    "icon": "livingRoom"
+  },
+  "8a2ab273-ea08-5932-92c1-2b56a0bede63": {
+    "id": "8a2ab273-ea08-5932-92c1-2b56a0bede63",
+    "name": "Attic",
+    "parent": "0641053b-a2b9-568f-b104-3e3d15dc324e",
+    "sortIndex": null,
+    "active": false,
+    "activeOrigins": [],
+    "activeLastUpdated": null,
+    "icon": "attic"
+  }
+}

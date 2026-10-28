@@ -1,0 +1,105 @@
+{
+  "bootId": "49044837-845b-57f4-9b7c-4c7f9464fc45",
+  "cloudId": "REDACTED",
+  "homeyVersion": "13.5.3",
+  "homeyPlatform": "local",
+  "homeyPlatformVersion": 2,
+  "date": "2026-10-28T12:00:00.000Z",
+  "dateHuman": "Wednesday, October 28th 2026, 13:00:00",
+  "dateDst": false,
+  "language": "en",
+  "country": "NL",
+  "timezone": "Europe/Amsterdam",
+  "rebootReason": "reboot-ota",
+  "bootDate": "2026-10-22T04:04:26.961Z",
+  "homeyModelId": "homey5q",
+  "homeyModelName": "Homey Pro (Early 2023)",
+  "nodeVersion": "v24.22.1",
+  "hostname": "REDACTED",
+  "totalmem": 1987624960,
+  "freemem": 620445696,
+  "loadavg": [
+    0.15,
+    0.2109375,
+    0.18359375
+  ],
+  "uptime": 546933.04,
+  "cpus": [
+    {
+      "model": "Cortex-A72",
+      "speed": 1800,
+      "times": {
+        "user": 1000000,
+        "nice": 0,
+        "sys": 500000,
+        "idle": 50000000,
+        "irq": 0
+      }
+    },
+    {
+      "model": "Cortex-A72",
+      "speed": 1800,
+      "times": {
+        "user": 1000000,
+        "nice": 0,
+        "sys": 500000,
+        "idle": 50000000,
+        "irq": 0
+      }
+    },
+    {
+      "model": "Cortex-A72",
+      "speed": 1800,
+      "times": {
+        "user": 1000000,
+        "nice": 0,
+        "sys": 500000,
+        "idle": 50000000,
+        "irq": 0
+      }
+    },
+    {
+      "model": "Cortex-A72",
+      "speed": 1800,
+      "times": {
+        "user": 1000000,
+        "nice": 0,
+        "sys": 500000,
+        "idle": 50000000,
+        "irq": 0
+      }
+    }
+  ],
+  "platform": "linux",
+  "devmode": false,
+  "videoCoreClock": 500000000,
+  "videoCoreTemperature": 48.7,
+  "videoCoreUnderVoltageTrueCount": 3,
+  "videoCoreUnderVoltageFalseCount": 19105,
+  "videoCoreUnderVoltageCurrentlyRatio": 0,
+  "videoCoreUnderVoltageCurrently": false,
+  "videoCoreUndervoltageOccured": true,
+  "videoCoreThrottleCurrently": false,
+  "videoCoreThrottleOccured": false,
+  "videoCoreSoftTemperatureLimitActiveCurrently": false,
+  "videoCoreSoftTemperatureLimitActiveOccured": false,
+  "videoCoreArmFrequencyCappedCurrently": false,
+  "videoCoreArmFrequencyCappedOccured": false,
+  "wifiRadioEnabled": true,
+  "wifiConnected": true,
+  "wifiAddress": "192.168.1.50",
+  "wifiDefaultGateway": "192.168.1.1",
+  "wifiSubnetMask": "255.255.255.0",
+  "wifiDns": "192.168.1.2",
+  "wifiMac": "AA:BB:CC:00:00:00",
+  "wifiSsid": "CANARY-SSID",
+  "wifiFrequency": 5180,
+  "wifiRegion": "DE",
+  "wifiStrength": 78,
+  "ethernetConnected": false,
+  "ethernetAddress": null,
+  "ethernetDefaultGateway": null,
+  "ethernetSubnetMask": null,
+  "ethernetDns": null,
+  "ethernetMac": null
+}

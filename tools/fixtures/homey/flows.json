@@ -1,0 +1,50 @@
+{
+  "1c940d6e-5208-5ed7-9967-01949e6a890a": {
+    "id": "1c940d6e-5208-5ed7-9967-01949e6a890a",
+    "name": "Morning lights",
+    "folder": null,
+    "enabled": true,
+    "broken": false,
+    "triggerable": true,
+    "trigger": {
+      "id": "homey:manager:cron:time",
+      "args": {
+        "time": "07:00"
+      }
+    },
+    "conditions": [],
+    "actions": [
+      {
+        "id": "homey:manager:notifications:create_notification",
+        "args": {
+          "text": "Example"
+        },
+        "group": "then"
+      }
+    ]
+  },
+  "ae6f4a15-6958-56d9-8803-4e583844b992": {
+    "id": "ae6f4a15-6958-56d9-8803-4e583844b992",
+    "name": "Vacation lights",
+    "folder": null,
+    "enabled": false,
+    "broken": false,
+    "triggerable": true,
+    "trigger": {
+      "id": "homey:manager:cron:time",
+      "args": {
+        "time": "07:00"
+      }
+    },
+    "conditions": [],
+    "actions": [
+      {
+        "id": "homey:manager:notifications:create_notification",
+        "args": {
+          "text": "Example"
+        },
+        "group": "then"
+      }
+    ]
+  }
+}

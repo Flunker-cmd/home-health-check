@@ -20,6 +20,8 @@ Claude Code plugin (and its own marketplace, `flunker`) with a network inventory
 - `powershell -NoProfile -ExecutionPolicy Bypass -File tools/check-skills.ps1` (contract copies, frontmatter, wording, sizes, privacy)
 - `powershell -NoProfile -ExecutionPolicy Bypass -File tools/test-package.ps1 -OutDir <folder outside the repo>` (builds and checks the Agensi ZIPs)
 - Pi collector: `ssh pi@<host> 'bash -s' < plugins/home-health-check/skills/pi-health-check/scripts/collect.sh`
+- PowerShell tests: `powershell -NoProfile -ExecutionPolicy Bypass -File tools/test-ps.ps1` (Homey collector against `tools/fixtures/homey/`, compared with its `expected.txt`)
+- Homey collector: `bash plugins/home-health-check/skills/homey-health-check/scripts/collect.sh --host <homey> --key-file <file>` and `powershell -NoProfile -ExecutionPolicy Bypass -File plugins/home-health-check/skills/homey-health-check/scripts/collect.ps1 -Homey <homey> -KeyFile <file>`. The key file holds a read-only API key and stays outside the repo.
 - Shell tests: `bash tools/test-sh.sh` (parsers against anonymized fixtures in `tools/fixtures/`). Also run it with `/bin/bash` on a Mac, because that is bash 3.2 with BSD awk and sed: copy `tools/` and `plugins/` over (`tar -c tools plugins | ssh <user>@<mac> 'mkdir -p /tmp/hhc-test && tar -x -C /tmp/hhc-test'`) and run `/bin/bash /tmp/hhc-test/tools/test-sh.sh`.
 - Mac collector: `ssh <user>@<mac> 'bash -s' < plugins/home-health-check/skills/macos-health-check/scripts/collect.sh`. Permission dialogs never show over SSH: test them with a local run, in Terminal and inside the agent app.
 - Windows scripts: `powershell -NoProfile -ExecutionPolicy Bypass -File <script>`
