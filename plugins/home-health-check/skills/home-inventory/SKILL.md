@@ -2,7 +2,7 @@
 name: home-inventory
 description: Discover and keep a local inventory of the devices on the user's home network (IP, MAC, vendor, name, type, open services), and report new, missing or changed devices since the last scan. Use when the user asks what is on their network, wants an inventory or device list, asks about an unknown device, or before another health check needs to know which devices exist.
 summary: Finds every device on your home network, keeps a private inventory, and tells you what is new or gone.
-version: 0.6.0
+version: 0.6.1
 tags: [home-network, inventory, network-scan, security, home-lab]
 keywords: [network devices, ip scanner, mac vendor, arp, unknown device, home lab, macos, linux]
 use_cases:

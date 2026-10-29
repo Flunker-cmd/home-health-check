@@ -2,7 +2,7 @@
 name: pi-health-check
 description: Read-only health check of a Raspberry Pi or other Debian-based Linux box reachable over SSH (OS support status, updates, SD card and disk health, security, services, Pi-hole/unbound/cloudflared DNS setup), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Pi, Pi-hole, home server or a Linux machine on their network.
 summary: Read-only SSH health check of a Raspberry Pi or Linux box with a prioritized fix list, Pi-hole aware.
-version: 0.6.0
+version: 0.6.1
 tags: [raspberry-pi, linux, pi-hole, ssh, security, health-check]
 keywords: [raspberry pi, debian, pi-hole, unbound, cloudflared, sd card, home server]
 use_cases:
@@ -104,6 +104,7 @@ After the report, write the findings so other skills can use them. The format is
 3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
 4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Put what could not be read in `not_checked`.
 5. Tell the user the path of each file in one line.
+6. If a findings file was written, add one line: the home-network-report skill, if it is installed, combines the saved findings of every check into one report for the whole home. Run it only if the user asks.
 
 ### Standard finding ids
 

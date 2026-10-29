@@ -2,7 +2,7 @@
 name: home-network-report
 description: Combine the home inventory and the findings of every health check into one prioritized report for the whole home - the most important actions, a red/yellow/green overview per device, and what changed since last time. Use when the user asks for a report, an overview or a summary of all checks of their home network, or what to fix first.
 summary: One prioritized report for the whole home from the inventory and every health check's findings.
-version: 0.6.0
+version: 0.6.1
 tags: [home-network, report, health-check, security, home-lab]
 keywords: [home report, summary, overview, what to fix first, findings, inventory, prioritized]
 use_cases:

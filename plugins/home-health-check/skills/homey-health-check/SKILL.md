@@ -2,7 +2,7 @@
 name: homey-health-check
 description: Read-only health check of a Homey Pro smart-home hub over its local API (firmware and apps, restarts and outages, memory and power, unavailable or stale devices, low batteries, broken flows, Zigbee and Z-Wave, backup notices, tidiness), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Homey, or asks why Homey devices are offline or flows do not run.
 summary: Read-only health check of your Homey Pro with a prioritized fix list, using a read-only API key you create yourself.
-version: 0.6.0
+version: 0.6.1
 tags: [homey, smart-home, health-check, zigbee, z-wave, backup]
 keywords: [homey pro, athom, flows, zigbee, z-wave, batteries, smart home hub]
 use_cases:
@@ -92,6 +92,7 @@ After the report, write the findings so other skills can use them. The format is
 3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
 4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Every `not checked:` line becomes an entry in `not_checked` with its area and reason, and so does the date of the last good backup when no `succeeded` notice shows it.
 5. Tell the user the path of the file in one line.
+6. If a findings file was written, add one line: the home-network-report skill, if it is installed, combines the saved findings of every check into one report for the whole home. Run it only if the user asks.
 
 ### Standard finding ids
 
