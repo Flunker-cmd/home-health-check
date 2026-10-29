@@ -2,7 +2,7 @@
 name: macos-health-check
 description: Read-only health check of the Mac it runs on (macOS version and support, updates, FileVault, SIP, Gatekeeper, firewall, XProtect, sharing services, Time Machine, disk, battery, startup items, Homebrew and unsigned apps, crashes and panics), ending in a prioritized fix list. Use when the user asks to check, review, clean up or "health check" their Mac, MacBook or iMac.
 summary: Read-only health check of your Mac with a prioritized fix list, no sudo and no permission dialogs.
-version: 0.6.0
+version: 0.6.1
 tags: [macos, mac, health-check, security, filevault, time-machine]
 keywords: [macbook, imac, mac mini, sip, gatekeeper, xprotect, homebrew, launch agents]
 use_cases:
@@ -84,6 +84,7 @@ After the report, write the findings so other skills can use them. The format is
 3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
 4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Every `not checked:` line becomes an entry in `not_checked` with its area and reason.
 5. Tell the user the path of the file in one line.
+6. If a findings file was written, add one line: the home-network-report skill, if it is installed, combines the saved findings of every check into one report for the whole home. Run it only if the user asks.
 
 ### Standard finding ids
 

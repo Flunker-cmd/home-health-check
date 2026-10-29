@@ -2,7 +2,7 @@
 name: windows-health-check
 description: Read-only health check of a Windows 10/11 PC (updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and event log errors, backup, startup programs, outdated apps), ending in a prioritized fix list. Use when the user asks to check, review, clean up or "health check" their Windows computer.
 summary: Read-only health check of a Windows 10/11 PC with a prioritized fix list, no admin rights needed.
-version: 0.6.0
+version: 0.6.1
 tags: [windows, health-check, security, bitlocker, defender, maintenance]
 keywords: [windows 11, windows 10, bios, secure boot, event log, backup, winget, startup programs]
 use_cases:
@@ -80,6 +80,7 @@ After the report, write the findings so other skills can use them. The format is
 3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
 4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Put what could not be read without admin rights in `not_checked`.
 5. Tell the user the path of the file in one line.
+6. If a findings file was written, add one line: the home-network-report skill, if it is installed, combines the saved findings of every check into one report for the whole home. Run it only if the user asks.
 
 ### Standard finding ids
 

@@ -2,7 +2,7 @@
 name: router-health-check
 description: Read-only health check of a home router or mesh Wi-Fi system (TP-Link Deco, Eero, Google/Nest Wifi, Asus, Netgear, Ubiquiti and others) from a computer on the LAN - model and firmware, open ports, UPnP, Wi-Fi security, DHCP/DNS path, IPv6, double NAT, latency - ending in a prioritized fix list. Use when the user asks to check or review their router, mesh, Wi-Fi or home network settings.
 summary: Read-only check of your router or mesh from the LAN: firmware, ports, UPnP, Wi-Fi, DNS path, double NAT.
-version: 0.6.0
+version: 0.6.1
 tags: [router, mesh, wifi, upnp, home-network, security]
 keywords: [tp-link deco, eero, asus, netgear, firmware, double nat, dns, ipv6, macos, linux]
 use_cases:
@@ -132,6 +132,7 @@ After the report, write the findings so other skills can use them. The format is
 3. If there is no `inventory.md` on this computer, say which file to copy where (see *Several computers* in the format file).
 4. Map the report to severities: items under *Should change* are `critical` or `high` by the format's definitions, otherwise `medium`; *Check* items are `low`; *Good to know* items are `info`. *Good as it is* writes nothing. Put the items you still need from the user (step 3) in `not_checked`.
 5. Tell the user the path of the file in one line.
+6. If a findings file was written, add one line: the home-network-report skill, if it is installed, combines the saved findings of every check into one report for the whole home. Run it only if the user asks.
 
 ### Standard finding ids
 
