@@ -1,0 +1,117 @@
+{
+  "70e73378-dffc-585f-a3b7-0e26a218a82f": {
+    "id": "70e73378-dffc-585f-a3b7-0e26a218a82f",
+    "ownerUri": "homey:manager:presence",
+    "ownerName": "Presence",
+    "dateCreated": "2026-10-27T07:12:03.381Z",
+    "excerpt": "Person A came home, CANARY-KEY phone was offline",
+    "meta": {
+      "userId": "7c0c1c64-706b-5711-9468-b155c23054ee",
+      "userAthomId": "000000000000000000000000"
+    }
+  },
+  "4db40161-7fee-512d-a189-f918fcc81a94": {
+    "id": "4db40161-7fee-512d-a189-f918fcc81a94",
+    "ownerUri": "homey:manager:security",
+    "ownerName": "Security",
+    "dateCreated": "2026-10-26T22:00:05.120Z",
+    "excerpt": "Alarm error: Person B left the front door open",
+    "meta": {}
+  },
+  "5c81f5fd-dcf8-535c-819e-c284db3576d4": {
+    "id": "5c81f5fd-dcf8-535c-819e-c284db3576d4",
+    "ownerUri": "homey:manager:apps",
+    "ownerName": "Apps",
+    "dateCreated": "2026-10-25T09:41:27.903Z",
+    "excerpt": "**Alarm Hub** has crashed.\nError: Cannot read properties of undefined (reading 'zone') at Driver.onInit (/app/drivers/hub/driver.js:42:17)",
+    "meta": {}
+  },
+  "7f8f02a9-d48d-5c76-baad-2a645e1cc616": {
+    "id": "7f8f02a9-d48d-5c76-baad-2a645e1cc616",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "ownerName": "Light Bridge",
+    "dateCreated": "2026-10-24T18:30:59.001Z",
+    "excerpt": "Gateway connection lost, retrying",
+    "meta": {}
+  },
+  "75ab857e-6f96-5331-8bd2-57ba8f17b1fa": {
+    "id": "75ab857e-6f96-5331-8bd2-57ba8f17b1fa",
+    "ownerUri": "homey:manager:updates",
+    "ownerName": "Updates",
+    "dateCreated": "2026-10-22T04:10:11.250Z",
+    "excerpt": "**Homey Pro** has been updated to version **13.5.3**.",
+    "meta": {}
+  },
+  "0d7d3031-9c34-531a-8ece-ca19b1553b64": {
+    "id": "0d7d3031-9c34-531a-8ece-ca19b1553b64",
+    "ownerUri": "homey:manager:apps",
+    "ownerName": "Apps",
+    "dateCreated": "2026-10-20T03:00:40.000Z",
+    "excerpt": "**Weather Station** has been automatically updated to version **3.2.1**.",
+    "meta": {}
+  },
+  "af005e7d-d3f6-53f1-b7cb-409f9c3c790a": {
+    "id": "af005e7d-d3f6-53f1-b7cb-409f9c3c790a",
+    "ownerUri": "homey:manager:google-assistant",
+    "ownerName": "Google Assistant",
+    "dateCreated": "2026-10-19T08:00:00.000Z",
+    "excerpt": "Device sync was disabled by the user",
+    "meta": {}
+  },
+  "222595d9-0bad-530d-9f4b-6380aedb82bd": {
+    "id": "222595d9-0bad-530d-9f4b-6380aedb82bd",
+    "ownerUri": "homey:manager:backup",
+    "ownerName": "Backups",
+    "dateCreated": "2026-10-15T15:07:40.649Z",
+    "excerpt": "Homey encountered a problem while creating a backup. Go to Backups in the Homey app for more information.",
+    "meta": {}
+  },
+  "ff3f6009-2951-524f-bd41-91020402de5f": {
+    "id": "ff3f6009-2951-524f-bd41-91020402de5f",
+    "ownerUri": "homey:manager:apps",
+    "ownerName": "Apps",
+    "dateCreated": "2026-10-01T10:00:00.000Z",
+    "excerpt": "**Dev Tool** has crashed.",
+    "meta": {}
+  },
+  "82302190-e43d-50c7-8f36-924cd8fed351": {
+    "id": "82302190-e43d-50c7-8f36-924cd8fed351",
+    "ownerUri": "homey:manager:backup",
+    "ownerName": "Backups",
+    "dateCreated": "2026-09-25T03:00:00.000Z",
+    "excerpt": "Backup created successfully.",
+    "meta": {}
+  },
+  "e5230f0d-a538-50c6-861b-c6a40f0fe315": {
+    "id": "e5230f0d-a538-50c6-861b-c6a40f0fe315",
+    "ownerUri": "homey:manager:security",
+    "ownerName": "Security",
+    "dateCreated": "2026-09-20T06:00:00.000Z",
+    "excerpt": "Person B disarmed the alarm",
+    "meta": {}
+  },
+  "3b1f6a52-8c0e-5d47-9a21-6e4f0b7c2d18": {
+    "id": "3b1f6a52-8c0e-5d47-9a21-6e4f0b7c2d18",
+    "ownerUri": "homey:manager:backup",
+    "ownerName": "Backups",
+    "dateCreated": "2026-10-05T02:00:00.000Z",
+    "excerpt": "Backup could not be created.",
+    "meta": {}
+  },
+  "c4d2e8a1-7b3f-5e90-8d16-2a9c5f1e7b04": {
+    "id": "c4d2e8a1-7b3f-5e90-8d16-2a9c5f1e7b04",
+    "ownerUri": "homey:manager:flow",
+    "ownerName": "Flow",
+    "dateCreated": "2026-10-26T19:00:00.000Z",
+    "excerpt": "Washing machine error, CANARY-FLOW power 3 W",
+    "meta": {}
+  },
+  "9e7a1c35-4f2b-5a68-b0d9-1c8e3f6a2b57": {
+    "id": "9e7a1c35-4f2b-5a68-b0d9-1c8e3f6a2b57",
+    "ownerUri": "homey:manager:notifications",
+    "ownerName": "Notifications",
+    "dateCreated": "2026-10-23T07:30:00.000Z",
+    "excerpt": "Garage door offline, CANARY-NOTE",
+    "meta": {}
+  }
+}

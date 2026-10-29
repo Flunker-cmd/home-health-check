@@ -1,0 +1,976 @@
+{
+  "4a85b797-9d6c-5ddc-a7a5-c2886605bec9": {
+    "id": "4a85b797-9d6c-5ddc-a7a5-c2886605bec9",
+    "driverId": "homey:app:com.example.lightbridge:sensor",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Leak sensor 1",
+    "note": null,
+    "zone": "93b2d458-f2f4-51fb-8dde-062b6b47edbc",
+    "data": {
+      "id": "68687ae3-8fe9-5669-b575-68d5802374e1"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "3d1629cc-2a1f-5b4c-9871-7fe25a9b5cfd",
+      "url": "/icon/example.svg"
+    },
+    "class": "sensor",
+    "virtualClass": null,
+    "capabilities": [
+      "alarm_water"
+    ],
+    "capabilitiesObj": {
+      "alarm_water": {
+        "id": "alarm_water",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Water Alarm",
+        "titleShort": "Water",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": "2026-10-27T09:30:12.204Z"
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": null,
+    "firmwareUpdate": null
+  },
+  "46b62825-8dae-53f6-b372-8e5c83b25e60": {
+    "id": "46b62825-8dae-53f6-b372-8e5c83b25e60",
+    "driverId": "homey:app:com.example.lightbridge:sensor",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Leak sensor 2",
+    "note": null,
+    "zone": "93b2d458-f2f4-51fb-8dde-062b6b47edbc",
+    "data": {
+      "id": "96c02fa9-c7f9-5332-9a85-f99d76737e44"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "c5d8f2a1-40e0-59c7-b08f-60cc3333fa33",
+      "url": "/icon/example.svg"
+    },
+    "class": "sensor",
+    "virtualClass": null,
+    "capabilities": [
+      "alarm_water",
+      "measure_battery",
+      "alarm_battery"
+    ],
+    "capabilitiesObj": {
+      "alarm_water": {
+        "id": "alarm_water",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Water Alarm",
+        "titleShort": "Water",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": 1793167800417
+      },
+      "measure_battery": {
+        "id": "measure_battery",
+        "type": "number",
+        "iconObj": null,
+        "title": "Battery",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 15,
+        "lastUpdated": 1793167800417
+      },
+      "alarm_battery": {
+        "id": "alarm_battery",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Battery Alarm",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": true,
+        "lastUpdated": 1793138400417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": null,
+    "firmwareUpdate": null
+  },
+  "3fd873dd-539d-544e-a2be-8eb4153fad28": {
+    "id": "3fd873dd-539d-544e-a2be-8eb4153fad28",
+    "driverId": "homey:app:com.example.lightbridge:sensor",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Door sensor",
+    "note": null,
+    "zone": "8f151621-54ee-5e21-b060-490a246793d6",
+    "data": {
+      "id": "ff6b72f9-2a6f-5c62-bded-894ae2e25c5e"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "14a4e323-b53d-534c-8d67-027c2febc9f5",
+      "url": "/icon/example.svg"
+    },
+    "class": "sensor",
+    "virtualClass": null,
+    "capabilities": [
+      "alarm_contact",
+      "measure_battery",
+      "alarm_battery"
+    ],
+    "capabilitiesObj": {
+      "alarm_contact": {
+        "id": "alarm_contact",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Contact Alarm",
+        "titleShort": "Contact",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": 1793173530417
+      },
+      "measure_battery": {
+        "id": "measure_battery",
+        "type": "number",
+        "iconObj": null,
+        "title": "Battery",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 80,
+        "lastUpdated": 1793173530417
+      },
+      "alarm_battery": {
+        "id": "alarm_battery",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Battery Alarm",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": true,
+        "lastUpdated": 1793019600417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": "2026-10-28T07:45:31.002Z",
+    "firmwareUpdate": null
+  },
+  "6ecd69f6-d498-58d0-95ff-8f0237feaa84": {
+    "id": "6ecd69f6-d498-58d0-95ff-8f0237feaa84",
+    "driverId": "homey:app:com.example.lightbridge:sensor",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Temperature sensor",
+    "note": null,
+    "zone": "f5686f1b-a976-58ea-8a07-08d1469b1cf2",
+    "data": {
+      "id": "ce4b6d98-fe45-5371-a7ca-c738ed769b4a"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "4d3d610b-58ab-5164-b82c-6f5da5524669",
+      "url": "/icon/example.svg"
+    },
+    "class": "sensor",
+    "virtualClass": null,
+    "capabilities": [
+      "measure_temperature",
+      "measure_humidity",
+      "measure_battery"
+    ],
+    "capabilitiesObj": {
+      "measure_temperature": {
+        "id": "measure_temperature",
+        "type": "number",
+        "iconObj": null,
+        "title": "Temperature",
+        "titleShort": "Temperature",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 21.4,
+        "lastUpdated": 1792476044417
+      },
+      "measure_humidity": {
+        "id": "measure_humidity",
+        "type": "number",
+        "iconObj": null,
+        "title": "Humidity",
+        "titleShort": "Humidity",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 41,
+        "lastUpdated": 1792451400417
+      },
+      "measure_battery": {
+        "id": "measure_battery",
+        "type": "number",
+        "iconObj": null,
+        "title": "Battery",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 55,
+        "lastUpdated": null
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": "2026-10-19T10:00:00.000Z",
+    "firmwareUpdate": null
+  },
+  "afa4004f-f2dd-5041-bf0d-6230d87991b0": {
+    "id": "afa4004f-f2dd-5041-bf0d-6230d87991b0",
+    "driverId": "homey:app:com.example.lightbridge:sensor",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Motion sensor",
+    "note": null,
+    "zone": "8f151621-54ee-5e21-b060-490a246793d6",
+    "data": {
+      "id": "fa57a4f9-4e7d-5b34-8cf9-dad874ab5fb2"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "8fff4143-7cab-5e3b-99c5-3bc39bac71cb",
+      "url": "/icon/example.svg"
+    },
+    "class": "sensor",
+    "virtualClass": null,
+    "capabilities": [
+      "alarm_motion",
+      "measure_battery"
+    ],
+    "capabilitiesObj": {
+      "alarm_motion": {
+        "id": "alarm_motion",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Motion Alarm",
+        "titleShort": "Motion",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": null
+      },
+      "measure_battery": {
+        "id": "measure_battery",
+        "type": "number",
+        "iconObj": null,
+        "title": "Battery",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 64,
+        "lastUpdated": null
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": false,
+    "unavailableMessage": "No response since 10/20/2026, 2:26:36 PM",
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": "2026-10-20T14:26:36.512Z",
+    "firmwareUpdate": null
+  },
+  "34cb87b5-3108-5b97-aafa-c114be4cb619": {
+    "id": "34cb87b5-3108-5b97-aafa-c114be4cb619",
+    "driverId": "homey:app:com.example.climate:thermostat",
+    "driverUri": "homey:app:com.example.climate",
+    "ownerUri": "homey:app:com.example.climate",
+    "name": "Thermostat",
+    "note": null,
+    "zone": "f5686f1b-a976-58ea-8a07-08d1469b1cf2",
+    "data": {
+      "id": "fcde5882-d9c8-537e-964e-46b6bea63e6d"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "f0a0f34d-ac46-5a62-9f17-b8d97b7c23df",
+      "url": "/icon/example.svg"
+    },
+    "class": "thermostat",
+    "virtualClass": null,
+    "capabilities": [
+      "target_temperature",
+      "measure_temperature"
+    ],
+    "capabilitiesObj": {
+      "target_temperature": {
+        "id": "target_temperature",
+        "type": "number",
+        "iconObj": null,
+        "title": "Target Temperature",
+        "titleShort": "Target",
+        "getable": true,
+        "setable": true,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 20,
+        "lastUpdated": null
+      },
+      "measure_temperature": {
+        "id": "measure_temperature",
+        "type": "number",
+        "iconObj": null,
+        "title": "Temperature",
+        "titleShort": "Temperature",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": null,
+        "lastUpdated": null
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": null,
+    "firmwareUpdate": null
+  },
+  "3b212db2-1c90-5a4b-92d0-dd01ccf9fabe": {
+    "id": "3b212db2-1c90-5a4b-92d0-dd01ccf9fabe",
+    "driverId": "homey:app:com.example.lightbridge:light",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Ceiling light",
+    "note": null,
+    "zone": "f5686f1b-a976-58ea-8a07-08d1469b1cf2",
+    "data": {
+      "id": "4f91caa7-ec8e-5b3f-aaf3-bace01238fec"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "b638eff1-0dda-5776-9d76-57f728c0ee47",
+      "url": "/icon/example.svg"
+    },
+    "class": "light",
+    "virtualClass": null,
+    "capabilities": [
+      "onoff",
+      "dim"
+    ],
+    "capabilitiesObj": {
+      "onoff": {
+        "id": "onoff",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Turned on",
+        "titleShort": "Turned",
+        "getable": true,
+        "setable": true,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": true,
+        "lastUpdated": 1790877600417
+      },
+      "dim": {
+        "id": "dim",
+        "type": "number",
+        "iconObj": null,
+        "title": "Dim level",
+        "titleShort": "Dim",
+        "getable": true,
+        "setable": true,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 0.8,
+        "lastUpdated": 1790877600417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": "2026-10-28T11:58:02.110Z",
+    "firmwareUpdate": {
+      "state": "available",
+      "currentVersion": "0.1b0 / 0.0b71",
+      "availableVersion": "0.1b0 / 0.0b87",
+      "metadata": {
+        "manufacturerCode": 4476,
+        "imageType": 1,
+        "fileVersion": 1,
+        "hardwareVersion": 1
+      },
+      "progress": null
+    }
+  },
+  "9f1893ed-2e32-5baf-b230-c077939466b2": {
+    "id": "9f1893ed-2e32-5baf-b230-c077939466b2",
+    "driverId": "homey:app:com.example.lightbridge:socket",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Desk lamp ",
+    "note": null,
+    "zone": "93b2d458-f2f4-51fb-8dde-062b6b47edbc",
+    "data": {
+      "id": "e0bfadb6-6b61-5281-a185-70406cbb4c36"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "103d4299-5faf-5a51-b907-618342578680",
+      "url": "/icon/example.svg"
+    },
+    "class": "socket",
+    "virtualClass": null,
+    "capabilities": [
+      "onoff"
+    ],
+    "capabilitiesObj": {
+      "onoff": {
+        "id": "onoff",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Turned on",
+        "titleShort": "Turned",
+        "getable": true,
+        "setable": true,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": 1793135700417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": "2026-10-28T11:30:00.000Z",
+    "firmwareUpdate": {
+      "state": "idle",
+      "currentVersion": "0.2b4 / 0.0b69",
+      "availableVersion": null,
+      "metadata": {
+        "manufacturerCode": 4476,
+        "imageType": 1,
+        "fileVersion": 1,
+        "hardwareVersion": 1
+      },
+      "progress": null
+    }
+  },
+  "6e34cef5-ff72-5d0d-a748-9f0da8de5450": {
+    "id": "6e34cef5-ff72-5d0d-a748-9f0da8de5450",
+    "driverId": "homey:app:com.example.plugs:socket",
+    "driverUri": "homey:app:com.example.plugs",
+    "ownerUri": "homey:app:com.example.plugs",
+    "name": "Smart plug",
+    "note": null,
+    "zone": "0641053b-a2b9-568f-b104-3e3d15dc324e",
+    "data": {
+      "id": "8dd05909-77c9-5a1c-9006-3c17faefbf5f"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "36562714-df88-5b0d-bd48-cafea2d6d3bb",
+      "url": "/icon/example.svg"
+    },
+    "class": "socket",
+    "virtualClass": null,
+    "capabilities": [
+      "onoff"
+    ],
+    "capabilitiesObj": {
+      "onoff": {
+        "id": "onoff",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Turned on",
+        "titleShort": "Turned",
+        "getable": true,
+        "setable": true,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": true,
+        "lastUpdated": 1793001600417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": null,
+    "firmwareUpdate": null
+  },
+  "a9e6b587-031e-5a10-87e2-94e76039cc5a": {
+    "id": "a9e6b587-031e-5a10-87e2-94e76039cc5a",
+    "driverId": "homey:app:com.example.mediaplayer:speaker",
+    "driverUri": "homey:app:com.example.mediaplayer",
+    "ownerUri": "homey:app:com.example.mediaplayer",
+    "name": "Speaker",
+    "note": null,
+    "zone": "f5686f1b-a976-58ea-8a07-08d1469b1cf2",
+    "data": {
+      "id": "d523291e-45ea-595d-bdba-3d206c860a3f"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "5a59612b-1e56-5843-9396-95d1470f9be3",
+      "url": "/icon/example.svg"
+    },
+    "class": "speaker",
+    "virtualClass": null,
+    "capabilities": [
+      "speaker_playing",
+      "volume_set"
+    ],
+    "capabilitiesObj": {
+      "speaker_playing": {
+        "id": "speaker_playing",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Playing",
+        "titleShort": "Playing",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": 1793131200417
+      },
+      "volume_set": {
+        "id": "volume_set",
+        "type": "number",
+        "iconObj": null,
+        "title": "Volume",
+        "titleShort": "Volume",
+        "getable": true,
+        "setable": true,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 0.3,
+        "lastUpdated": 1793131200417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": "Connection unstable, check Wi-Fi",
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": null,
+    "firmwareUpdate": null
+  },
+  "2db180d0-b8ef-5bbe-9ddd-f5982bde7e18": {
+    "id": "2db180d0-b8ef-5bbe-9ddd-f5982bde7e18",
+    "driverId": "homey:app:com.example.lightbridge:remote",
+    "driverUri": "homey:app:com.example.lightbridge",
+    "ownerUri": "homey:app:com.example.lightbridge",
+    "name": "Remote",
+    "note": null,
+    "zone": "f5686f1b-a976-58ea-8a07-08d1469b1cf2",
+    "data": {
+      "id": "38b85232-3af3-5a32-9dc8-3ec130587f53"
+    },
+    "icon": null,
+    "iconOverride": null,
+    "iconObj": {
+      "id": "07aa69f2-635e-5959-9097-c550c9c5df68",
+      "url": "/icon/example.svg"
+    },
+    "class": "remote",
+    "virtualClass": null,
+    "capabilities": [
+      "button",
+      "measure_battery"
+    ],
+    "capabilitiesObj": {
+      "button": {
+        "id": "button",
+        "type": "boolean",
+        "iconObj": null,
+        "title": "Button",
+        "titleShort": "Button",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": false,
+        "lastUpdated": null
+      },
+      "measure_battery": {
+        "id": "measure_battery",
+        "type": "number",
+        "iconObj": null,
+        "title": "Battery",
+        "titleShort": "Battery",
+        "getable": true,
+        "setable": false,
+        "insights": true,
+        "insightsTitleTrue": null,
+        "insightsTitleFalse": null,
+        "titleTrue": null,
+        "titleFalse": null,
+        "value": 91,
+        "lastUpdated": 1793178000417
+      }
+    },
+    "settings": {},
+    "settingsObj": true,
+    "insights": [],
+    "flags": [
+      "zigbee"
+    ],
+    "energy": {},
+    "energyObj": {},
+    "ui": {
+      "state": null,
+      "components": [],
+      "componentsStartAt": 0,
+      "quickActionOverride": null
+    },
+    "uiIndicator": null,
+    "available": true,
+    "unavailableMessage": null,
+    "warningMessage": null,
+    "ready": true,
+    "repair": true,
+    "unpair": false,
+    "images": [],
+    "videos": [],
+    "color": "#0b579e",
+    "hidden": false,
+    "group": null,
+    "lastSeenAt": null,
+    "firmwareUpdate": {
+      "state": "queued",
+      "currentVersion": "0.0b1 / 1.0b6",
+      "availableVersion": "0.1b1 / 0.0b4",
+      "metadata": {
+        "manufacturerCode": 4476,
+        "imageType": 1,
+        "fileVersion": 1,
+        "hardwareVersion": 1
+      },
+      "requiresWake": true,
+      "progress": null
+    }
+  }
+}

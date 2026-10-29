@@ -1,6 +1,6 @@
 # home-health-check
 
-A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC and your Mac. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
+A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC, your Mac and your Homey Pro. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
 
 | Skill | Does |
 |---|---|
@@ -9,6 +9,7 @@ A Claude Code plugin that lets Claude map and health-check the devices in your h
 | `router-health-check` | Home router or mesh from a PC on the LAN: model and firmware, open ports, UPnP mappings, Wi-Fi security, DHCP and DNS path (incl. Pi-hole bypass), IPv6, double NAT, latency, devices |
 | `windows-health-check` | Windows 10/11: updates, BIOS, Defender, firewall, Secure Boot, BitLocker, disks, crashes and log errors, backup, startup programs, outdated apps |
 | `macos-health-check` | macOS: version and support, updates, FileVault, SIP, Gatekeeper, firewall, XProtect, sharing, Time Machine, disk, battery, startup items, Homebrew and unsigned apps, crashes and panics. No sudo, no permission dialogs |
+| `homey-health-check` | Homey Pro smart-home hub over its local API with a read-only key: firmware and apps, restarts and outages, memory and power, unavailable or stale devices, batteries, broken flows, Zigbee and Z-Wave, backup notices |
 | `home-network-report` | Combines the inventory and every check's findings into one report: the most important actions across the home, a red/yellow/green overview per device, and what changed since last time |
 
 ## Requirements

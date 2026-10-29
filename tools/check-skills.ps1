@@ -40,7 +40,7 @@ function Test-ScriptSize {
         if (-not (Test-Path $dir)) { continue }
         foreach ($f in Get-ChildItem $dir -Recurse -File) {
             Checked
-            if ($f.Length -ge 20480) { Fail 'script-size' $f.FullName "$($f.Length) bytes, must be under 20480" }
+            if ($f.Length -ge 20000) { Fail 'script-size' $f.FullName "$($f.Length) bytes, must be under 20000" }
         }
     }
 }
@@ -167,7 +167,7 @@ function Test-NetworkSection {
 }
 
 function Test-FindingsSection {
-    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check', 'macos-health-check') {
+    foreach ($name in 'pi-health-check', 'router-health-check', 'windows-health-check', 'macos-health-check', 'homey-health-check') {
         $md = Join-Path $skillsDir "$name\SKILL.md"
         Checked
         if (-not (Test-Path $md)) { Fail 'findings-section' $md 'missing SKILL.md'; continue }

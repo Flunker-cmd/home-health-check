@@ -251,6 +251,8 @@ Collector: `scripts/collect.sh`, under the bash 3.2 rules above. It is tested on
 
 ### `homey-health-check`
 
+Superseded by `2026-10-28-homey-health-check-design.md`, which wins where the two disagree.
+
 Read-only health check of an Athom Homey Pro. A throwaway spike on the author's Homey Pro (Early 2023, firmware 13.5) on 2026-10-27 established the following.
 
 **Data source.** The primary source is the **local Web API** with a user-created API key that has **only read permissions**. All of these answered over plain HTTP on the LAN:

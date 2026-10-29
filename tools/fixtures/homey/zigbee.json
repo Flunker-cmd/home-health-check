@@ -1,0 +1,154 @@
+{
+  "zigbee_ready": true,
+  "zigbee_state": {
+    "currentCommand": "IDLE"
+  },
+  "zigbee_error": null,
+  "controllerState": {
+    "panId": 4660,
+    "extendedPanId": "00:00:00:00:00:00:00:00",
+    "IEEEAddress": "00:00:00:00:00:00:00:00",
+    "networkKey": "00000000000000000000000000000000",
+    "networkKeySequenceNumber": 0,
+    "networkKeyFrameCounter": 0,
+    "channel": 15,
+    "softwareVersion": "7.4.4",
+    "routes": {
+      "1001": [
+        1002
+      ],
+      "1002": []
+    }
+  },
+  "nodes": {
+    "00:00:00:00:00:00:00:01": {
+      "networkAddress": 1001,
+      "ieeeAddress": "00:00:00:00:00:00:00:01",
+      "lastSeen": 1793185200417,
+      "modelId": "Example model",
+      "manufacturerName": "Example",
+      "endpointDescriptors": [],
+      "deviceType": "router",
+      "receiveWhenIdle": true,
+      "swBuildId": "1.0.0",
+      "capabilities": {
+        "alternatePANCoordinator": false,
+        "deviceType": true,
+        "powerSourceMains": true,
+        "receiveWhenIdle": true,
+        "security": false,
+        "allocateAddress": true
+      },
+      "stats": {
+        "tx": 100,
+        "txSuccess": 99,
+        "txError": 1,
+        "rx": 120
+      },
+      "name": "Ceiling light",
+      "ieeeAddr": "00:00:00:00:00:00:00:01",
+      "nwkAddr": 1001,
+      "type": "router"
+    },
+    "00:00:00:00:00:00:00:02": {
+      "networkAddress": 1002,
+      "ieeeAddress": "00:00:00:00:00:00:00:02",
+      "lastSeen": 1793185200417,
+      "modelId": "Example model",
+      "manufacturerName": "Example",
+      "endpointDescriptors": [],
+      "deviceType": "router",
+      "receiveWhenIdle": true,
+      "swBuildId": "1.0.0",
+      "capabilities": {
+        "alternatePANCoordinator": false,
+        "deviceType": true,
+        "powerSourceMains": true,
+        "receiveWhenIdle": true,
+        "security": false,
+        "allocateAddress": true
+      },
+      "stats": {
+        "tx": 100,
+        "txSuccess": 99,
+        "txError": 1,
+        "rx": 120
+      },
+      "name": "Desk lamp ",
+      "ieeeAddr": "00:00:00:00:00:00:00:02",
+      "nwkAddr": 1002,
+      "type": "router"
+    },
+    "00:00:00:00:00:00:00:03": {
+      "networkAddress": 1003,
+      "ieeeAddress": "00:00:00:00:00:00:00:03",
+      "lastSeen": 1793185200417,
+      "modelId": "Example model",
+      "manufacturerName": "Example",
+      "endpointDescriptors": [],
+      "deviceType": "enddevice",
+      "receiveWhenIdle": false,
+      "swBuildId": "1.0.0",
+      "capabilities": {
+        "alternatePANCoordinator": false,
+        "deviceType": false,
+        "powerSourceMains": false,
+        "receiveWhenIdle": false,
+        "security": false,
+        "allocateAddress": true
+      },
+      "stats": {
+        "tx": 100,
+        "txSuccess": 99,
+        "txError": 1,
+        "rx": 120
+      },
+      "name": "Leak sensor 1",
+      "ieeeAddr": "00:00:00:00:00:00:00:03",
+      "nwkAddr": 1003,
+      "type": "enddevice"
+    },
+    "00:00:00:00:00:00:00:04": {
+      "networkAddress": 1004,
+      "ieeeAddress": "00:00:00:00:00:00:00:04",
+      "lastSeen": 1793185200417,
+      "modelId": "Example model",
+      "manufacturerName": "Example",
+      "endpointDescriptors": [],
+      "deviceType": "enddevice",
+      "receiveWhenIdle": false,
+      "swBuildId": "1.0.0",
+      "capabilities": {
+        "alternatePANCoordinator": false,
+        "deviceType": false,
+        "powerSourceMains": false,
+        "receiveWhenIdle": false,
+        "security": false,
+        "allocateAddress": true
+      },
+      "stats": {
+        "tx": 100,
+        "txSuccess": 99,
+        "txError": 1,
+        "rx": 120
+      },
+      "name": "Door sensor",
+      "ieeeAddr": "00:00:00:00:00:00:00:04",
+      "nwkAddr": 1004,
+      "type": "enddevice"
+    },
+    "00:00:00:00:00:00:00:00": {
+      "receiveWhenIdle": true,
+      "ieeeAddr": "00:00:00:00:00:00:00:00",
+      "nwkAddr": 0,
+      "modelId": "Homey",
+      "manufacturerName": "Athom",
+      "type": "coordinator",
+      "name": "Homey"
+    }
+  },
+  "extendedInterviewResult": null,
+  "availability": {
+    "zigbee": "available"
+  }
+}
