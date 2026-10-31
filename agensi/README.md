@@ -1,6 +1,6 @@
 # Home Health Check Pack
 
-Let your AI agent map and health-check your home: the devices on your network, a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC, your Mac and your Homey Pro. Each check runs a read-only script, explains what is fine and what is not, and ends with a prioritized fix list. Nothing is changed without your yes, and the agent never handles your passwords.
+Let your AI agent map and health-check your home: the devices on your network, a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC, your Mac and your Homey Pro. Each check runs a read-only script, explains what is fine and what is not, and ends with a prioritized fix list. Nothing is changed without your yes, and the agent never handles your passwords. Read-only does not mean passive: the inventory and router checks actively ping and port-check your LAN, and the inventory downloads a public MAC vendor list from wireshark.org on first use.
 
 | Skill | Does |
 |---|---|
