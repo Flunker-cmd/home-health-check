@@ -2,7 +2,7 @@
 name: homey-health-check
 description: Read-only health check of a Homey Pro smart-home hub over its local API (firmware and apps, restarts and outages, memory and power, unavailable or stale devices, low batteries, broken flows, Zigbee and Z-Wave, backup notices, tidiness), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Homey, or asks why Homey devices are offline or flows do not run.
 summary: Read-only health check of your Homey Pro with a prioritized fix list, using a read-only API key you create yourself.
-version: 0.6.1
+version: 0.6.2
 tags: [homey, smart-home, health-check, zigbee, z-wave, backup]
 keywords: [homey pro, athom, flows, zigbee, z-wave, batteries, smart home hub]
 use_cases:
