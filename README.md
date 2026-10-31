@@ -1,6 +1,6 @@
 # home-health-check
 
-A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC, your Mac and your Homey Pro. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords.
+A Claude Code plugin that lets Claude map and health-check the devices in your home: a Raspberry Pi or Linux server, your router or mesh Wi-Fi, your Windows PC, your Mac and your Homey Pro. Claude collects facts with read-only scripts, explains what is good and what isn't, and gives you a prioritized fix list. Nothing is changed without your yes, and Claude never handles your passwords. Read-only does not mean passive: the inventory and router checks actively ping and port-check your LAN, and the inventory downloads a public MAC vendor list from wireshark.org on first use.
 
 | Skill | Does |
 |---|---|
