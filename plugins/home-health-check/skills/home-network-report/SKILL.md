@@ -1,8 +1,8 @@
 ---
 name: home-network-report
-description: Combine the home inventory and the findings of every health check into one prioritized report for the whole home - the most important actions, a red/yellow/green overview per device, and what changed since last time. Use when the user asks for a report, an overview or a summary of all checks of their home network, or what to fix first.
+description: Combine the home inventory and the findings of every health check into one prioritized report for the whole home - the most important actions, a graded overview per device, and what changed since last time. Use when the user asks for a report, an overview or a summary of all checks of their home network, or what to fix first.
 summary: One prioritized report for the whole home from the inventory and every health check's findings.
-version: 0.6.1
+version: 0.6.2
 tags: [home-network, report, health-check, security, home-lab]
 keywords: [home report, summary, overview, what to fix first, findings, inventory, prioritized]
 use_cases:
@@ -60,7 +60,7 @@ Today's date comes from the system clock or your environment, never from an esti
 
 1. **Most important actions.** Three to five items across the whole home. Rank by severity first (`critical`, `high`, `medium`, `low`, `info`), then by `effort`, cheapest first; read effort as rough time ("5 min" before "30 min" before "1-2 h"), and put items without an effort after those with one. Each item names the device, the `subject` when there is one, what to do (from `action`) and the effort. The same problem on several devices may become one item naming all of them. Fewer than three items is fine when there are fewer findings than that.
 2. **Per device.** One row per inventory device, in inventory order, with: name, type, grade, the modules that checked it and when, and `stale` for a check older than 30 days.
-   - Grade: **red** if any latest finding of any module for the device is `critical` or `high`, **yellow** if any is `medium`, **green** otherwise. A device whose latest check has `findings: []` is **green**. A device with no readable findings file from any module is **not checked**, which is not the same as green.
+   - Grade: **Fix now** if any latest finding of any module for the device is `critical` or `high`, **Should fix** if any is `medium`, **OK** otherwise. A device whose latest check has `findings: []` is **OK**. A device with no readable findings file from any module is **Not checked**, which is not the same as OK. Write a grade only as one of these four labels, translated into the report's language: no colors, color words or emoji, so that it reads the same on any screen.
    - For a not-checked device, name the module that could check it: pi-health-check for a Raspberry Pi or Linux server, router-health-check for the router or a mesh node, windows-health-check for a Windows PC, macos-health-check for a Mac, homey-health-check for a Homey Pro (vendor Athom). Phones, speakers, printers and other devices have no check yet; say so.
    - Below the table, the findings per device, all modules together, so that two checks of one device sit side by side. When a finding names another device in its `subject` or `detail`, mention it at that device as well.
 3. **Not in the inventory.** Devices from findings files whose MAC is not in the inventory (for example a Mac's private Wi-Fi address, or a device the scan never saw) and devices with MAC `unknown`, each with its name, module, grade and findings. Do not guess which inventory device they are; suggest running the home-inventory skill or adding the device by hand.
