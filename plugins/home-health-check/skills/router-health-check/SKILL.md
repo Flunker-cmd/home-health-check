@@ -1,8 +1,8 @@
 ---
 name: router-health-check
-description: Read-only health check of a home router or mesh Wi-Fi system (TP-Link Deco, Eero, Google/Nest Wifi, Asus, Netgear, Ubiquiti and others) from a computer on the LAN - model and firmware, open ports, UPnP, Wi-Fi security, DHCP/DNS path, IPv6, double NAT, latency - ending in a prioritized fix list. Use when the user asks to check or review their router, mesh, Wi-Fi or home network settings.
+description: Read-only health check of a home router or mesh Wi-Fi system (TP-Link Deco, Eero, Google/Nest Wifi, Asus, Netgear, Ubiquiti and others) from a computer on the LAN - model and firmware, open ports, UPnP, Wi-Fi security, DHCP/DNS path, IPv6, double NAT, latency - ending in a prioritized fix list. Actively pings and port-checks the gateway, but changes nothing. Use when the user asks to check or review their router, mesh, Wi-Fi or home network settings.
 summary: Read-only check of your router or mesh from the LAN: firmware, ports, UPnP, Wi-Fi, DNS path, double NAT.
-version: 0.6.2
+version: 0.6.3
 tags: [router, mesh, wifi, upnp, home-network, security]
 keywords: [tp-link deco, eero, asus, netgear, firmware, double nat, dns, ipv6, macos, linux]
 use_cases:
