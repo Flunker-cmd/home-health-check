@@ -100,6 +100,13 @@ if have pihole; then
     echo "web password set: $([ -n "$pw" ] && echo yes || echo NO)"
     echo "gravity domains: $($SUDO pihole-FTL sqlite3 /etc/pihole/gravity.db 'select count(*) from gravity' 2>/dev/null)"
     echo "clients seen last 24h: $($SUDO pihole-FTL sqlite3 /etc/pihole/pihole-FTL.db "select count(distinct client) from queries where timestamp > strftime('%s','now')-86400" 2>/dev/null)"
+    # Pi-hole v5 has no adlist.type; every list there is a blocklist
+    adlist_type=type
+    [ "$($SUDO pihole-FTL sqlite3 /etc/pihole/gravity.db "select count(*) from pragma_table_info('adlist') where name='type'" 2>/dev/null)" = 1 ] || adlist_type=0
+    adlists=$($SUDO pihole-FTL sqlite3 /etc/pihole/gravity.db "select enabled, $adlist_type, status, number, strftime('%Y-%m-%d', date_updated, 'unixepoch'), address from adlist order by id" 2>/dev/null) || adlists=""
+    echo "adlists (enabled|type|status|domains|last updated|url, no login or query):"
+    # login and query string in a list url can hold secrets
+    if [ -n "$adlists" ]; then printf '%s\n' "$adlists" | sed -E 's#://[^/@]+@#://#; s/\?.*$//; s/^/  /'; else echo "  (none, or could not be read)"; fi
   else
     echo "(details need passwordless sudo)"
   fi
