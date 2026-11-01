@@ -2,7 +2,7 @@
 name: pi-health-check
 description: Read-only health check of a Raspberry Pi or other Debian-based Linux box reachable over SSH (OS support status, updates, SD card and disk health, security, services, Pi-hole/unbound/cloudflared DNS setup), ending in a prioritized fix list. Use when the user asks to check, review or "health check" their Pi, Pi-hole, home server or a Linux machine on their network.
 summary: Read-only SSH health check of a Raspberry Pi or Linux box with a prioritized fix list, Pi-hole aware.
-version: 0.6.3
+version: 0.6.4
 tags: [raspberry-pi, linux, pi-hole, ssh, security, health-check]
 keywords: [raspberry pi, debian, pi-hole, unbound, cloudflared, sd card, home server]
 use_cases:
@@ -72,6 +72,7 @@ Go through each area. For each finding, say what you saw, why it matters and how
 | **Services** | Failed units, services that look unused (old RetroPie, VNC, Samba, CUPS) and could be removed. |
 | **Network** | Static IP config (`dhcpcd` on older releases, NetworkManager on newer), netmask and gateway matching what the router hands out, DNS used by the host itself. |
 | **Pi-hole** | Version, blocking enabled, upstream DNS, gravity size, web password set (`webserver.api.pwhash` non-empty). |
+| **Pi-hole adlists** | Per-list lines under `adlists`. `status`: `1`/`2` are fine (downloaded, or unchanged so the local copy was reused); `3` means the list was unreachable and Pi-hole fell back to an older local copy (stale but not empty); `4` means unreachable with no local copy at all, so that list contributes nothing; `0` means added but not processed yet, so gravity has not run since (no date; not a failure, say so). `type`: `0` is a blocklist; anything else is an allowlist, where a failure means allowed domains may get blocked rather than lost coverage. Flag an **enabled** list at `3`/`4`, or one at `1`/`2` with `0` domains. The status only shows the latest gravity run, so one failure can be temporary: say so, and have the user run `pihole -g` and check again before calling it lasting. Gravity normally runs weekly, so if enabled lists were last updated more than two weeks ago it has stopped, whatever their status says. A single well-maintained list (e.g. StevenBlack's unified hosts) is not itself a problem — more lists mean more coverage but also more upkeep, not automatically "better". A disabled list sitting unused is harmless clutter, not a finding. Name lists by host and file name in reports and findings: a long random path segment may be a private token. |
 | **Encrypted DNS** | `cloudflared` with `proxy-dns` **was removed in cloudflared 2026.2.0**. Hosts still on an older cloudflared work but run unmaintained code with known vulnerabilities, and upgrading cloudflared breaks DNS. Recommend unbound (see below). |
 | **Backups** | Is there any? (Pi-hole Teleporter export, config copies, a full image.) |
 | **Errors** | Repeating errors in the journal since boot. |
@@ -123,6 +124,8 @@ After the report, write the findings so other skills can use them. The format is
 | `no-static-ip` | low | a server whose address is not fixed |
 | `pihole-no-password` | high | Pi-hole web UI has no password |
 | `pihole-outdated` | low | Pi-hole core, FTL or web has an update |
+| `pihole-adlist-failing` | medium | an enabled adlist's `status` is `3` or `4`, or it is `1` or `2` with `0` domains |
+| `pihole-gravity-stale` | medium | enabled adlists were last updated more than two weeks ago |
 | `cloudflared-deprecated` | medium | still on cloudflared `proxy-dns`, removed upstream in 2026.2.0 |
 | `no-backup` | high | no backup of the Pi-hole or other configuration |
 
@@ -131,7 +134,7 @@ Use a standard id when it fits. Otherwise make a new kebab-case id, and keep usi
 ## Network and permissions
 
 - **Network:** SSH to the host the user names, with key login only (`BatchMode`, no passwords). Without key login the user runs the collector over ssh in their own terminal and types the password there; the agent only reads the saved output file and deletes it afterwards. The collector makes no outbound calls of its own; it reads the host's local state. `apt-get -s` is a simulation and installs nothing. Support dates, versions and advisories are looked up on public web pages by the agent; nothing from the host is sent there.
-- **Rights:** runs as the normal SSH user. It uses `sudo -n` (passwordless sudo only, it never prompts) to read things such as the effective sshd configuration, firewall status, the kernel log, process names behind listening ports, and Pi-hole's settings and query database (a read-only count). Without passwordless sudo these are skipped and listed as needing sudo. It checks whether Pi-hole's web password is set and prints only yes or no, never the hash.
+- **Rights:** runs as the normal SSH user. It uses `sudo -n` (passwordless sudo only, it never prompts) to read things such as the effective sshd configuration, firewall status, the kernel log, process names behind listening ports, and Pi-hole's settings, adlists and query database (a read-only count). Without passwordless sudo these are skipped and listed as needing sudo. It checks whether Pi-hole's web password is set and prints only yes or no, never the hash. Adlist addresses are printed without any login or query string; the rest of the address is shown as stored.
 - **Files:** nothing is written on the host. On this computer the skill writes the findings files and updates the inventory row, both in `<data dir>`. Every fix is a separate step that needs the user's yes.
 
 ## Fixing: proven playbooks
